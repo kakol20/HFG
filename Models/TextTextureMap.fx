@@ -23,7 +23,7 @@ struct PS_Input
 };
 
 
-PS_Input VS_Main( VS_Input vertex )                                          
+PS_Input VS_Main( VS_Input vertex )
 {
     PS_Input vsOut = ( PS_Input )0;
     vsOut.pos = vertex.pos;
