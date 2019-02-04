@@ -717,7 +717,6 @@ void ModelsDemo::Update(float dt)
 				models[i].setDirection(XMVectorSet(XMVectorGetX(cameraPosition) - models[i].getPosition().x, 0.0f,
 				XMVectorGetZ(cameraPosition) - models[i].getPosition().z, 0.0f));
 
-
 			}
 			else {
 				/*d3dContext_->IASetVertexBuffers(0, 1, models[i].getMesh()->getVertexBuffer(), &stride, &offset);
@@ -1050,20 +1049,6 @@ void ModelsDemo::Render()
 		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
 		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);
 
-		//DrawString( "CHE PALLE", -0.2f, 0.0f );
-		//DrawString( "HOWDY 123()><.,;:'?", -0.9f, 0.83f );
-
-		//DrawString( "{Pippolippo} = 1234%$^&*!!!", -0.9f, 0.6f );
-
-		//char output[24];
-		//sprintf_s(output, "FPS:%d",fps_);
-
-		//DrawString( output, -0.9f, 0.83f);
-
-		//sprintf_s(output, "Frame Time:%.6f", frameTime_);
-
-		//DrawString( output, -0.9f, 0.6f);
-
 		DrawString("PRESS ENTER to START", -0.4f, 0.0f);
 
 		TurnOffAlphaBlending();
@@ -1145,128 +1130,6 @@ void ModelsDemo::Render()
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &robotDead.getWorldMat(), 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
 		d3dContext_->Draw(robotDead.getCurrentFrame()->getTotalVerts(), 0);
-
-		//d3dContext_.ia
-
-
-
-		//d3dContext_->PSSetShaderResources(0, 1, &colorMap_);
-
-
-		//////////////////////////////////////////TANK3//////////////////////////////////////////////
-		//XMMATRIX tank3WorldMatrix;
-		//XMMATRIX tank3RotationY;
-		//XMMATRIX tank3Translation;
-
-		//tank3WorldMatrix = XMMatrixIdentity();
-		//tank3RotationY = XMMatrixIdentity();
-		//tank3Translation = XMMatrixIdentity();
-
-		//static float tank3x = 8.0f;
-		//static float tank3y = 0.5f;
-		//static float tank3z = -10.0f;
-
-		//XMVECTOR tank3Position = XMLoadFloat3(&XMFLOAT3(tank3x, tank3y, tank3z));
-
-		//XMVECTOR tank3DefaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-		//XMVECTOR tank3DefaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-		//XMVECTOR tank3DefaultUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-		//static XMVECTOR tank3Direction = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);//look forward
-
-		//tank3Direction = XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);//look behind
-
-		//tank3Direction = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);//look right
-
-		//tank3Direction = XMVectorSet(-1.0f, 0.0f, 0.0f, 0.0f);//look left
-
-		//													  //look at the player
-		//tank3Direction = XMVectorSet(XMVectorGetX(cameraPosition) - XMVectorGetX(tank3Position)
-		//	, 0.0f,
-		//	XMVectorGetZ(cameraPosition) - XMVectorGetZ(tank3Position),
-		//	0.0f);
-
-
-		//tank3Direction = XMVector3Normalize(tank3Direction);
-
-		//XMVECTOR tank3DirectionInvertX = XMVectorSet(-1.0f*XMVectorGetX(tank3Direction), XMVectorGetY(tank3Direction), XMVectorGetZ(tank3Direction), 0.0f);
-
-		//XMVECTOR xaxis = XMVector3Cross(tank3DefaultUp, tank3DirectionInvertX);
-
-		//xaxis = XMVector3Normalize(xaxis);
-
-		//tank3RotationY = XMMatrixSet
-		//(XMVectorGetX(xaxis), XMVectorGetX(tank3DefaultUp), XMVectorGetX(tank3DirectionInvertX), 0.0f,
-		//	XMVectorGetY(xaxis), XMVectorGetY(tank3DefaultUp), XMVectorGetY(tank3DirectionInvertX), 0.0f,
-		//	XMVectorGetZ(xaxis), XMVectorGetZ(tank3DefaultUp), XMVectorGetZ(tank3DirectionInvertX), 0.0f,
-		//	0.0f, 0.0f, 0.0f, 1.0f
-		//);
-
-		//tank3x += XMVectorGetX(tank3Direction)*Tank3Speed;
-		//tank3z += XMVectorGetZ(tank3Direction)*Tank3Speed;
-
-		//tank3Translation = XMMatrixTranslation(tank3x, tank3y, tank3z);
-
-		//tank3WorldMatrix = tank3RotationY * tank3Translation;
-		////tank3WorldMatrix = tank3Translation;
-
-		//tank3WorldMatrix = XMMatrixTranspose(tank3WorldMatrix);
-		//d3dContext_->UpdateSubresource(worldCB_, 0, 0, &tank3WorldMatrix, 0, 0);
-		//d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-
-		//d3dContext_->Draw(model1Mesh.getTotalVerts(), 0);
-
-
-		////////////////////////////////////////////END Tank 3////////////////////////////////////////////////////////////////////////
-
-		///////////////////////////////rotational movement (from camera)////////////////////////
-
-		//XMVECTOR DefaultForward_ ;
-		//XMVECTOR DefaultRight_;
-		//XMVECTOR camForward_;
-		//XMVECTOR camRight_;
-
-		///////////////////////////////////////////////////////////////////////////////////////////
-
-		//SetDistance( 2.0f, 1.0f, 10.0f );
-		//SetRotation( 0.0f, 0.0f, -XM_PIDIV4/3, XM_PIDIV4/2 );
-		////SetRotation( 0.0f, 0.0f, -XM_PIDIV4/4, XM_PIDIV4/4 );
-
-		//DefaultForward_ = XMVectorSet(0.0f,0.0f,1.0f, 0.0f);
-		//DefaultRight_ = XMVectorSet(1.0f,0.0f,0.0f, 0.0f);
-		//camForward_ = XMVectorSet(0.0f,0.0f,1.0f, 0.0f);
-		//camRight_ = XMVectorSet(1.0f,0.0f,0.0f, 0.0f);
-
-		//////////////////////////////////////////////////////////////////////////////////////////
-
-		//XMMATRIX  camRotationMatrix = XMMatrixRotationRollPitchYaw(xRotation_, yRotation_, 0);
-		//XMVECTOR camTarget = XMVector3TransformCoord(DefaultForward_, camRotationMatrix );
-		//camTarget = XMVector3Normalize(camTarget);
-
-		//XMMATRIX RotateYTempMatrix;
-		//RotateYTempMatrix = XMMatrixRotationY(yRotation_);
-
-		//camRight_ = XMVector3TransformCoord(DefaultRight_, RotateYTempMatrix);
-		//camUp_ = XMVector3TransformCoord(camUp_, RotateYTempMatrix);
-		//camForward_ = XMVector3TransformCoord(DefaultForward_, RotateYTempMatrix);
-
-		//XMVECTOR pos = XMLoadFloat3( &position_ );
-
-		//pos += leftRight*camRight_;
-		//pos += backFoward*camForward_;
-
-		//XMStoreFloat3( &position_, pos );
-		////moveLeftRight = 0.0f;
-		////moveBackForward = 0.0f;
-
-		//camTarget = pos + camTarget;	
-
-		//XMStoreFloat3( &direction_, camTarget );
-
-		//camView_ = XMMatrixLookAtLH( pos, camTarget, camUp_ );
-
-		///////////////////////////////(END) rotational movement (from camera)//////////////////
-
 
 		////////////////////terrain////////////////////////////////
 		d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
