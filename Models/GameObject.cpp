@@ -84,8 +84,6 @@ void GameObject::moveForward(float speed)
 	m_position.x += xDir * speed;
 	m_position.z += zDir * speed;
 
-	
-
 	updateWorldMat();
 }
 
