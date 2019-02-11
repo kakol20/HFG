@@ -336,3 +336,30 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+Debug/Models\.exe
+
+Models/Debug/Animation\.obj
+
+Models/Debug/ArcCamera\.obj
+
+Models/Debug/Dx11DemoBase\.obj
+
+Models/Debug/FirstPersonCamera\.obj
+
+Models/Debug/GameObject\.obj
+
+Models/Debug/main\.obj
+
+Models/Debug/Mesh\.obj
+
+*.tlog
+
+Models/Debug/ModelsDemo\.obj
+
+Models/Debug/player\.obj
+
+Models/Debug/PlayerChar\.obj
+
+Models/Debug/Texture\.obj
+
+Models/Debug/TokenStream\.obj
