@@ -20,11 +20,11 @@ public:
 	XMMATRIX getWorldMat();
 
 	void setScale(XMFLOAT3 scale);
-	void setDirection(XMVECTOR direction);
+	//void setDirection(XMVECTOR direction);
 	void setPosition(XMFLOAT3 position);
 
-	void moveForward(float dt);
-	void moveRight();
+	void moveForward(float dt, bool reverse);
+	void moveRight(float dt, bool reverse);
 	void update(XMFLOAT3 opponentPostion);
 	void updateWorldMat();
 

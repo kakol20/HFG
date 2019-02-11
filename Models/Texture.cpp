@@ -40,6 +40,17 @@ bool Texture::Init(char* name, HRESULT& d3dResult, ID3D11Device* d3dDevice)
 	return true;
 }
 
+bool Texture::setTexture(char * name, HRESULT & d3dResult, ID3D11Device * d3dDevice)
+{
+	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice, name, 0, 0, &m_colorMap, 0);
+
+	if (FAILED(d3dResult)) {
+		return false;
+	}
+
+	return true;
+}
+
 void Texture::unloadTexture()
 {
 	if (m_colorMap) m_colorMap->Release();

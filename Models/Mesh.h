@@ -17,6 +17,8 @@ public:
 
 	bool Init(char* name, HRESULT&  d3dResult, ID3D11Device* d3dDevice);
 
+	bool setMesh(char* name, HRESULT&  d3dResult, ID3D11Device* d3dDevice);
+
 	int getTotalVerts() const;
 
 	void Unload();
