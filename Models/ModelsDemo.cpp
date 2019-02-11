@@ -280,35 +280,6 @@ bool ModelsDemo::LoadContent()
 	}
 
 	// ----- ROBOT DEAD ANIMATION -----
-	/*for (int i = 0; i < 10; i++)
-	{
-		std::string file = "PlayerModels/Cameron_Robot/RobotDead";
-
-		if (i < 10)
-		{
-			
-			file = file + "0";
-			file = file + std::to_string(i);
-		}
-		else
-		{
-			file = file + std::to_string(i);
-		}
-
-		file = file + ".obj";
-		char * fileChar = new char[file.size() + 1];
-		std::copy(file.begin(), file.end(), fileChar);
-		fileChar[file.size()] = '\0';
-
-		if (!robotDeadMeshes[i]->Init(fileChar, d3dResult, d3dDevice_))
-		{
-			delete[] fileChar;
-			return false;
-		}
-
-		delete[] fileChar;
-	}*/
-
 	
 	if (!robotDeadMeshes[0]->Init("PlayerModels/Cameron_Robot/RobotDead01.obj", d3dResult
 	, d3dDevice_))
@@ -384,7 +355,7 @@ bool ModelsDemo::LoadContent()
 		models[i].setTexture(&model1Texture);
 
 	}
-//================== MOVEMENTS =========================
+
 	models[0].setMesh(&model2Mesh);
 	models[0].setTexture(&model2Texture);
 
@@ -405,6 +376,20 @@ bool ModelsDemo::LoadContent()
 	//robotDead.setPosition({ 0.5f, 0.5f, 0.5f });
 	robotDead.setScale({ 0.16f, 0.16f, 0.16f });
 	robotDead.setAnimate(true);
+
+	// ---------- LOADING PLAYERS ----------
+	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.obj", d3dResult, d3dDevice_))
+	{
+		return false;
+	}
+	if (!Player1Texture.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.jpg", d3dResult, d3dDevice_))
+	{
+		return false;
+	}
+	Player1.setMesh(&Player1Mesh);
+	Player1.setTexture(&Player1Texture);
+	Player1.setPosition({ 15.0f, 0.0f, 10.0f });
+	Player1.setScale({ 0.55f, 0.55f, 0.55f });
 
 	// ------------------------------ END ------------------------------
 
@@ -612,10 +597,14 @@ void ModelsDemo::UnloadContent()
 	{
 		if (robotDeadMeshes[i] != nullptr)
 		{
+			robotDeadMeshes[i]->Unload();
 			delete robotDeadMeshes[i];
 		}
 		robotDeadMeshes[i] = nullptr;
 	}
+
+	Player1Mesh.Unload();
+	Player1Texture.unloadTexture();
 
 	colorMapSampler_ = 0;
 	textColorMapSampler_ = 0;
@@ -771,109 +760,101 @@ void ModelsDemo::Update(float dt)
 	zoom -= moveSpeed*2;
 	}*/
 
-
+	
 
 	//moveSpeed=0.001f;
-float moveLeftRight = 0.0;
-float moveBackForward = 0.0;
+	float moveLeftRight = 0.0;
+	float moveBackForward = 0.0;
 
-if (gameState_ == START_MENU)
-{
+	if (gameState_ == START_MENU)
+	{
 
-	if (keystate[DIK_RETURN] & 0x80)
-	{
-		gameState_ = RUN;
-	}
-}
-
-if (gameState_ == PAUSED)
-{
-
-	if (!(keystate[DIK_ESCAPE] & 0x80) && (keyPrevState[DIK_ESCAPE] & 0x80))
-	{
-		//PostQuitMessage(0);
-		gameState_ = RUN;
-	}
-	if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == RETURN))
-	{
-		//PostQuitMessage(0);
-		gameState_ = RUN;
-	}
-	if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == PLAY_MOVIE))
-	{
-		//PostQuitMessage(0);
-		gameState_ = INTRO_MOVIE_REPLAY;
+		if (keystate[DIK_RETURN] & 0x80)
+		{
+			gameState_ = RUN;
+		}
 	}
 
-	if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == QUIT))
+	if (gameState_ == PAUSED)
 	{
-		PostQuitMessage(0);
+
+		if (!(keystate[DIK_ESCAPE] & 0x80) && (keyPrevState[DIK_ESCAPE] & 0x80))
+		{
+			//PostQuitMessage(0);
+			gameState_ = RUN;
+		}
+		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == RETURN))
+		{
+			//PostQuitMessage(0);
+			gameState_ = RUN;
+		}
+		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == PLAY_MOVIE))
+		{
+			//PostQuitMessage(0);
+			gameState_ = INTRO_MOVIE_REPLAY;
+		}
+
+		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == QUIT))
+		{
+			PostQuitMessage(0);
+		}
+
+		if ((!(keystate[DIK_RETURN] & 0x80) && (keyPrevState[DIK_RETURN] & 0x80))
+			&& (pauseMenuSelection == FPS))
+		{
+			displayFPS = !displayFPS;
+		}
+
+		if (
+			(!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80))
+			||
+			(!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80))
+			)
+		{
+			pauseMenuSelection++;
+		}
+		if (
+			(!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80))
+			||
+			(!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80))
+			)
+
+		{
+			pauseMenuSelection--;
+		}
+
+
 	}
-
-	if ((!(keystate[DIK_RETURN] & 0x80) && (keyPrevState[DIK_RETURN] & 0x80))
-		&& (pauseMenuSelection == FPS))
-	{
-		displayFPS = !displayFPS;
-	}
-
-	if (
-		(!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80))
-		||
-		(!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80))
-		)
-	{
-		pauseMenuSelection++;
-	}
-	if (
-		(!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80))
-		||
-		(!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80))
-		)
-
-	{
-		pauseMenuSelection--;
-	}
-
-
-}
 
 //========================== GETTING THE INPUTS ==============================
 
-if (gameState_ == RUN)
-{
-	float distance = sqrt(((m_x - m_x1)*(m_x - m_x1)) +
-		((m_y - m_y1)*(m_y - m_y1)) +
-		((m_z - m_z1)*(m_z - m_z1)));
-
-	// =========== MODEL MOVEMENTS 1 =================
-	if ((keystate[DIK_A] & 0x80))
+	if (gameState_ == RUN)
 	{
-		float tempx = m_x1;
-		tempx -= moveSpeed2 * dt;
-		if (sqrt(((m_x - tempx)*(m_x - tempx)) +
+		float distance = sqrt(((m_x - m_x1)*(m_x - m_x1)) +
 			((m_y - m_y1)*(m_y - m_y1)) +
-			((m_z - m_z1)*(m_z - m_z1)))> 4.0f) 
-			{
-				moveLeftRight -= moveSpeed2 * dt;
-				m_x1 -= moveSpeed2 * dt;
-			}
+			((m_z - m_z1)*(m_z - m_z1)));
+
+		// =========== MODEL MOVEMENTS 1 =================
+		if ((keystate[DIK_A] & 0x80 && distance > 3.0f))
+		{										  
 			//moveLeftRight -= moveSpeed;		  
-						  
+			moveLeftRight -= moveSpeed2 * dt;	  
+			m_x1 -= moveSpeed2 * dt;			  
 		}										  
-		if ((keystate[DIK_D] & 0x80 && distance + 0.1f  > 4.0f))
+		if ((keystate[DIK_D] & 0x80 && distance > 3.0f))
 		{										  
 			//moveLeftRight += moveSpeed;		  
 			moveLeftRight += moveSpeed2 * dt;	  
 			m_x1 += moveSpeed2 * dt;			  
 		}										  
 												  
-		if ((keystate[DIK_S] & 0x80 && distance - 0.1f > 4.0f))
+		if ((keystate[DIK_S] & 0x80 && distance > 3.0f))
 		{										  
 			//moveBackForward  -= moveSpeed;	  
 			moveBackForward -= dt * moveSpeed2;	  
 			m_z1 -= dt * moveSpeed2;			  
 		}										  
-		if ((keystate[DIK_W] & 0x80 && distance + 0.1f > 4.0f))
+		if ((keystate[DIK_W] & 0x80 && distance > 3.0f))
 		{										  
 			//moveBackForward  += moveSpeed;
 			moveBackForward += dt * moveSpeed2;
@@ -1212,6 +1193,13 @@ void ModelsDemo::Render()
 		d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
 
 		d3dContext_->Draw(6, 0);
+
+		// ---------- DRAWING PLAYERS ----------
+		d3dContext_->IASetVertexBuffers(0, 1, Player1.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->PSSetShaderResources(0, 1, Player1.getTexture()->getColorMap());
+		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Player1.getWorldMat(), 0, 0);
+		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		d3dContext_->Draw(Player1.getMesh()->getTotalVerts(), 0);
 	}
 
 	if ((gameState_ == RUN) && (displayFPS == true))
