@@ -384,13 +384,13 @@ bool ModelsDemo::LoadContent()
 		models[i].setTexture(&model1Texture);
 
 	}
-
+//================== MOVEMENTS =========================
 	models[0].setMesh(&model2Mesh);
 	models[0].setTexture(&model2Texture);
 
 	models[0].setPosition({ -4.0f, 0.0f, -10.0f });
-	models[1].setPosition({ 6.0f, 0.0f, -10.0f });
-	models[2].setPosition({ 16.0f, 0.0f, -10.0f });
+	models[1].setPosition({ m_x, m_y, m_z });
+	models[2].setPosition({ m_x1, m_y1, m_z1 });
 
 	models[0].setScale({ 0.55f, 0.55f, 0.55f });
 
@@ -837,26 +837,78 @@ void ModelsDemo::Update(float dt)
 
 	}
 
+//========================== GETTING THE INPUTS ==============================
+
 	if (gameState_ == RUN)
 	{
 
-		if ((keystate[DIK_LEFT] & 0x80) || (keystate[DIK_A] & 0x80))
+		if ((keystate[DIK_A] & 0x80))
 		{
 			//moveLeftRight -= moveSpeed;
 			moveLeftRight -= moveSpeed2 * dt;
+			m_x1 -= moveSpeed2 * dt;
 		}
-		if ((keystate[DIK_RIGHT] & 0x80) || (keystate[DIK_D] & 0x80))
+		if ((keystate[DIK_D] & 0x80))
 		{
 			//moveLeftRight += moveSpeed;
 			moveLeftRight += moveSpeed2 * dt;
+			m_x1 += moveSpeed2 * dt;
 		}
 		
-		if ((keystate[DIK_DOWN] & 0x80) || (keystate[DIK_S] & 0x80))
+		if ((keystate[DIK_S] & 0x80))
+		{
+			//moveBackForward  -= moveSpeed;
+			moveBackForward -= dt * moveSpeed2;
+			m_z1 -= dt * moveSpeed2;
+		}
+		if ((keystate[DIK_W] & 0x80))
+		{
+			//moveBackForward  += moveSpeed;
+			moveBackForward += dt * moveSpeed2;
+			m_z1 += dt * moveSpeed2;
+		}
+		// =========== MODEL MOVEMENTS =================
+		if ((keystate[DIK_LEFT] & 0x80))
+		{
+			//moveLeftRight -= moveSpeed;
+			m_x -= moveSpeed2 * dt;
+		}
+		if ((keystate[DIK_RIGHT] & 0x80))
+		{
+			//moveLeftRight += moveSpeed;
+			m_x += moveSpeed2 * dt;
+		}
+
+		if ((keystate[DIK_DOWN] & 0x80))
+		{
+			//moveBackForward  -= moveSpeed;
+			m_z -= dt * moveSpeed2;
+		}
+		if ((keystate[DIK_UP] & 0x80))
+		{
+			//moveBackForward  += moveSpeed;
+			m_z += dt * moveSpeed2;
+		}
+		//===================================================================
+		if ((keystate[DIK_J] & 0x80))
+		{
+			//moveLeftRight -= moveSpeed;
+			moveLeftRight -= moveSpeed2 * dt;
+			
+		}
+		if ((keystate[DIK_L] & 0x80))
+		{
+			//moveLeftRight += moveSpeed;
+			moveLeftRight += moveSpeed2 * dt;
+		
+		}
+
+		if ((keystate[DIK_K] & 0x80))
 		{
 			//moveBackForward  -= moveSpeed;
 			moveBackForward -= dt * moveSpeed2;
 		}
-		if ((keystate[DIK_UP] & 0x80) || (keystate[DIK_W] & 0x80))
+		if ((keystate[DIK_I] & 0x80))
 		{
 			//moveBackForward  += moveSpeed;
 			moveBackForward += dt * moveSpeed2;
@@ -900,7 +952,8 @@ void ModelsDemo::Update(float dt)
 
 
 		camera_.Move(moveLeftRight, moveBackForward);
-
+		models[1].setPosition(XMFLOAT3(m_x, m_y, m_z));
+		models[2].setPosition(XMFLOAT3(m_x1, m_y1, m_z1));
 		camera_.ApplyZoom(zoom);
 		camera_.ApplyRotation(xRotation, yRotation);
 
