@@ -760,101 +760,109 @@ void ModelsDemo::Update(float dt)
 	zoom -= moveSpeed*2;
 	}*/
 
-	
+
 
 	//moveSpeed=0.001f;
-	float moveLeftRight = 0.0;
-	float moveBackForward = 0.0;
+float moveLeftRight = 0.0;
+float moveBackForward = 0.0;
 
-	if (gameState_ == START_MENU)
+if (gameState_ == START_MENU)
+{
+
+	if (keystate[DIK_RETURN] & 0x80)
 	{
+		gameState_ = RUN;
+	}
+}
 
-		if (keystate[DIK_RETURN] & 0x80)
-		{
-			gameState_ = RUN;
-		}
+if (gameState_ == PAUSED)
+{
+
+	if (!(keystate[DIK_ESCAPE] & 0x80) && (keyPrevState[DIK_ESCAPE] & 0x80))
+	{
+		//PostQuitMessage(0);
+		gameState_ = RUN;
+	}
+	if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == RETURN))
+	{
+		//PostQuitMessage(0);
+		gameState_ = RUN;
+	}
+	if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == PLAY_MOVIE))
+	{
+		//PostQuitMessage(0);
+		gameState_ = INTRO_MOVIE_REPLAY;
 	}
 
-	if (gameState_ == PAUSED)
+	if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == QUIT))
 	{
-
-		if (!(keystate[DIK_ESCAPE] & 0x80) && (keyPrevState[DIK_ESCAPE] & 0x80))
-		{
-			//PostQuitMessage(0);
-			gameState_ = RUN;
-		}
-		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == RETURN))
-		{
-			//PostQuitMessage(0);
-			gameState_ = RUN;
-		}
-		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == PLAY_MOVIE))
-		{
-			//PostQuitMessage(0);
-			gameState_ = INTRO_MOVIE_REPLAY;
-		}
-
-		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == QUIT))
-		{
-			PostQuitMessage(0);
-		}
-
-		if ((!(keystate[DIK_RETURN] & 0x80) && (keyPrevState[DIK_RETURN] & 0x80))
-			&& (pauseMenuSelection == FPS))
-		{
-			displayFPS = !displayFPS;
-		}
-
-		if (
-			(!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80))
-			||
-			(!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80))
-			)
-		{
-			pauseMenuSelection++;
-		}
-		if (
-			(!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80))
-			||
-			(!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80))
-			)
-
-		{
-			pauseMenuSelection--;
-		}
-
-
+		PostQuitMessage(0);
 	}
+
+	if ((!(keystate[DIK_RETURN] & 0x80) && (keyPrevState[DIK_RETURN] & 0x80))
+		&& (pauseMenuSelection == FPS))
+	{
+		displayFPS = !displayFPS;
+	}
+
+	if (
+		(!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80))
+		||
+		(!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80))
+		)
+	{
+		pauseMenuSelection++;
+	}
+	if (
+		(!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80))
+		||
+		(!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80))
+		)
+
+	{
+		pauseMenuSelection--;
+	}
+
+
+}
 
 //========================== GETTING THE INPUTS ==============================
 
-	if (gameState_ == RUN)
-	{
-		float distance = sqrt(((m_x - m_x1)*(m_x - m_x1)) +
-			((m_y - m_y1)*(m_y - m_y1)) +
-			((m_z - m_z1)*(m_z - m_z1)));
+if (gameState_ == RUN)
+{
+	float distance = sqrt(((m_x - m_x1)*(m_x - m_x1)) +
+		((m_y - m_y1)*(m_y - m_y1)) +
+		((m_z - m_z1)*(m_z - m_z1)));
 
-		// =========== MODEL MOVEMENTS 1 =================
-		if ((keystate[DIK_A] & 0x80 && distance > 3.0f))
-		{										  
+	// =========== MODEL MOVEMENTS 1 =================
+	if ((keystate[DIK_A] & 0x80))
+	{
+		float tempx = m_x1;
+		tempx -= moveSpeed2 * dt;
+		if (sqrt(((m_x - tempx)*(m_x - tempx)) +
+			((m_y - m_y1)*(m_y - m_y1)) +
+			((m_z - m_z1)*(m_z - m_z1)))> 4.0f) 
+			{
+				moveLeftRight -= moveSpeed2 * dt;
+				m_x1 -= moveSpeed2 * dt;
+			}
 			//moveLeftRight -= moveSpeed;		  
-			moveLeftRight -= moveSpeed2 * dt;	  
-			m_x1 -= moveSpeed2 * dt;			  
+						  
 		}										  
-		if ((keystate[DIK_D] & 0x80 && distance > 3.0f))
+		if ((keystate[DIK_D] & 0x80 && distance + 0.1f  > 4.0f))
 		{										  
 			//moveLeftRight += moveSpeed;		  
 			moveLeftRight += moveSpeed2 * dt;	  
 			m_x1 += moveSpeed2 * dt;			  
 		}										  
 												  
-		if ((keystate[DIK_S] & 0x80 && distance > 3.0f))
+		if ((keystate[DIK_S] & 0x80 && distance - 0.1f > 4.0f))
 		{										  
 			//moveBackForward  -= moveSpeed;	  
 			moveBackForward -= dt * moveSpeed2;	  
 			m_z1 -= dt * moveSpeed2;			  
 		}										  
-		if ((keystate[DIK_W] & 0x80 && distance > 3.0f))
+		if ((keystate[DIK_W] & 0x80 && distance + 0.1f > 4.0f))
 		{										  
 			//moveBackForward  += moveSpeed;
 			moveBackForward += dt * moveSpeed2;
