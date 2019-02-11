@@ -280,6 +280,35 @@ bool ModelsDemo::LoadContent()
 	}
 
 	// ----- ROBOT DEAD ANIMATION -----
+	/*for (int i = 0; i < 10; i++)
+	{
+		std::string file = "PlayerModels/Cameron_Robot/RobotDead";
+
+		if (i < 10)
+		{
+			
+			file = file + "0";
+			file = file + std::to_string(i);
+		}
+		else
+		{
+			file = file + std::to_string(i);
+		}
+
+		file = file + ".obj";
+		char * fileChar = new char[file.size() + 1];
+		std::copy(file.begin(), file.end(), fileChar);
+		fileChar[file.size()] = '\0';
+
+		if (!robotDeadMeshes[i]->Init(fileChar, d3dResult, d3dDevice_))
+		{
+			delete[] fileChar;
+			return false;
+		}
+
+		delete[] fileChar;
+	}*/
+
 	
 	if (!robotDeadMeshes[0]->Init("PlayerModels/Cameron_Robot/RobotDead01.obj", d3dResult
 	, d3dDevice_))
@@ -355,7 +384,7 @@ bool ModelsDemo::LoadContent()
 		models[i].setTexture(&model1Texture);
 
 	}
-
+//================== MOVEMENTS =========================
 	models[0].setMesh(&model2Mesh);
 	models[0].setTexture(&model2Texture);
 
@@ -376,20 +405,6 @@ bool ModelsDemo::LoadContent()
 	//robotDead.setPosition({ 0.5f, 0.5f, 0.5f });
 	robotDead.setScale({ 0.16f, 0.16f, 0.16f });
 	robotDead.setAnimate(true);
-
-	// ---------- LOADING PLAYERS ----------
-	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.obj", d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!Player1Texture.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.jpg", d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	Player1.setMesh(&Player1Mesh);
-	Player1.setTexture(&Player1Texture);
-	Player1.setPosition({ 15.0f, 0.0f, 10.0f });
-	Player1.setScale({ 0.55f, 0.55f, 0.55f });
 
 	// ------------------------------ END ------------------------------
 
@@ -597,14 +612,10 @@ void ModelsDemo::UnloadContent()
 	{
 		if (robotDeadMeshes[i] != nullptr)
 		{
-			robotDeadMeshes[i]->Unload();
 			delete robotDeadMeshes[i];
 		}
 		robotDeadMeshes[i] = nullptr;
 	}
-
-	Player1Mesh.Unload();
-	Player1Texture.unloadTexture();
 
 	colorMapSampler_ = 0;
 	textColorMapSampler_ = 0;
@@ -1201,13 +1212,6 @@ void ModelsDemo::Render()
 		d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
 
 		d3dContext_->Draw(6, 0);
-
-		// ---------- DRAWING PLAYERS ----------
-		d3dContext_->IASetVertexBuffers(0, 1, Player1.getMesh()->getVertexBuffer(), &stride, &offset);
-		d3dContext_->PSSetShaderResources(0, 1, Player1.getTexture()->getColorMap());
-		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Player1.getWorldMat(), 0, 0);
-		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-		d3dContext_->Draw(Player1.getMesh()->getTotalVerts(), 0);
 	}
 
 	if ((gameState_ == RUN) && (displayFPS == true))
