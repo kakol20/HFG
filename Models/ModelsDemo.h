@@ -85,8 +85,15 @@ class ModelsDemo : public Dx11DemoBase
 		ID3D11Buffer* vertexBuffer2_;
 		ID3D11Buffer* textVertexBuffer_;
 		ID3D11Buffer* vertexBufferTerrain_;
+		//================= MODIFIED STUFF ================
         int totalVerts1_;
 		int totalVerts2_;
+		float m_x = 6.0f;
+		float m_y = 0.0f;
+		float m_z = -10.0f;
+		float m_x1 = 16.0f;
+		float m_y1 = 0.0f;
+		float m_z1 = -10.0f;
 
 		float Tank3Speed;
 

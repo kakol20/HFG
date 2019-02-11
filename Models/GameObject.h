@@ -18,12 +18,12 @@ public:
 
 	XMMATRIX getWorldMat();
 
-	void setPosition(XMFLOAT3 position);
 	void setDirection(XMVECTOR direction);
 	void setScale(XMFLOAT3 scale);
 
 	void moveForward(float speed);
-
+	
+	void setPosition(XMFLOAT3 position);
 	XMFLOAT3 getPosition();
 	XMVECTOR getDirection();
 
