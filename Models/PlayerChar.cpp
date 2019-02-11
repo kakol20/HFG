@@ -15,6 +15,8 @@ Player::Player()
 	m_worldMat = XMMatrixIdentity();
 	m_translation = XMMatrixIdentity();
 	m_rotation = XMMatrixIdentity();
+
+	m_speed = 0.25f;
 }
 
 Player::~Player()
@@ -68,6 +70,9 @@ void Player::setPosition(XMFLOAT3 position)
 
 void Player::moveForward(float dt, bool reverse)
 {
+	m_direction = XMVector3ClampLength(m_direction, 0.0f, 1.0f);
+	m_direction = m_direction * m_speed * dt;
+
 	float xDir = XMVectorGetX(m_direction);
 	float zDir = XMVectorGetZ(m_direction);
 
@@ -85,6 +90,9 @@ void Player::moveForward(float dt, bool reverse)
 
 void Player::moveRight(float dt, bool reverse)
 {
+	m_direction = XMVector3ClampLength(m_direction, 0.0f, 1.0f);
+	m_direction = m_direction * m_speed * dt;
+
 	float xDir = -1.0f * XMVectorGetZ(m_direction);
 	float zDir = XMVectorGetX(m_direction);
 

@@ -46,6 +46,10 @@ private:
 	XMVECTOR m_defaultUp;
 
 	XMVECTOR m_direction;
+
+	float m_health;
+	float m_speed;
+	float m_strength;
 };
 
 #endif // !PLAYERCHAR_H
