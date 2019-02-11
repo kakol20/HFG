@@ -268,7 +268,7 @@ bool ModelsDemo::LoadContent()
 	if (!model1Texture.Init(Antonina.TEXTURE, d3dResult, d3dDevice_)) {
 		return false;
 	}
-
+	
 
 	if (!model2Texture.Init(model2.TEXTURE, d3dResult, d3dDevice_)) {
 		return false;
@@ -280,7 +280,36 @@ bool ModelsDemo::LoadContent()
 	}
 
 	// ----- ROBOT DEAD ANIMATION -----
+	/*for (int i = 0; i < 10; i++)
+	{
+		std::string file = "PlayerModels/Cameron_Robot/RobotDead";
 
+		if (i < 10)
+		{
+			
+			file = file + "0";
+			file = file + std::to_string(i);
+		}
+		else
+		{
+			file = file + std::to_string(i);
+		}
+
+		file = file + ".obj";
+		char * fileChar = new char[file.size() + 1];
+		std::copy(file.begin(), file.end(), fileChar);
+		fileChar[file.size()] = '\0';
+
+		if (!robotDeadMeshes[i]->Init(fileChar, d3dResult, d3dDevice_))
+		{
+			delete[] fileChar;
+			return false;
+		}
+
+		delete[] fileChar;
+	}*/
+
+	
 	if (!robotDeadMeshes[0]->Init("PlayerModels/Cameron_Robot/RobotDead01.obj", d3dResult
 	, d3dDevice_))
 	{
@@ -338,17 +367,14 @@ bool ModelsDemo::LoadContent()
 		return false;
 	} 
 
-	// ------------------------------ MESHES AND TEXTURES ------------------------------
+	/*model1.setMesh(&model1Mesh);
+	model1.setTexture(&model1Texture);*/
 
-	// Player 1 - temporary loading
-	if (!player1Mesh.setMesh("PlayerModels/Antonina_Wolf/Idle/Antonina.obj", d3dResult, d3dDevice_))
+	/*for (int i = 0; i < 3; i++)
 	{
-		return false;
-	}
-	if (!player1Texture.setTexture("PlayerModels/Antonina_Wolf/Idle/Antonina.jpg", d3dResult, d3dDevice_))
-	{
-		return false;
-	}
+		models[i].setMesh(&model1Mesh);
+		models[i].setTexture(&model1Texture);
+	}*/
 
 	// ------------------------------ GAME OBJECT LOADING ------------------------------
 
@@ -379,13 +405,6 @@ bool ModelsDemo::LoadContent()
 	//robotDead.setPosition({ 0.5f, 0.5f, 0.5f });
 	robotDead.setScale({ 0.16f, 0.16f, 0.16f });
 	robotDead.setAnimate(true);
-
-
-	// ----- PLAYERS -----
-	player1.setMesh(&player1Mesh);
-	player1.setTexture(&player1Texture);
-	player1.setPosition({ 15.0f, 0.0f, 15.0f });
-	player1.setScale({ 0.55f, 0.55f, 0.55f });
 
 	// ------------------------------ END ------------------------------
 
@@ -488,7 +507,26 @@ bool ModelsDemo::LoadContent()
 	{
 		return false;
 	}
-	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*		D3D11_BLEND_DESC blendDesc2;
+	ZeroMemory( &blendDesc2, sizeof( blendDesc2 ) );
+	blendDesc2.RenderTarget[0].BlendEnable = TRUE;
+
+	blendDesc2.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendDesc2.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blendDesc2.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blendDesc2.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendDesc2.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
+	blendDesc2.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendDesc2.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+
+	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+	d3dDevice_->CreateBlendState( &blendDesc2, &alphaBlendState_ );
+	//d3dDevice_->CreateBlendState( &BlendState, &alphaBlendState_ );
+	d3dContext_->OMSetBlendState( alphaBlendState_, blendFactor, 0xFFFFFFFF );*/
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	D3D11_BLEND_DESC blendStateDescription;
 	// Clear the blend state description.
 	ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
@@ -540,9 +578,6 @@ void ModelsDemo::UnloadContent()
 	model2Texture.unloadTexture();
 	model1Mesh.Unload();
 	model2Mesh.Unload();
-
-	player1Mesh.Unload();
-	player1Texture.unloadTexture();
 
 	if (terrainColorMap_) terrainColorMap_->Release();
 	if (textColorMap_) textColorMap_->Release();
@@ -806,33 +841,37 @@ void ModelsDemo::Update(float dt)
 
 	if (gameState_ == RUN)
 	{
+		float distance = sqrt(((m_x - m_x1)*(m_x - m_x1)) +
+			((m_y - m_y1)*(m_y - m_y1)) +
+			((m_z - m_z1)*(m_z - m_z1)));
 
-		if ((keystate[DIK_A] & 0x80))
-		{
-			//moveLeftRight -= moveSpeed;
-			moveLeftRight -= moveSpeed2 * dt;
-			m_x1 -= moveSpeed2 * dt;
-		}
-		if ((keystate[DIK_D] & 0x80))
-		{
-			//moveLeftRight += moveSpeed;
-			moveLeftRight += moveSpeed2 * dt;
-			m_x1 += moveSpeed2 * dt;
-		}
-		
-		if ((keystate[DIK_S] & 0x80))
-		{
-			//moveBackForward  -= moveSpeed;
-			moveBackForward -= dt * moveSpeed2;
-			m_z1 -= dt * moveSpeed2;
-		}
-		if ((keystate[DIK_W] & 0x80))
-		{
+		// =========== MODEL MOVEMENTS 1 =================
+		if ((keystate[DIK_A] & 0x80 && distance > 3.0f))
+		{										  
+			//moveLeftRight -= moveSpeed;		  
+			moveLeftRight -= moveSpeed2 * dt;	  
+			m_x1 -= moveSpeed2 * dt;			  
+		}										  
+		if ((keystate[DIK_D] & 0x80 && distance > 3.0f))
+		{										  
+			//moveLeftRight += moveSpeed;		  
+			moveLeftRight += moveSpeed2 * dt;	  
+			m_x1 += moveSpeed2 * dt;			  
+		}										  
+												  
+		if ((keystate[DIK_S] & 0x80 && distance > 3.0f))
+		{										  
+			//moveBackForward  -= moveSpeed;	  
+			moveBackForward -= dt * moveSpeed2;	  
+			m_z1 -= dt * moveSpeed2;			  
+		}										  
+		if ((keystate[DIK_W] & 0x80 && distance > 3.0f))
+		{										  
 			//moveBackForward  += moveSpeed;
 			moveBackForward += dt * moveSpeed2;
 			m_z1 += dt * moveSpeed2;
 		}
-		// =========== MODEL MOVEMENTS =================
+		// =========== MODEL MOVEMENTS 2 =================
 		if ((keystate[DIK_LEFT] & 0x80))
 		{
 			//moveLeftRight -= moveSpeed;
@@ -854,7 +893,7 @@ void ModelsDemo::Update(float dt)
 			//moveBackForward  += moveSpeed;
 			m_z += dt * moveSpeed2;
 		}
-		//===================================================================
+		//============================== CAMERA  =====================================
 		if ((keystate[DIK_J] & 0x80))
 		{
 			//moveLeftRight -= moveSpeed;
@@ -921,6 +960,13 @@ void ModelsDemo::Update(float dt)
 		models[2].setPosition(XMFLOAT3(m_x1, m_y1, m_z1));
 		camera_.ApplyZoom(zoom);
 		camera_.ApplyRotation(xRotation, yRotation);
+
+		
+		
+
+
+
+
 
 	}
 
@@ -1081,7 +1127,6 @@ void ModelsDemo::Render()
 		/////////////////////////////////////////geometry settings//////////////////////////////
 
 
-		// --------------- TEMPORARY START ---------------
 		d3dContext_->IASetInputLayout(inputLayout_);
 		d3dContext_->IASetVertexBuffers(0, 1, model2Mesh.getVertexBuffer(), &stride, &offset);
 		d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -1150,8 +1195,6 @@ void ModelsDemo::Render()
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
 		d3dContext_->Draw(robotDead.getCurrentFrame()->getTotalVerts(), 0);
 
-		// --------------- TEMPORARY END ---------------
-
 		////////////////////terrain////////////////////////////////
 		d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
 		worldMat = XMMatrixIdentity();
@@ -1161,14 +1204,6 @@ void ModelsDemo::Render()
 		d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
 
 		d3dContext_->Draw(6, 0);
-
-		// --------------- DRAWING PLAYERS ---------------
-		d3dContext_->IASetVertexBuffers(0, 1, player1.getMesh()->getVertexBuffer(), &stride, &offset);
-		d3dContext_->PSSetShaderResources(0, 1, player1.getTexture()->getColorMap());
-		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &player1.getWorldMat(), 0, 0);
-		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-		d3dContext_->Draw(player1.getMesh()->getTotalVerts(), 0);
-
 	}
 
 	if ((gameState_ == RUN) && (displayFPS == true))

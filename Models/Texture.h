@@ -13,8 +13,6 @@ public:
 
 	bool Init(char* name, HRESULT&  d3dResult, ID3D11Device* d3dDevice);
 
-	bool setTexture(char* name, HRESULT&  d3dResult, ID3D11Device* d3dDevice);
-
 	void unloadTexture();
 
 	//ID3D11ShaderResourceView* getColorMap() const;
