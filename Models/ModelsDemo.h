@@ -21,6 +21,8 @@
 #include "GameObject.h"
 #include "Animation.h"
 
+#include "PlayerChar.h"
+
 
 enum GameStates {PLAY_INTRO, START_MENU, RUN, PAUSED, INTRO_MOVIE_REPLAY};
 
@@ -125,6 +127,14 @@ class ModelsDemo : public Dx11DemoBase
 		Mesh* robotDeadMeshes[10];
 		Texture robotTexture;
 		Animation robotDead;
+
+		// ----- PLAYERS -----
+		Mesh player1Mesh;
+		Texture player1Texture;
+		Player player1;
+
+		/*Mesh player2Mesh;
+		Texture player2Texture;*/
 
 		//////////////time globals///////////////////
 public:
