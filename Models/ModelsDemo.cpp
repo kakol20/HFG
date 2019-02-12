@@ -378,6 +378,26 @@ bool ModelsDemo::LoadContent()
 	robotDead.setAnimate(true);
 
 	// ---------- LOADING PLAYERS ----------
+	/* The following is broken
+	if (!Player1Mesh.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_110219.obj", d3dResult, d3dDevice_))
+	{
+		return false;
+	}
+	if (!Player1Texture.Init("PlayerModels/Cameron_Robot/Idle/RobotUVwires.png", d3dResult, d3dDevice_))
+	{
+		return false;
+	}
+	
+	if (!Player1Mesh.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_))
+	{
+		return false;
+	}
+	if (!Player1Texture.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Machine_Texture.png", d3dResult, d3dDevice_))
+	{
+		return false;
+	}
+	*/
+
 	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.obj", d3dResult, d3dDevice_))
 	{
 		return false;
@@ -388,7 +408,7 @@ bool ModelsDemo::LoadContent()
 	}
 	Player1.setMesh(&Player1Mesh);
 	Player1.setTexture(&Player1Texture);
-	Player1.setPosition({ 15.0f, 0.0f, 10.0f });
+	Player1.setPosition({ 20.0f, 0.0f, 20.0f });
 	Player1.setScale({ 0.55f, 0.55f, 0.55f });
 
 	// ------------------------------ END ------------------------------
