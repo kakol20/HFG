@@ -378,38 +378,30 @@ bool ModelsDemo::LoadContent()
 	robotDead.setAnimate(true);
 
 	// ---------- LOADING PLAYERS ----------
-	/* The following is broken
-	if (!Player1Mesh.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_110219.obj", d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!Player1Texture.Init("PlayerModels/Cameron_Robot/Idle/RobotUVwires.png", d3dResult, d3dDevice_))
-	{
-		return false;
-	}
 	
-	if (!Player1Mesh.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_))
+	/*if (!Player1Mesh.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_))
 	{
 		return false;
 	}
 	if (!Player1Texture.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Machine_Texture.png", d3dResult, d3dDevice_))
 	{
 		return false;
-	}
-	*/
+	}*/
+	
 
-	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.obj", d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!Player1Texture.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.jpg", d3dResult, d3dDevice_))
-	{
-		return false;
-	}
+	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.obj", d3dResult, d3dDevice_)) return false;
+	if (!Player1Texture.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.jpg", d3dResult, d3dDevice_)) return false;
 	Player1.setMesh(&Player1Mesh);
 	Player1.setTexture(&Player1Texture);
 	Player1.setPosition({ 20.0f, 0.0f, 20.0f });
-	Player1.setScale({ 0.55f, 0.55f, 0.55f });
+	Player1.setScale({ 0.275f, 0.275f, 0.275f });
+
+	if (!Player2Mesh.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_110219.obj", d3dResult, d3dDevice_)) return false;
+	if (!Player2Texture.Init("PlayerModels/Cameron_Robot/Idle/RobotUVwires.png", d3dResult, d3dDevice_)) return false;
+	Player2.setMesh(&Player2Mesh);
+	Player2.setTexture(&Player2Texture);
+	Player2.setPosition({ 30.0f, 0.0f, 20.0f });
+	Player2.setScale({ 0.02f, 0.02f, 0.02f });
 
 	// ------------------------------ END ------------------------------
 
@@ -739,8 +731,12 @@ void ModelsDemo::Update(float dt)
 
 		robotDead.Update(dt);
 		
-		models[0].moveForward(2 * dt);
+		//models[0].moveForward(2 * dt);
 		Tank3Speed = 2 * dt;
+
+		// Updating Players
+		Player1.update(Player2.getPosition());
+		Player2.update(Player1.getPosition());
 	}
 	else
 	{
@@ -1171,7 +1167,7 @@ void ModelsDemo::Render()
 		d3dContext_->VSSetConstantBuffers(2, 1, &projCB_);
 		d3dContext_->VSSetConstantBuffers(3, 1, &camPosCB_);
 
-		d3dContext_->Draw(model2Mesh.getTotalVerts(), 0);
+		//d3dContext_->Draw(model2Mesh.getTotalVerts(), 0);
 
 		//z = 0;
 		///////////////////second object///////////////////////
@@ -1220,6 +1216,12 @@ void ModelsDemo::Render()
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Player1.getWorldMat(), 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
 		d3dContext_->Draw(Player1.getMesh()->getTotalVerts(), 0);
+
+		d3dContext_->IASetVertexBuffers(0, 1, Player2.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->PSSetShaderResources(0, 1, Player2.getTexture()->getColorMap());
+		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Player2.getWorldMat(), 0, 0);
+		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		d3dContext_->Draw(Player2.getMesh()->getTotalVerts(), 0);
 	}
 
 	if ((gameState_ == RUN) && (displayFPS == true))

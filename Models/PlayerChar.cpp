@@ -108,9 +108,13 @@ void Player::moveRight(float dt, bool reverse)
 	updateWorldMat();
 }
 
-void Player::update(XMFLOAT3 opponentPostion)
+void Player::update(XMFLOAT3 opponentPosition)
 {
-	// nothing for now
+	
+	m_direction = XMVectorSet(opponentPosition.x - m_position.x, opponentPosition.y - m_position.y, opponentPosition.z - m_position.z, 0.0f);
+	m_direction = XMVector3ClampLength(m_direction, 0.0f, 1.0f);
+
+	updateWorldMat();
 }
 
 void Player::updateWorldMat()

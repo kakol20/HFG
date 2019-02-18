@@ -139,6 +139,10 @@ class ModelsDemo : public Dx11DemoBase
 		Texture Player1Texture;
 		Player Player1;
 
+		Mesh Player2Mesh;
+		Texture Player2Texture;
+		Player Player2;
+
 		//////////////time globals///////////////////
 public:
 		//double countsPerSecond_ = 0.0;

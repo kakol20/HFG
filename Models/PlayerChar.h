@@ -25,7 +25,7 @@ public:
 
 	void moveForward(float dt, bool reverse);
 	void moveRight(float dt, bool reverse);
-	void update(XMFLOAT3 opponentPostion);
+	void update(XMFLOAT3 opponentPosition);
 	void updateWorldMat();
 
 	XMFLOAT3 getPosition();
