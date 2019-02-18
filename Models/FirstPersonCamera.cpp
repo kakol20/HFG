@@ -115,6 +115,19 @@ XMFLOAT3 FirstPersonCamera::GetPosition( )
     return position_;
 }
 
+void FirstPersonCamera::update(Player * Player1, Player * Player2)
+{
+	// find midpoint between playeras
+	// find which player is on the left side of the camera
+	// set direction of camera perpendicular to player's direction
+	// set distance from midpoint based on distance between players
+
+	XMFLOAT3 mid = { (Player1->getPosition().x + Player2->getPosition().x) / 2.0f, (Player1->getPosition().y + Player2->getPosition().y) / 2.0f, (Player1->getPosition().z + Player2->getPosition().z) / 2.0f };
+
+	XMFLOAT3 tempDir = { Player1->getPosition().z, mid.y, -1.0f * Player1->getPosition().z };
+
+}
+
 XMMATRIX FirstPersonCamera::GetViewMatrix( )
 {
     XMVECTOR zoom = XMVectorSet( 0.0f, 0.0f, distance_, 1.0f );

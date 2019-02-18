@@ -3,6 +3,8 @@
 
 #include<xnamath.h>
 
+#include "PlayerChar.h"
+
 
 class FirstPersonCamera
 {
@@ -22,7 +24,9 @@ class FirstPersonCamera
 		void ApplyZoom( float zoomDelta );
 		void ApplyRotation( float yawDelta, float pitchDelta );
 
-		
+
+		// OWN  CODE
+		void update(Player * Player1, Player * Player2);
 
 		XMMATRIX GetViewMatrix( );
 
