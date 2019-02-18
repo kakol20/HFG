@@ -44,7 +44,7 @@ private:
 	Texture* m_texture;
 	XMFLOAT3 m_position;
 
-	Mesh* m_meshFrames[10];
+	Mesh* m_meshFrames[10];//for later 8
 
 	XMMATRIX m_worldMat;
 	XMMATRIX m_translation;

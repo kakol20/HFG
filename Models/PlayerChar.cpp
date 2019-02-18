@@ -6,17 +6,18 @@ Player::Player()
 	m_defaultRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 	m_defaultUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	m_direction = m_defaultForward;
+	m_direction = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 	m_position = { 0.0f, 0.0f, 0.0f };
 
-	m_scale = XMMatrixIdentity();
-	m_scale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	m_scale = { 1.0f, 1.0f, 1.0f };
+	m_scaleMat = XMMatrixIdentity();
+	m_scaleMat = XMMatrixScaling(1.0f, 1.0f, 1.0f);
 
 	m_worldMat = XMMatrixIdentity();
 	m_translation = XMMatrixIdentity();
 	m_rotation = XMMatrixIdentity();
 
-	m_speed = 0.25f;
+	m_speed = 2.0f;
 }
 
 Player::~Player()
@@ -50,9 +51,7 @@ XMMATRIX Player::getWorldMat()
 
 void Player::setScale(XMFLOAT3 scale)
 {
-	m_scale = XMMatrixIdentity();
-
-	m_scale = XMMatrixScaling(scale.x, scale.y, scale.y);
+	m_scale = scale;
 
 	updateWorldMat();
 }
@@ -70,7 +69,7 @@ void Player::setPosition(XMFLOAT3 position)
 
 void Player::moveForward(float dt, bool reverse)
 {
-	m_direction = XMVector3ClampLength(m_direction, 0.0f, 1.0f);
+	m_direction = XMVector3Normalize(m_direction);
 	m_direction = m_direction * m_speed * dt;
 
 	float xDir = XMVectorGetX(m_direction);
@@ -83,14 +82,14 @@ void Player::moveForward(float dt, bool reverse)
 	}
 
 	m_position.x += xDir;
-	m_position.y += zDir;
+	m_position.z += zDir;
 
 	updateWorldMat();
 }
 
 void Player::moveRight(float dt, bool reverse)
 {
-	m_direction = XMVector3ClampLength(m_direction, 0.0f, 1.0f);
+	m_direction = XMVector3Normalize(m_direction);
 	m_direction = m_direction * m_speed * dt;
 
 	float xDir = -1.0f * XMVectorGetZ(m_direction);
@@ -103,7 +102,7 @@ void Player::moveRight(float dt, bool reverse)
 	}
 
 	m_position.x += xDir;
-	m_position.y += zDir;
+	m_position.z += zDir;
 
 	updateWorldMat();
 }
@@ -115,9 +114,14 @@ void Player::update(XMFLOAT3 opponentPostion)
 
 void Player::updateWorldMat()
 {
+	//m_scale = XMMatrixIdentity();
 	m_translation = XMMatrixIdentity();
 	m_worldMat = XMMatrixIdentity();
 	m_rotation = XMMatrixIdentity();
+	m_scaleMat = XMMatrixIdentity();
+
+
+	m_scaleMat = XMMatrixScaling(m_scale.x, m_scale.y, m_scale.z);
 
 	m_translation = XMMatrixTranslation(m_position.x, m_position.y, m_position.z);
 
@@ -132,7 +136,7 @@ void Player::updateWorldMat()
 		XMVectorGetZ(xAxis), XMVectorGetZ(m_defaultUp), XMVectorGetZ(invertX), 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f);
 
-	m_worldMat = m_scale * m_rotation * m_translation;
+	m_worldMat = m_scaleMat * m_rotation * m_translation;
 
 	//m_worldMat =  m_translation;
 

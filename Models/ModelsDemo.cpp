@@ -762,9 +762,7 @@ void ModelsDemo::Update(float dt)
 
 	
 
-	//moveSpeed=0.001f;
-	float moveLeftRight = 0.0;
-	float moveBackForward = 0.0;
+	
 
 	if (gameState_ == START_MENU)
 	{
@@ -826,8 +824,10 @@ void ModelsDemo::Update(float dt)
 
 	}
 
-//========================== GETTING THE INPUTS ==============================
-
+//========================== GETTING THE INPUTS / COLLISIONS  ==============================
+//moveSpeed=0.001f;
+	float moveLeftRight = 0.0;
+	float moveBackForward = 0.0;
 	if (gameState_ == RUN)
 	{
 		float distance = sqrt(((m_x - m_x1)*(m_x - m_x1)) +
@@ -835,52 +835,89 @@ void ModelsDemo::Update(float dt)
 			((m_z - m_z1)*(m_z - m_z1)));
 
 		// =========== MODEL MOVEMENTS 1 =================
-		if ((keystate[DIK_A] & 0x80 && distance > 3.0f))
-		{										  
-			//moveLeftRight -= moveSpeed;		  
-			moveLeftRight -= moveSpeed2 * dt;	  
-			m_x1 -= moveSpeed2 * dt;			  
-		}										  
-		if ((keystate[DIK_D] & 0x80 && distance > 3.0f))
-		{										  
-			//moveLeftRight += moveSpeed;		  
-			moveLeftRight += moveSpeed2 * dt;	  
-			m_x1 += moveSpeed2 * dt;			  
-		}										  
-												  
-		if ((keystate[DIK_S] & 0x80 && distance > 3.0f))
-		{										  
-			//moveBackForward  -= moveSpeed;	  
-			moveBackForward -= dt * moveSpeed2;	  
-			m_z1 -= dt * moveSpeed2;			  
-		}										  
-		if ((keystate[DIK_W] & 0x80 && distance > 3.0f))
-		{										  
-			//moveBackForward  += moveSpeed;
-			moveBackForward += dt * moveSpeed2;
-			m_z1 += dt * moveSpeed2;
+		if ((keystate[DIK_A] & 0x80))
+		{
+			float tempx = m_x1;
+			tempx -= moveSpeed2 * dt;
+			if (collision.colliding(m_x1, m_y1, m_z1, m_x,m_y,m_z, dt) != 1)
+			{
+				//m_x1 -= moveSpeed2 * dt;
+				bool right = false;
+				Player1.moveRight(dt, right);
+			}
+		}
+		if ((keystate[DIK_D] & 0x80))
+		{
+			float tempx = m_x1;
+			tempx += moveSpeed2 * dt;
+			if (collision.colliding(m_x1, m_y1, m_z1, m_x, m_y, m_z, dt) != 2)
+			{
+				//m_x1 += moveSpeed2 * dt;
+				bool right = true;
+				Player1.moveRight(dt, right);
+			}	  
+		}
+
+		if ((keystate[DIK_S] & 0x80))
+		{
+			float tempx = m_z1;
+			tempx -= moveSpeed2 * dt;
+			if (collision.colliding(m_x1, m_y1, m_z1, m_x, m_y, m_z, dt) != 3)
+			{
+				//m_z1 -= moveSpeed2 * dt;
+				Player1.moveForward(dt, true);
+			}
+		}
+		if ((keystate[DIK_W] & 0x80))
+
+
+		{
+			float tempx = m_z1;
+			tempx += moveSpeed2 * dt;
+			if (collision.colliding(m_x1, m_y1, m_z1, m_x, m_y, m_z, dt) != 4)
+			{
+				//m_z1 += moveSpeed2 * dt;
+				bool forward = false;
+				Player1.moveForward(dt, forward);
+			}		  
 		}
 		// =========== MODEL MOVEMENTS 2 =================
 		if ((keystate[DIK_LEFT] & 0x80))
 		{
-			//moveLeftRight -= moveSpeed;
-			m_x -= moveSpeed2 * dt;
+			float tempx = m_x1;
+			tempx -= moveSpeed2 * dt;
+			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 1)
+			{
+				m_x -= moveSpeed2 * dt;
+			}
 		}
 		if ((keystate[DIK_RIGHT] & 0x80))
 		{
-			//moveLeftRight += moveSpeed;
-			m_x += moveSpeed2 * dt;
+			float tempx = m_x1;
+			tempx += moveSpeed2 * dt;
+			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 2)
+			{
+				m_x += moveSpeed2 * dt;
+			}
 		}
 
 		if ((keystate[DIK_DOWN] & 0x80))
 		{
-			//moveBackForward  -= moveSpeed;
-			m_z -= dt * moveSpeed2;
+			float tempx = m_x1;
+			tempx -= moveSpeed2 * dt;
+			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 3)
+			{
+				m_z -= moveSpeed2 * dt;
+			}	  
 		}
 		if ((keystate[DIK_UP] & 0x80))
 		{
-			//moveBackForward  += moveSpeed;
-			m_z += dt * moveSpeed2;
+			float tempx = m_x1;
+			tempx += moveSpeed2 * dt;
+			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 4)
+			{
+				m_z += moveSpeed2 * dt;
+			}
 		}
 		//============================== CAMERA  =====================================
 		if ((keystate[DIK_J] & 0x80))

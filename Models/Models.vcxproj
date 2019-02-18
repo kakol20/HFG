@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="ArcCamera.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Dx11DemoBase.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -94,6 +95,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="ArcCamera.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="Dx11DemoBase.h" />
     <ClInclude Include="FirstPersonCamera.h" />
     <ClInclude Include="GameObject.h" />
