@@ -70,7 +70,7 @@ void GameObject::setScale(XMFLOAT3 scale)
 {
 	m_scale = XMMatrixIdentity();
 
-	m_scale = XMMatrixScaling(scale.x, scale.y, scale.y);
+	m_scale = XMMatrixScaling(scale.x, scale.y, scale.z);
 
 	updateWorldMat();
 }

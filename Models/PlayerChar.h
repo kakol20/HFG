@@ -35,11 +35,12 @@ private:
 	Mesh * m_mesh;
 	Texture* m_texture;
 	XMFLOAT3 m_position;
+	XMFLOAT3 m_scale;
 
 	XMMATRIX m_worldMat;
 	XMMATRIX m_translation;
 	XMMATRIX m_rotation;
-	XMMATRIX m_scale;
+	XMMATRIX m_scaleMat;
 
 	XMVECTOR m_defaultForward;
 	XMVECTOR m_defaultRight;

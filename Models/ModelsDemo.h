@@ -22,6 +22,7 @@
 #include "Animation.h"
 
 #include "PlayerChar.h"
+#include "Collision.h"
 
 enum GameStates {PLAY_INTRO, START_MENU, RUN, PAUSED, INTRO_MOVIE_REPLAY};
 
@@ -73,6 +74,7 @@ class ModelsDemo : public Dx11DemoBase
 		GameStates GetGameState();
 
     private:
+		Collision collision;
         ID3D11VertexShader* textureMapVS_;
         ID3D11PixelShader* textureMapPS_;
 		ID3D11VertexShader* textTextureMapVS_;
