@@ -17,6 +17,8 @@ public:
 
 	bool Init(char* name, HRESULT&  d3dResult, ID3D11Device* d3dDevice);
 
+	bool getInitiated();
+
 	int getTotalVerts() const;
 
 	void Unload();
@@ -28,6 +30,7 @@ private:
 
 	ObjModel m_objModel;
 	int m_totalVerts;
+	bool m_initiated;
 
 	ID3D11Buffer* m_vertexBuffer;
 };

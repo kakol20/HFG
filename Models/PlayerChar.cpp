@@ -107,7 +107,7 @@ void Player::moveRight(float dt, bool reverse)
 	/*updateWorldMat();*/
 }
 
-void Player::update(XMFLOAT3 opponentPosition)
+void Player::update(float dt, XMFLOAT3 opponentPosition)
 {
 	
 	m_direction = XMVectorSet(opponentPosition.x - m_position.x, opponentPosition.y - m_position.y, opponentPosition.z - m_position.z, 0.0f);
@@ -124,7 +124,6 @@ void Player::updateWorldMat()
 	m_worldMat = XMMatrixIdentity();
 	m_rotation = XMMatrixIdentity();
 	m_scaleMat = XMMatrixIdentity();
-
 
 	m_scaleMat = XMMatrixScaling(m_scale.x, m_scale.y, m_scale.z);
 
@@ -147,6 +146,38 @@ void Player::updateWorldMat()
 
 	m_worldMat = XMMatrixTranspose(m_worldMat);
 }
+
+void Player::setIsAnimated(bool animated)
+{
+	m_isAnimated = true;
+}
+
+bool Player::getIsAnimated()
+{
+	return m_isAnimated;
+}
+
+void Player::setAnimation(const std::string & name)
+{
+	m_animation = name;
+}
+
+void Player::setIdleMesh(Mesh * meshFrames[])
+{
+	for (int i = 0; i < 8; i++)
+	{
+		m_idleAnim[i] = meshFrames[i];
+	}
+}
+
+void Player::setWalkMesh(Mesh * meshFrames[])
+{
+	for (int i = 0; i < 8; i++)
+	{
+		m_walkAnim[i] = meshFrames[i];
+	}
+}
+
 
 XMFLOAT3 Player::getPosition()
 {

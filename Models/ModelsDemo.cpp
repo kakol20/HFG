@@ -338,14 +338,24 @@ bool ModelsDemo::LoadContent()
 		return false;
 	} 
 
-	/*model1.setMesh(&model1Mesh);
-	model1.setTexture(&model1Texture);*/
+	
+	// ------------------------------ LOADING CHARACTER MODELS ------------------------------
 
-	/*for (int i = 0; i < 3; i++)
+	// Kremit
+	for (int i = 0; i < 8; i++)
 	{
-		models[i].setMesh(&model1Mesh);
-		models[i].setTexture(&model1Texture);
-	}*/
+		std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
+		//std::string temp = ;
+		if (!KremitWalk[i]->Init((walkName + std::to_string(i + 1) + ".obj").c_str(), d3dResult, d3dDevice_))
+		{
+			return false;
+		}
+	}
+	// temporary
+	if (!KremitTexture.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.jpg", d3dResult, d3dDevice_))
+	{
+		return false;
+	}
 
 	// ------------------------------ GAME OBJECT LOADING ------------------------------
 
@@ -402,6 +412,11 @@ bool ModelsDemo::LoadContent()
 	Player2.setTexture(&Player2Texture);
 	Player2.setPosition({ 30.0f, 0.0f, 20.0f });
 	Player2.setScale({ 0.02f, 0.02f, 0.02f });
+
+	// temporary - comment out before uploading to github
+	Player1.setWalkMesh(KremitWalk);
+	Player1.setIsAnimated(true);
+	Player1.setAnimation("walk");
 
 	// ------------------------------ END ------------------------------
 

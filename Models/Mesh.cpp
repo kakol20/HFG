@@ -10,6 +10,7 @@ struct VertexPos
 
 Mesh::Mesh()
 {
+	m_initiated = false;
 }
 
 Mesh::Mesh(const Mesh & copyMesh)
@@ -93,7 +94,14 @@ bool Mesh::Init(char* name, HRESULT& d3dResult, ID3D11Device* d3dDevice)
 		return false;
 	}
 
+	m_initiated = true;
+
 	return true;
+}
+
+bool Mesh::getInitiated()
+{
+	return m_initiated;
 }
 
 int Mesh::getTotalVerts() const

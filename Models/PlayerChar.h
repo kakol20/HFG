@@ -5,6 +5,8 @@
 #include "Mesh.h"
 #include "Texture.h"
 
+#include <string>
+
 class Player
 {
 public:
@@ -25,8 +27,15 @@ public:
 
 	void moveForward(float dt, bool reverse);
 	void moveRight(float dt, bool reverse);
-	void update(XMFLOAT3 opponentPosition);
+	void update(float dt, XMFLOAT3 opponentPosition);
 	void updateWorldMat();
+
+	void setIsAnimated(bool animated);
+	bool getIsAnimated();
+	void setAnimation(const std::string & name);
+
+	void setIdleMesh(Mesh * meshFrames[]);
+	void setWalkMesh(Mesh * meshFrames[]);
 
 	XMFLOAT3 getPosition();
 	XMVECTOR getDirection();
@@ -37,10 +46,21 @@ private:
 	XMFLOAT3 m_position;
 	XMFLOAT3 m_scale;
 
+	Mesh * m_idleAnim[8];
+	Mesh * m_walkAnim[8];
+	Mesh * m_attackAnim[8];
+	Mesh * m_deathAnim[8];
+	Mesh * m_damagedAnim[8];
+	int m_currFrame;
+	bool m_isAnimated;
+	std::string m_animation;
+
 	XMMATRIX m_worldMat;
 	XMMATRIX m_translation;
 	XMMATRIX m_rotation;
 	XMMATRIX m_scaleMat;
+
+	//enum Animations { IDLE, WALK, ATTACK, DEATH, DAMAGED };
 
 	XMVECTOR m_defaultForward;
 	XMVECTOR m_defaultRight;

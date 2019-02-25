@@ -145,6 +145,10 @@ class ModelsDemo : public Dx11DemoBase
 		Texture Player2Texture;
 		Player Player2;
 
+		// ---------- CHARACTERS ----------
+		Mesh * KremitWalk[8];
+		Texture KremitTexture;
+
 		//////////////time globals///////////////////
 public:
 		//double countsPerSecond_ = 0.0;
