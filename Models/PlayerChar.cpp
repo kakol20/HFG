@@ -84,7 +84,7 @@ void Player::moveForward(float dt, bool reverse)
 	m_position.x += xDir;
 	m_position.z += zDir;
 
-	updateWorldMat();
+	/*updateWorldMat();*/
 }
 
 void Player::moveRight(float dt, bool reverse)
@@ -104,7 +104,7 @@ void Player::moveRight(float dt, bool reverse)
 	m_position.x += xDir;
 	m_position.z += zDir;
 
-	updateWorldMat();
+	/*updateWorldMat();*/
 }
 
 void Player::update(XMFLOAT3 opponentPosition)
