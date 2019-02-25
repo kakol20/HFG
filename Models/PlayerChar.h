@@ -27,7 +27,7 @@ public:
 	void moveRight(float dt, bool reverse);
 	void update(XMFLOAT3 opponentPosition);
 	void updateWorldMat();
-
+	void SetPlayer(bool player);
 	XMFLOAT3 getPosition();
 	XMVECTOR getDirection();
 
@@ -51,6 +51,8 @@ private:
 	float m_health;
 	float m_speed;
 	float m_strength;
+
+	bool m_player1 = true;
 };
 
 #endif // !PLAYERCHAR_H

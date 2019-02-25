@@ -84,7 +84,7 @@ void Player::moveForward(float dt, bool reverse)
 	m_position.x += xDir;
 	m_position.z += zDir;
 
-	/*updateWorldMat();*/
+	updateWorldMat();
 }
 
 void Player::moveRight(float dt, bool reverse)
@@ -104,13 +104,18 @@ void Player::moveRight(float dt, bool reverse)
 	m_position.x += xDir;
 	m_position.z += zDir;
 
-	/*updateWorldMat();*/
+	updateWorldMat();
 }
 
 void Player::update(XMFLOAT3 opponentPosition)
 {
+	XMVECTOR Opponent = XMLoadFloat3(&XMFLOAT3(opponentPosition.x, opponentPosition.y, opponentPosition.z));
+	XMVECTOR Self = XMLoadFloat3(&XMFLOAT3(m_position.x, m_position.y, m_position.z));
 	
-	m_direction = XMVectorSet(opponentPosition.x - m_position.x, opponentPosition.y - m_position.y, opponentPosition.z - m_position.z, 0.0f);
+	m_direction = XMVectorSet(XMVectorGetX(Opponent) - XMVectorGetX(Self)
+		, 0.0f,
+		XMVectorGetZ(Opponent) - XMVectorGetZ(Self),
+		0.0f);
 	//m_direction = XMdVector3ClampLength(m_direction, 0.0f, 1.0f);
 	m_direction = XMVector3Normalize(m_direction);
 
@@ -120,12 +125,13 @@ void Player::update(XMFLOAT3 opponentPosition)
 void Player::updateWorldMat()
 {
 	//m_scale = XMMatrixIdentity();
-	m_translation = XMMatrixIdentity();
+	/*m_translation = XMMatrixIdentity();
 	m_worldMat = XMMatrixIdentity();
 	m_rotation = XMMatrixIdentity();
-	m_scaleMat = XMMatrixIdentity();
+	m_scaleMat = XMMatrixIdentity();*/
 
 
+	/*m_scaleMat = XMMatrixScaling(m_scale.x, m_scale.y, m_scale.z);*/
 	m_scaleMat = XMMatrixScaling(m_scale.x, m_scale.y, m_scale.z);
 
 	m_translation = XMMatrixTranslation(m_position.x, m_position.y, m_position.z);
@@ -135,17 +141,30 @@ void Player::updateWorldMat()
 	XMVECTOR xAxis = XMVector3Cross(m_defaultUp, invertX);
 	xAxis = XMVector3Normalize(xAxis);
 
-	m_rotation = XMMatrixSet(
+	/*m_rotation = XMMatrixSet(
 		XMVectorGetX(xAxis), XMVectorGetX(m_defaultUp), XMVectorGetX(invertX), 0.0f,
 		XMVectorGetY(xAxis), XMVectorGetY(m_defaultUp), XMVectorGetY(invertX), 0.0f,
 		XMVectorGetZ(xAxis), XMVectorGetZ(m_defaultUp), XMVectorGetZ(invertX), 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f);
-
+		0.0f, 0.0f, 0.0f, 1.0f);*/
+	if (m_player1) 
+	{
+		m_rotation = XMMatrixRotationY(XM_PIDIV2);
+	}
+	else
+	{
+		m_rotation = XMMatrixRotationY(XM_PIDIV2 + XM_PI);
+	}
+	
 	m_worldMat = m_scaleMat * m_rotation * m_translation;
 
 	//m_worldMat =  m_translation;
 
 	m_worldMat = XMMatrixTranspose(m_worldMat);
+}
+
+void Player::SetPlayer(bool player)
+{
+	m_player1 = player;
 }
 
 XMFLOAT3 Player::getPosition()
