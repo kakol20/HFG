@@ -281,53 +281,53 @@ bool ModelsDemo::LoadContent()
 
 	// ----- ROBOT DEAD ANIMATION -----
 	
-	if (!robotDeadMeshes[0]->Init("PlayerModels/Cameron_Robot/RobotDead01.obj", d3dResult
-	, d3dDevice_))
+	if (!robotDeadMeshes[0]->Init("PlayerModels/Cameron_Robot/RobotDead01.obj",
+ d3dResult, d3dDevice_))
 	{
 		return false;
 	}
-	if (!robotDeadMeshes[1]->Init("PlayerModels/Cameron_Robot/RobotDead02.obj", d3dResult
-		, d3dDevice_))
+	if (!robotDeadMeshes[1]->Init("PlayerModels/Cameron_Robot/RobotDead02.obj",
+ d3dResult, d3dDevice_))
 	{
 		return false;
 	}
-	if (!robotDeadMeshes[2]->Init("PlayerModels/Cameron_Robot/RobotDead03.obj", d3dResult
-		, d3dDevice_))
+	if (!robotDeadMeshes[2]->Init("PlayerModels/Cameron_Robot/RobotDead03.obj",
+ d3dResult, d3dDevice_))
 	{
 		return false;
 	}
-	if (!robotDeadMeshes[3]->Init("PlayerModels/Cameron_Robot/RobotDead04.obj", d3dResult
-		, d3dDevice_))
+	if (!robotDeadMeshes[3]->Init("PlayerModels/Cameron_Robot/RobotDead04.obj",
+ d3dResult, d3dDevice_))
 	{
 		return false;
 	}
-	if (!robotDeadMeshes[4]->Init("PlayerModels/Cameron_Robot/RobotDead05.obj", d3dResult
-		, d3dDevice_))
+	if (!robotDeadMeshes[4]->Init("PlayerModels/Cameron_Robot/RobotDead05.obj",
+ d3dResult, d3dDevice_))
 	{
 		return false;
 	}
-	if (!robotDeadMeshes[5]->Init("PlayerModels/Cameron_Robot/RobotDead06.obj", d3dResult
-		, d3dDevice_))
+	if (!robotDeadMeshes[5]->Init("PlayerModels/Cameron_Robot/RobotDead06.obj",
+ d3dResult, d3dDevice_))
 	{
 		return false;
 	}
-	if (!robotDeadMeshes[6]->Init("PlayerModels/Cameron_Robot/RobotDead07.obj", d3dResult
-		, d3dDevice_))
+	if (!robotDeadMeshes[6]->Init("PlayerModels/Cameron_Robot/RobotDead07.obj",
+ d3dResult, d3dDevice_))
 	{
 		return false;
 	}
-	if (!robotDeadMeshes[7]->Init("PlayerModels/Cameron_Robot/RobotDead08.obj", d3dResult
-		, d3dDevice_))
+	if (!robotDeadMeshes[7]->Init("PlayerModels/Cameron_Robot/RobotDead08.obj",
+ d3dResult, d3dDevice_))
 	{
 		return false;
 	}
-	if (!robotDeadMeshes[8]->Init("PlayerModels/Cameron_Robot/RobotDead09.obj", d3dResult
-		, d3dDevice_))
+	if (!robotDeadMeshes[8]->Init("PlayerModels/Cameron_Robot/RobotDead09.obj",
+ d3dResult, d3dDevice_))
 	{
 		return false;
 	}
-	if (!robotDeadMeshes[9]->Init("PlayerModels/Cameron_Robot/RobotDead10.obj", d3dResult
-		, d3dDevice_))
+	if (!robotDeadMeshes[9]->Init("PlayerModels/Cameron_Robot/RobotDead10.obj",
+ d3dResult, d3dDevice_))
 	{
 		return false;
 	}
@@ -344,18 +344,25 @@ bool ModelsDemo::LoadContent()
 	// Kremit
 	for (int i = 0; i < 8; i++)
 	{
-		std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
-		//std::string temp = ;
-		if (!KremitWalk[i]->Init((walkName + std::to_string(i + 1) + ".obj").c_str(), d3dResult, d3dDevice_))
+		std::string walkName = "PlayerModels/Antonina_Wolf/Walk/WolfF";
+		//std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
+
+		walkName = walkName + std::to_string(i + 1) + ".obj";
+
+		KremitWalk[i] = new Mesh();
+		if (!KremitWalk[i]->Init(walkName.c_str(), d3dResult, d3dDevice_))
 		{
 			return false;
 		}
 	}
-	// temporary
+	// temporary - comment out before commiting to github
 	if (!KremitTexture.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.jpg", d3dResult, d3dDevice_))
 	{
 		return false;
 	}
+	Player1.setWalkMesh(KremitWalk);
+	Player1.setIsAnimated(true);
+	Player1.setAnimation("walk");
 
 	// ------------------------------ GAME OBJECT LOADING ------------------------------
 
@@ -411,7 +418,7 @@ bool ModelsDemo::LoadContent()
 	Player2.setMesh(&Player2Mesh);
 	Player2.setTexture(&Player2Texture);
 	Player2.setPosition({ 30.0f, 0.0f, 20.0f });
-	Player2.setScale({ 0.02f, 0.02f, 0.02f });
+	//Player2.setScale({ 0.02f, 0.02f, 0.02f });
 
 	// temporary - comment out before uploading to github
 	Player1.setWalkMesh(KremitWalk);
@@ -572,7 +579,7 @@ bool ModelsDemo::LoadContent()
 		return false;
 	}
 
-	projMatrix_ = XMMatrixPerspectiveFovLH(XM_PIDIV4, 800.0f / 600.0f, 0.01f, 100.0f);
+	projMatrix_ = XMMatrixPerspectiveFovLH(XM_PIDIV4, 800.0f / 600.0f, 0.01f, 10000.0f);
 	projMatrix_ = XMMatrixTranspose(projMatrix_);
 
 	camera_.SetDistance(12.0f, 4.0f, 20.0f);
@@ -750,8 +757,8 @@ void ModelsDemo::Update(float dt)
 		Tank3Speed = 2 * dt;
 
 		// Updating Players
-		Player1.update(Player2.getPosition());
-		Player2.update(Player1.getPosition());
+		Player1.update(dt, Player2.getPosition());
+		Player2.update(dt, Player1.getPosition());
 	}
 	else
 	{
@@ -760,7 +767,7 @@ void ModelsDemo::Update(float dt)
 
 
 	float moveSpeed = 0.01f;
-	float moveSpeed2 = 5.0f;
+	float moveSpeed2 = 20.0f;
 	float zoom = 0.0;
 	float xRotation = 0.0;
 	float yRotation = 0.0;

@@ -4,7 +4,7 @@
 #include "FirstPersonCamera.h"
 
 FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f ) ),
-    position_( XMFLOAT3( 3.0f, 3.0f, -30.0f )), direction_( XMFLOAT3( 0.0f, 0.0f, 1.0f ) )
+    position_( XMFLOAT3( 3.0f, 200.0f, -30.0f )), direction_( XMFLOAT3( 0.0f, 0.0f, 1.0f ) )
 {
 	SetDistance( 2.0f, 1.0f, 10.0f );
     SetRotation( 0.0f, 0.0f, -XM_PIDIV4/3, XM_PIDIV4/2 );

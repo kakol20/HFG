@@ -42,7 +42,7 @@ void ObjModel::Release( )
 }
 
 
-bool ObjModel::LoadOBJ( char *fileName )
+bool ObjModel::LoadOBJ( const char * fileName )
 {
     std::ifstream fileStream;
     int fileSize = 0;

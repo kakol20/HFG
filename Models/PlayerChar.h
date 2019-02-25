@@ -54,6 +54,7 @@ private:
 	int m_currFrame;
 	bool m_isAnimated;
 	std::string m_animation;
+	float m_dtCumulative;
 
 	XMMATRIX m_worldMat;
 	XMMATRIX m_translation;

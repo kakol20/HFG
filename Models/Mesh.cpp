@@ -36,7 +36,7 @@ Mesh::~Mesh()
 	m_vertexBuffer = 0;
 }
 
-bool Mesh::Init(char* name, HRESULT& d3dResult, ID3D11Device* d3dDevice)
+bool Mesh::Init(const char * name, HRESULT& d3dResult, ID3D11Device* d3dDevice)
 {
 
 	if (m_objModel.LoadOBJ(name) == false) {

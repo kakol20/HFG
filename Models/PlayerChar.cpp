@@ -17,6 +17,8 @@ Player::Player()
 	m_translation = XMMatrixIdentity();
 	m_rotation = XMMatrixIdentity();
 
+	m_animation = "n/a";
+
 	m_speed = 2.0f;
 }
 
@@ -36,6 +38,11 @@ void Player::setTexture(Texture * texture)
 
 Mesh * Player::getMesh()
 {
+	if (m_animation == "walk")
+	{
+		return m_walkAnim[m_currFrame];
+	}
+	
 	return m_mesh;
 }
 
@@ -109,7 +116,23 @@ void Player::moveRight(float dt, bool reverse)
 
 void Player::update(float dt, XMFLOAT3 opponentPosition)
 {
-	
+	// animation
+
+	if (m_animation == "walk")
+	{
+		m_dtCumulative += dt;
+		if (m_dtCumulative >= (1 / 12.0f))
+		{
+			m_dtCumulative = 0.0f;
+			m_currFrame++;
+
+			if (m_currFrame == 7)
+			{
+				m_currFrame = 0;
+			}
+		}
+	}
+
 	m_direction = XMVectorSet(opponentPosition.x - m_position.x, opponentPosition.y - m_position.y, opponentPosition.z - m_position.z, 0.0f);
 	//m_direction = XMdVector3ClampLength(m_direction, 0.0f, 1.0f);
 	m_direction = XMVector3Normalize(m_direction);

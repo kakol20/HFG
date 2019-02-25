@@ -17,7 +17,7 @@ class ObjModel
       ~ObjModel( );
 
       void Release( );
-      bool LoadOBJ( char *fileName );
+      bool LoadOBJ( const char * fileName );
 
       float *GetVertices()   { return vertices_; }
       float *GetNormals()    { return normals_; }

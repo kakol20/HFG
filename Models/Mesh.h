@@ -15,7 +15,7 @@ public:
 	Mesh& operator=(const Mesh& copyMesh);
 	~Mesh();
 
-	bool Init(char* name, HRESULT&  d3dResult, ID3D11Device* d3dDevice);
+	bool Init(const char * name, HRESULT&  d3dResult, ID3D11Device* d3dDevice);
 
 	bool getInitiated();
 
