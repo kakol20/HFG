@@ -19,7 +19,7 @@ class FirstPersonCamera
 		void SetPosition(float x, float y, float z);
 		XMFLOAT3 GetPosition( );
 		void SetDirection(float x, float y, float z);
-		void Move(float leftRight, float backFoward);
+		void Move(float leftRight, float backFoward, float upDown);
 
 		void ApplyZoom( float zoomDelta );
 		void ApplyRotation( float yawDelta, float pitchDelta );

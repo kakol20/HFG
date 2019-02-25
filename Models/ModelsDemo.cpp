@@ -418,7 +418,7 @@ bool ModelsDemo::LoadContent()
 	Player2.setMesh(&Player2Mesh);
 	Player2.setTexture(&Player2Texture);
 	Player2.setPosition({ 30.0f, 0.0f, 20.0f });
-	//Player2.setScale({ 0.02f, 0.02f, 0.02f });
+	Player2.setScale({ 0.02f, 0.02f, 0.02f });
 
 	// temporary - comment out before uploading to github
 	Player1.setWalkMesh(KremitWalk);
@@ -866,6 +866,7 @@ void ModelsDemo::Update(float dt)
 //moveSpeed=0.001f;
 	float moveLeftRight = 0.0;
 	float moveBackForward = 0.0;
+	float moveUpDown = 0.0;
 	Player2.SetPlayer(false);
 	if (gameState_ == RUN)
 	{
@@ -981,6 +982,18 @@ void ModelsDemo::Update(float dt)
 			//moveBackForward  += moveSpeed;
 			moveBackForward += dt * moveSpeed2;
 		}
+
+		if ((keystate[DIK_U] & 0x80))
+		{
+			//moveBackForward  -= moveSpeed;
+			moveUpDown -= dt * moveSpeed2;
+		}
+		if ((keystate[DIK_O] & 0x80))
+		{
+			//moveBackForward  += moveSpeed;
+			moveUpDown += dt * moveSpeed2;
+		}
+
 		if (keystate[DIK_SUBTRACT] & 0x80)
 		{
 			zoom += moveSpeed * 2;
@@ -1019,7 +1032,7 @@ void ModelsDemo::Update(float dt)
 		}
 
 
-		camera_.Move(moveLeftRight, moveBackForward);
+		camera_.Move(moveLeftRight, moveBackForward, moveUpDown);
 		models[1].setPosition(XMFLOAT3(m_x1, m_y1, m_z1));
 		models[2].setPosition(XMFLOAT3(m_x2, m_y2, m_z2));
 		camera_.ApplyZoom(zoom);
