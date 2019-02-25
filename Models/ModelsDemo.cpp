@@ -377,7 +377,7 @@ bool ModelsDemo::LoadContent()
 	models[0].setTexture(&model2Texture);
 
 	models[0].setPosition({ -4.0f, 0.0f, -10.0f });
-	models[1].setPosition({ m_x, m_y, m_z });
+	models[1].setPosition({ m_x2, m_y2, m_z2 });
 	models[2].setPosition({ m_x1, m_y1, m_z1 });
 
 	models[0].setScale({ 0.55f, 0.55f, 0.55f });
@@ -866,18 +866,15 @@ void ModelsDemo::Update(float dt)
 //moveSpeed=0.001f;
 	float moveLeftRight = 0.0;
 	float moveBackForward = 0.0;
+	Player2.SetPlayer(false);
 	if (gameState_ == RUN)
 	{
-		float distance = sqrt(((m_x - m_x1)*(m_x - m_x1)) +
-			((m_y - m_y1)*(m_y - m_y1)) +
-			((m_z - m_z1)*(m_z - m_z1)));
-
 		// =========== MODEL MOVEMENTS 1 =================
 		if ((keystate[DIK_S] & 0x80))
 		{
 			float tempx = m_x1;
 			tempx -= moveSpeed2 * dt;
-			if (collision.colliding(m_x1, m_y1, m_z1, m_x,m_y,m_z, dt) != 1)
+			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt) != 1)
 			{
 				//m_x1 -= moveSpeed2 * dt;
 				bool right = false;
@@ -888,7 +885,7 @@ void ModelsDemo::Update(float dt)
 		{
 			float tempx = m_x1;
 			tempx += moveSpeed2 * dt;
-			if (collision.colliding(m_x1, m_y1, m_z1, m_x, m_y, m_z, dt) != 2)
+			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt) != 2)
 			{
 				//m_x1 += moveSpeed2 * dt;
 				bool right = true;
@@ -900,7 +897,7 @@ void ModelsDemo::Update(float dt)
 		{
 			float tempx = m_z1;
 			tempx -= moveSpeed2 * dt;
-			if (collision.colliding(m_x1, m_y1, m_z1, m_x, m_y, m_z, dt) != 3)
+			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt) != 3)
 			{
 				//m_z1 -= moveSpeed2 * dt;
 				Player1.moveForward(dt, true);
@@ -912,7 +909,7 @@ void ModelsDemo::Update(float dt)
 		{
 			float tempx = m_z1;
 			tempx += moveSpeed2 * dt;
-			if (collision.colliding(m_x1, m_y1, m_z1, m_x, m_y, m_z, dt) != 4)
+			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt) != 4)
 			{
 				//m_z1 += moveSpeed2 * dt;
 				bool forward = false;
@@ -922,9 +919,9 @@ void ModelsDemo::Update(float dt)
 		// =========== MODEL MOVEMENTS 2 =================
 		if ((keystate[DIK_DOWN] & 0x80))
 		{
-			float tempx = m_x1;
+			float tempx = m_x2;
 			tempx -= moveSpeed2 * dt;
-			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 1)
+			if (collision.colliding(Player2.getPosition(), Player1.getPosition(), dt) != 1)
 			{
 				bool right = false;
 				Player2.moveRight(dt, right);
@@ -932,9 +929,9 @@ void ModelsDemo::Update(float dt)
 		}
 		if ((keystate[DIK_UP] & 0x80))
 		{
-			float tempx = m_x1;
+			float tempx = m_x2;
 			tempx += moveSpeed2 * dt;
-			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 2)
+			if (collision.colliding(Player2.getPosition(),Player1.getPosition(), dt) != 2)
 			{
 				bool right = true;
 				Player2.moveRight(dt, right);
@@ -943,18 +940,18 @@ void ModelsDemo::Update(float dt)
 
 		if ((keystate[DIK_RIGHT] & 0x80))
 		{
-			float tempx = m_x1;
+			float tempx = m_z2;
 			tempx -= moveSpeed2 * dt;
-			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 3)
+			if (collision.colliding(Player2.getPosition(), Player1.getPosition(), dt) != 3)
 			{
 				Player2.moveForward(dt, true);
 			}	  
 		}
 		if ((keystate[DIK_LEFT] & 0x80))
 		{
-			float tempx = m_x1;
+			float tempx = m_z2;
 			tempx += moveSpeed2 * dt;
-			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 4)
+			if (collision.colliding(Player2.getPosition(), Player1.getPosition(), dt) != 4)
 			{
 				bool forward = false;
 				Player2.moveForward(dt, forward);
@@ -1023,8 +1020,8 @@ void ModelsDemo::Update(float dt)
 
 
 		camera_.Move(moveLeftRight, moveBackForward);
-		models[1].setPosition(XMFLOAT3(m_x, m_y, m_z));
-		models[2].setPosition(XMFLOAT3(m_x1, m_y1, m_z1));
+		models[1].setPosition(XMFLOAT3(m_x1, m_y1, m_z1));
+		models[2].setPosition(XMFLOAT3(m_x2, m_y2, m_z2));
 		camera_.ApplyZoom(zoom);
 		camera_.ApplyRotation(xRotation, yRotation);
 

@@ -1,12 +1,14 @@
 #pragma once
 #include<math.h>
+#include"Dx11DemoBase.h"
+#include<xnamath.h>
 class Collision
 {
 public:
 	Collision();
 	~Collision();
 
-	int colliding(float x,float y,float z, float x1, float y1, float z1, float dt);
+	int colliding(XMFLOAT3 A, XMFLOAT3 B, float dt);
 
 private:
 	float moveSpeed2 = 5.0f;

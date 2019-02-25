@@ -89,9 +89,9 @@ class ModelsDemo : public Dx11DemoBase
 		//================= MODIFIED STUFF ================
         int totalVerts1_;
 		int totalVerts2_;
-		float m_x = 6.0f;
-		float m_y = 0.0f;
-		float m_z = -10.0f;
+		float m_x2 = 6.0f;
+		float m_y2 = 0.0f;
+		float m_z2 = -10.0f;
 		float m_x1 = 16.0f;
 		float m_y1 = 0.0f;
 		float m_z1 = -10.0f;
