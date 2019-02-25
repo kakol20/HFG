@@ -873,7 +873,7 @@ void ModelsDemo::Update(float dt)
 			((m_z - m_z1)*(m_z - m_z1)));
 
 		// =========== MODEL MOVEMENTS 1 =================
-		if ((keystate[DIK_A] & 0x80))
+		if ((keystate[DIK_S] & 0x80))
 		{
 			float tempx = m_x1;
 			tempx -= moveSpeed2 * dt;
@@ -884,7 +884,7 @@ void ModelsDemo::Update(float dt)
 				Player1.moveRight(dt, right);
 			}
 		}
-		if ((keystate[DIK_D] & 0x80))
+		if ((keystate[DIK_W] & 0x80))
 		{
 			float tempx = m_x1;
 			tempx += moveSpeed2 * dt;
@@ -896,7 +896,7 @@ void ModelsDemo::Update(float dt)
 			}	  
 		}
 
-		if ((keystate[DIK_S] & 0x80))
+		if ((keystate[DIK_A] & 0x80))
 		{
 			float tempx = m_z1;
 			tempx -= moveSpeed2 * dt;
@@ -906,7 +906,7 @@ void ModelsDemo::Update(float dt)
 				Player1.moveForward(dt, true);
 			}
 		}
-		if ((keystate[DIK_W] & 0x80))
+		if ((keystate[DIK_D] & 0x80))
 
 
 		{
@@ -920,41 +920,44 @@ void ModelsDemo::Update(float dt)
 			}		  
 		}
 		// =========== MODEL MOVEMENTS 2 =================
-		if ((keystate[DIK_LEFT] & 0x80))
+		if ((keystate[DIK_DOWN] & 0x80))
 		{
 			float tempx = m_x1;
 			tempx -= moveSpeed2 * dt;
 			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 1)
 			{
-				m_x -= moveSpeed2 * dt;
+				bool right = false;
+				Player2.moveRight(dt, right);
 			}
-		}
-		if ((keystate[DIK_RIGHT] & 0x80))
-		{
-			float tempx = m_x1;
-			tempx += moveSpeed2 * dt;
-			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 2)
-			{
-				m_x += moveSpeed2 * dt;
-			}
-		}
-
-		if ((keystate[DIK_DOWN] & 0x80))
-		{
-			float tempx = m_x1;
-			tempx -= moveSpeed2 * dt;
-			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 3)
-			{
-				m_z -= moveSpeed2 * dt;
-			}	  
 		}
 		if ((keystate[DIK_UP] & 0x80))
 		{
 			float tempx = m_x1;
 			tempx += moveSpeed2 * dt;
+			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 2)
+			{
+				bool right = true;
+				Player2.moveRight(dt, right);
+			}
+		}
+
+		if ((keystate[DIK_RIGHT] & 0x80))
+		{
+			float tempx = m_x1;
+			tempx -= moveSpeed2 * dt;
+			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 3)
+			{
+				Player2.moveForward(dt, true);
+			}	  
+		}
+		if ((keystate[DIK_LEFT] & 0x80))
+		{
+			float tempx = m_x1;
+			tempx += moveSpeed2 * dt;
 			if (collision.colliding(m_x, m_y, m_z, m_x1, m_y1, m_z1, dt) != 4)
 			{
-				m_z += moveSpeed2 * dt;
+				bool forward = false;
+				Player2.moveForward(dt, forward);
 			}
 		}
 		//============================== CAMERA  =====================================
