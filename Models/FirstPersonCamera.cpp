@@ -4,7 +4,7 @@
 #include "FirstPersonCamera.h"
 
 FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f ) ),
-    position_( XMFLOAT3( 3.0f, 200.0f, -30.0f )), direction_( XMFLOAT3( 0.0f, 0.0f, 1.0f ) )
+    position_( XMFLOAT3( 3.0f, 3.0f, -30.0f )), direction_( XMFLOAT3( 0.0f, 0.0f, 1.0f ) )
 {
 	SetDistance( 2.0f, 1.0f, 10.0f );
     SetRotation( 0.0f, 0.0f, -XM_PIDIV4/3, XM_PIDIV4/2 );
@@ -81,7 +81,7 @@ void FirstPersonCamera::ApplyRotation( float yawDelta, float pitchDelta )
 	if( yRotation_ < -XM_2PI ) yRotation_ += XM_2PI;
     if( yRotation_ > XM_2PI ) yRotation_ -= XM_2PI;
 }
-void FirstPersonCamera::Move(float leftRight, float backFoward)
+void FirstPersonCamera::Move(float leftRight, float backFoward, float upDown)
 {
 	XMMATRIX  camRotationMatrix = XMMatrixRotationRollPitchYaw(xRotation_, yRotation_, 0);
 	XMVECTOR camTarget = XMVector3TransformCoord(DefaultForward_, camRotationMatrix );
@@ -98,7 +98,7 @@ void FirstPersonCamera::Move(float leftRight, float backFoward)
 
 	pos += leftRight*camRight_;
 	pos += backFoward*camForward_;
-
+	pos += upDown * camUp_;
 	XMStoreFloat3( &position_, pos );
 	//moveLeftRight = 0.0f;
 	//moveBackForward = 0.0f;
