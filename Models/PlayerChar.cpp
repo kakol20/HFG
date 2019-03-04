@@ -228,7 +228,7 @@ void Player::setWalkMesh(Mesh * meshFrames[])
 }
 
 
-XMFLOAT3 Player::getPosition() const
+XMFLOAT3 Player::getPosition()
 {
 	return m_position;
 }
