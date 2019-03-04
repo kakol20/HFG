@@ -13,44 +13,25 @@ Collision::~Collision()
 
 }
 
-int Collision::colliding(XMFLOAT3 A, XMFLOAT3 B, float dt)
+int Collision::colliding(XMFLOAT3 A, XMFLOAT3 B, float dt,float dist)
 {
+	m_nextP = A;
+	m_direction = XMVector3Normalize(m_direction);
+	m_direction = m_direction * m_speed * dt;
+
+	float xDir = XMVectorGetX(m_direction);
+	float zDir = XMVectorGetZ(m_direction);
+
 	
 
-	float tempx1 = A.x;
-	tempx1 -= moveSpeed2 * dt;
-	if (sqrt(((tempx1 - B.x)*(tempx1 - B.x)) +
-		((A.y - B.y)*(A.y - B.y)) +
-		((A.z - B.z)*(A.z - B.z))) < 4.0f)
+	m_nextP.x += xDir;
+	m_nextP.z += zDir;
+	
+	if (sqrt(((m_nextP.x - B.x)*(m_nextP.x - B.x)) +
+		((m_nextP.y - B.y)*(m_nextP.y - B.y)) +
+		((m_nextP.z - B.z)*(m_nextP.z - B.z))) < dist)
 	{
 		return 1;
-	}
-
-	tempx1 = A.x;
-	tempx1 += moveSpeed2 * dt;
-	if (sqrt(((tempx1 - B.x)*(tempx1 - B.x)) +
-		((A.y - B.y)*(A.y - B.y)) +
-		((A.z - B.z)*(A.z - B.z))) < 4.0f)
-	{
-		return 2;
-	}
-
-	float tempz1 = A.z;
-	tempz1 -= moveSpeed2 * dt;
-	if (sqrt(((A.x - B.x)*(A.x - B.x)) +
-		((A.y - B.y)*(A.y - B.y)) +
-		((tempz1 - B.z)*(tempz1 - B.z))) < 4.0f)
-	{
-		return 3;
-	}
-
-	tempz1 = A.z;
-	tempz1 += moveSpeed2 * dt;
-	if (sqrt(((A.x - B.x)*(A.x - B.x)) +
-		((A.y - B.y)*(A.y - B.y)) +
-		((tempz1 - B.z)*(tempz1 - B.z))) < 4.0f)
-	{
-		return 4;
 	}
 	return 0;
 }

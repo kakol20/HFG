@@ -8,9 +8,12 @@ public:
 	Collision();
 	~Collision();
 
-	int colliding(XMFLOAT3 A, XMFLOAT3 B, float dt);
+	int colliding(XMFLOAT3 A, XMFLOAT3 B, float dt,float dist);
 
 private:
+	XMFLOAT3 m_nextP;
+	XMVECTOR m_direction;
+	float m_speed;
 	float moveSpeed2 = 5.0f;
 };
 

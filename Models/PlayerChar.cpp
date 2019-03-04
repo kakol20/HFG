@@ -232,3 +232,13 @@ XMVECTOR Player::getDirection()
 {
 	return m_direction;
 }
+
+void Player::setRadius(float radius2)
+{
+	m_radius = radius2;
+}
+
+float Player::getRadius()
+{
+	return m_radius;
+}
