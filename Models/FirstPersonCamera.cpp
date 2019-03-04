@@ -18,6 +18,11 @@ FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f 
 	//camPosition = XMVectorSet( 0.0f, 5.0f, -8.0f, 0.0f );
 	//camTarget = XMVectorSet( 0.0f, 0.0f, 0.0f, 0.0f );
 	camUp_ = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
+
+	position_.y = 3.0f;
+
+	// set true to move camera freely
+	m_controllable = true;
 }
 
 
@@ -117,15 +122,37 @@ XMFLOAT3 FirstPersonCamera::GetPosition( )
 
 void FirstPersonCamera::update(Player * Player1, Player * Player2)
 {
-	// find midpoint between playeras
+	// player1 will always be on left side
+	// find midpoint between players
 	// find which player is on the left side of the camera
 	// set direction of camera perpendicular to player's direction
 	// set distance from midpoint based on distance between players
 
-	XMFLOAT3 mid = { (Player1->getPosition().x + Player2->getPosition().x) / 2.0f, (Player1->getPosition().y + Player2->getPosition().y) / 2.0f, (Player1->getPosition().z + Player2->getPosition().z) / 2.0f };
+	if (!m_controllable)
+	{
+		XMFLOAT3 mid = { (Player1->getPosition().x + Player2->getPosition().x) / 2.0f, (Player1->getPosition().y + Player2->getPosition().y) / 2.0f, (Player1->getPosition().z + Player2->getPosition().z) / 2.0f };
 
-	XMFLOAT3 tempDir = { Player1->getPosition().z, mid.y, -1.0f * Player1->getPosition().z };
+		//XMFLOAT3 tempDir = { , Player1->getPosition().y - Player2->getPosition().y,  };
 
+		float tempX = Player1->getPosition().x - Player2->getPosition().x;
+		float tempZ = Player1->getPosition().z - Player2->getPosition().z;
+
+		XMFLOAT3 tempDir = { tempZ, 0.0f, -1 * tempX };
+
+		XMVECTOR tempDirVect = XMLoadFloat3(&tempDir);
+		tempDirVect = XMVector3Normalize(tempDirVect);
+		tempDirVect = tempDirVect * 20.0f;
+
+		tempDir.x = -1 * XMVectorGetX(tempDirVect);
+		tempDir.z = -1 * XMVectorGetZ(tempDirVect);
+
+		position_.x = mid.x + tempDir.x;
+		position_.z = mid.z + tempDir.z;
+
+		XMVECTOR camTarget = XMLoadFloat3(&mid);
+		//camTarget = XMVector3Normalize(camTarget);
+		camView_ = XMMatrixLookAtLH(XMLoadFloat3(&position_), camTarget, camUp_);
+	}
 }
 
 XMMATRIX FirstPersonCamera::GetViewMatrix( )

@@ -37,8 +37,10 @@ public:
 	void setIdleMesh(Mesh * meshFrames[]);
 	void setWalkMesh(Mesh * meshFrames[]);
 
+	void setFPS(float fps) { m_fps = fps; };
+
 	void SetPlayer(bool player);
-	XMFLOAT3 getPosition();
+	XMFLOAT3 getPosition() const;
 	XMVECTOR getDirection();
 
 private:
@@ -56,6 +58,7 @@ private:
 	bool m_isAnimated;
 	std::string m_animation;
 	float m_dtCumulative;
+	float m_fps;
 
 	XMMATRIX m_worldMat;
 	XMMATRIX m_translation;

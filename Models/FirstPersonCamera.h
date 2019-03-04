@@ -18,17 +18,18 @@ class FirstPersonCamera
 		void SetTarget( XMFLOAT3& target );
 		void SetPosition(float x, float y, float z);
 		XMFLOAT3 GetPosition( );
-		void SetDirection(float x, float y, float z);
+		// void SetDirection(float x, float y, float z);
 		void Move(float leftRight, float backFoward, float upDown);
 
 		void ApplyZoom( float zoomDelta );
 		void ApplyRotation( float yawDelta, float pitchDelta );
-
+		XMMATRIX GetViewMatrix();
 
 		// OWN  CODE
 		void update(Player * Player1, Player * Player2);
 
-		XMMATRIX GetViewMatrix( );
+		void setControllable(bool flag) { m_controllable = flag; };
+		bool getControllable() { return m_controllable; };
 
 	private:
 		XMFLOAT3 position_;
@@ -46,6 +47,10 @@ class FirstPersonCamera
 		XMMATRIX camView_;
 
 		XMVECTOR camUp_;
+
+		// own variables
+
+		bool m_controllable;
 };
 
 #endif

@@ -20,6 +20,8 @@ Player::Player()
 	m_animation = "n/a";
 
 	m_speed = 2.0f;
+
+	m_fps = 12.0f;
 }
 
 Player::~Player()
@@ -38,10 +40,14 @@ void Player::setTexture(Texture * texture)
 
 Mesh * Player::getMesh()
 {
-	if (m_animation == "walk")
+	if (m_isAnimated)
 	{
-		return m_walkAnim[m_currFrame];
+		if (m_animation == "walk")
+		{
+			return m_walkAnim[m_currFrame];
+		}
 	}
+	
 	
 	return m_mesh;
 }
@@ -125,10 +131,10 @@ void Player::update(float dt, XMFLOAT3 opponentPosition)
 		0.0f);
 	// animation
 
-	if (m_animation == "walk")
+	if (m_isAnimated)
 	{
 		m_dtCumulative += dt;
-		if (m_dtCumulative >= (1 / 12.0f))
+		if (m_dtCumulative >= (1 / m_fps))
 		{
 			m_dtCumulative = 0.0f;
 			m_currFrame++;
@@ -139,7 +145,6 @@ void Player::update(float dt, XMFLOAT3 opponentPosition)
 			}
 		}
 	}
-
 	//m_direction = XMdVector3ClampLength(m_direction, 0.0f, 1.0f);
 	m_direction = XMVector3Normalize(m_direction);
 
@@ -223,7 +228,7 @@ void Player::setWalkMesh(Mesh * meshFrames[])
 }
 
 
-XMFLOAT3 Player::getPosition()
+XMFLOAT3 Player::getPosition() const
 {
 	return m_position;
 }

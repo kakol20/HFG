@@ -131,10 +131,6 @@ class ModelsDemo : public Dx11DemoBase
 		Texture model2Texture;
 
 		GameObject models[3];
-
-		Mesh* robotDeadMeshes[10];
-		Texture robotTexture;
-		Animation robotDead;
 		
 		// ---------- Players ----------
 		Mesh Player1Mesh;

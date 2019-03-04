@@ -274,69 +274,10 @@ bool ModelsDemo::LoadContent()
 		return false;
 	}
 
-	for (int i = 0; i < 10; i++)
+	/*for (int i = 0; i < 10; i++)
 	{
 		robotDeadMeshes[i] = new Mesh();
-	}
-
-	// ----- ROBOT DEAD ANIMATION -----
-	
-	if (!robotDeadMeshes[0]->Init("PlayerModels/Cameron_Robot/RobotDead01.obj",
- d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!robotDeadMeshes[1]->Init("PlayerModels/Cameron_Robot/RobotDead02.obj",
- d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!robotDeadMeshes[2]->Init("PlayerModels/Cameron_Robot/RobotDead03.obj",
- d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!robotDeadMeshes[3]->Init("PlayerModels/Cameron_Robot/RobotDead04.obj",
- d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!robotDeadMeshes[4]->Init("PlayerModels/Cameron_Robot/RobotDead05.obj",
- d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!robotDeadMeshes[5]->Init("PlayerModels/Cameron_Robot/RobotDead06.obj",
- d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!robotDeadMeshes[6]->Init("PlayerModels/Cameron_Robot/RobotDead07.obj",
- d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!robotDeadMeshes[7]->Init("PlayerModels/Cameron_Robot/RobotDead08.obj",
- d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!robotDeadMeshes[8]->Init("PlayerModels/Cameron_Robot/RobotDead09.obj",
- d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!robotDeadMeshes[9]->Init("PlayerModels/Cameron_Robot/RobotDead10.obj",
- d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	
-	if (!robotTexture.Init("PlayerModels/Cameron_Robot/robot01.jpg", d3dResult
-		, d3dDevice_))
-	{
-		return false;
-	} 
+	}*/
 
 	
 	// ------------------------------ LOADING CHARACTER MODELS ------------------------------
@@ -344,7 +285,7 @@ bool ModelsDemo::LoadContent()
 	// Kremit
 	for (int i = 0; i < 8; i++)
 	{
-		std::string walkName = "PlayerModels/Antonina_Wolf/Walk/WolfF";
+		std::string walkName = "PlayerModels/Nathan_ExoSuit/Walk/EXO_Walk_0";
 		//std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
 
 		walkName = walkName + std::to_string(i + 1) + ".obj";
@@ -355,14 +296,20 @@ bool ModelsDemo::LoadContent()
 			return false;
 		}
 	}
-	// temporary - comment out before commiting to github
-	if (!KremitTexture.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.jpg", d3dResult, d3dDevice_))
+	if (!KremitTexture.Init("PlayerModels/Nathan_ExoSuit/Walk/LabRatUV.png", d3dResult, d3dDevice_))
 	{
 		return false;
 	}
+
+	// temporary - comment out before commiting to github
+
 	Player1.setWalkMesh(KremitWalk);
+	Player1.setTexture(&KremitTexture);
 	Player1.setIsAnimated(true);
 	Player1.setAnimation("walk");
+	Player1.setFPS(1.0f);
+
+	// end
 
 	// ------------------------------ GAME OBJECT LOADING ------------------------------
 
@@ -386,44 +333,21 @@ bool ModelsDemo::LoadContent()
 	models[1].setDirection(XMVectorSet(1.0f, 0.0f, 1.0f, 0.0f));
 	models[2].setDirection(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f));
 
-	robotDead.setMeshFrames(robotDeadMeshes);
-	robotDead.setTexture(&robotTexture);
-
-	robotDead.setPosition({ 10.0f, 0.0f, 10.f });
-	//robotDead.setPosition({ 0.5f, 0.5f, 0.5f });
-	robotDead.setScale({ 0.16f, 0.16f, 0.16f });
-	robotDead.setAnimate(true);
-
 	// ---------- LOADING PLAYERS ----------
-	
-	/*if (!Player1Mesh.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_))
-	{
-		return false;
-	}
-	if (!Player1Texture.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Machine_Texture.png", d3dResult, d3dDevice_))
-	{
-		return false;
-	}*/
-	
 
-	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.obj", d3dResult, d3dDevice_)) return false;
-	if (!Player1Texture.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.jpg", d3dResult, d3dDevice_)) return false;
+	if (!Player1Mesh.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
+	if (!Player1Texture.Init("PlayerModels/Nathan_ExoSuit/Walk/LabRatUV.png", d3dResult, d3dDevice_)) return false;
 	Player1.setMesh(&Player1Mesh);
-	Player1.setTexture(&Player1Texture);
-	Player1.setPosition({ 20.0f, 0.0f, 20.0f });
+	//Player1.setTexture(&Player1Texture);
+	Player1.setPosition({ -10.0f, 0.0f, 20.0f });
 	Player1.setScale({ 0.275f, 0.275f, 0.275f });
 
-	if (!Player2Mesh.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_110219.obj", d3dResult, d3dDevice_)) return false;
-	if (!Player2Texture.Init("PlayerModels/Cameron_Robot/Idle/RobotUVwires.png", d3dResult, d3dDevice_)) return false;
+	if (!Player2Mesh.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
+	if (!Player2Texture.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Machine_Texture.png", d3dResult, d3dDevice_)) return false;
 	Player2.setMesh(&Player2Mesh);
 	Player2.setTexture(&Player2Texture);
-	Player2.setPosition({ 30.0f, 0.0f, 20.0f });
+	Player2.setPosition({ 10.0f, 0.0f, 20.0f });
 	Player2.setScale({ 0.02f, 0.02f, 0.02f });
-
-	// temporary - comment out before uploading to github
-	Player1.setWalkMesh(KremitWalk);
-	Player1.setIsAnimated(true);
-	Player1.setAnimation("walk");
 
 	// ------------------------------ END ------------------------------
 
@@ -627,16 +551,6 @@ void ModelsDemo::UnloadContent()
 		m_alphaDisableBlendingState = 0;
 	}
 
-	for (int i = 0; i < 10; i++)
-	{
-		if (robotDeadMeshes[i] != nullptr)
-		{
-			robotDeadMeshes[i]->Unload();
-			delete robotDeadMeshes[i];
-		}
-		robotDeadMeshes[i] = nullptr;
-	}
-
 	Player1Mesh.Unload();
 	Player1Texture.unloadTexture();
 
@@ -750,8 +664,6 @@ void ModelsDemo::Update(float dt)
 		}
 		
 		// following each other
-
-		robotDead.Update(dt);
 		
 		//models[0].moveForward(2 * dt);
 		Tank3Speed = 2 * dt;
@@ -959,40 +871,44 @@ void ModelsDemo::Update(float dt)
 			}
 		}
 		//============================== CAMERA  =====================================
-		if ((keystate[DIK_J] & 0x80))
-		{
-			//moveLeftRight -= moveSpeed;
-			moveLeftRight -= moveSpeed2 * dt;
-			
-		}
-		if ((keystate[DIK_L] & 0x80))
-		{
-			//moveLeftRight += moveSpeed;
-			moveLeftRight += moveSpeed2 * dt;
-		
-		}
 
-		if ((keystate[DIK_K] & 0x80))
+		if (camera_.getControllable())
 		{
-			//moveBackForward  -= moveSpeed;
-			moveBackForward -= dt * moveSpeed2;
-		}
-		if ((keystate[DIK_I] & 0x80))
-		{
-			//moveBackForward  += moveSpeed;
-			moveBackForward += dt * moveSpeed2;
-		}
+			if ((keystate[DIK_J] & 0x80))
+			{
+				//moveLeftRight -= moveSpeed;
+				moveLeftRight -= moveSpeed2 * dt;
 
-		if ((keystate[DIK_U] & 0x80))
-		{
-			//moveBackForward  -= moveSpeed;
-			moveUpDown -= dt * moveSpeed2;
-		}
-		if ((keystate[DIK_O] & 0x80))
-		{
-			//moveBackForward  += moveSpeed;
-			moveUpDown += dt * moveSpeed2;
-		}
+			}
+			if ((keystate[DIK_L] & 0x80))
+			{
+				//moveLeftRight += moveSpeed;
+				moveLeftRight += moveSpeed2 * dt;
+
+			}
+
+			if ((keystate[DIK_K] & 0x80))
+			{
+				//moveBackForward  -= moveSpeed;
+				moveBackForward -= dt * moveSpeed2;
+			}
+			if ((keystate[DIK_I] & 0x80))
+			{
+				//moveBackForward  += moveSpeed;
+				moveBackForward += dt * moveSpeed2;
+			}
+
+			if ((keystate[DIK_U] & 0x80))
+			{
+				//moveBackForward  -= moveSpeed;
+				moveUpDown -= dt * moveSpeed2;
+			}
+			if ((keystate[DIK_O] & 0x80))
+			{
+				//moveBackForward  += moveSpeed;
+				moveUpDown += dt * moveSpeed2;
+			}
+		}	
 
 		if (keystate[DIK_SUBTRACT] & 0x80)
 		{
@@ -1009,41 +925,41 @@ void ModelsDemo::Update(float dt)
 			gameState_ = PAUSED;
 		}
 
-		if ((mouseCurrState.lX != mousePrevState.lX) || (mouseCurrState.lY != mousePrevState.lY))
-		{
-			yRotation += mousePrevState.lX * 0.005f;
-			//yRotation += mousePrevState.lX * dt*2.0f;//mouse movement already based on time
-
-			xRotation += mouseCurrState.lY * 0.005f;
-			//xRotation += mouseCurrState.lY * dt*2.0f;/mouse movement already based on time
-
-
-			if (xRotation>XM_PI / 8)
-			{
-				xRotation = XM_PI / 8;
-			}
-
-			if (xRotation<-(XM_PI / 8))
-			{
-				xRotation = -(XM_PI / 8);
-			}
-
-			mousePrevState = mouseCurrState;
-		}
-
-
-		camera_.Move(moveLeftRight, moveBackForward, moveUpDown);
 		models[1].setPosition(XMFLOAT3(m_x1, m_y1, m_z1));
 		models[2].setPosition(XMFLOAT3(m_x2, m_y2, m_z2));
+
+		if (camera_.getControllable())
+		{
+			if ((mouseCurrState.lX != mousePrevState.lX) || (mouseCurrState.lY != mousePrevState.lY))
+			{
+				yRotation += mousePrevState.lX * 0.005f;
+				//yRotation += mousePrevState.lX * dt*2.0f;//mouse movement already based on time
+
+				xRotation += mouseCurrState.lY * 0.005f;
+				//xRotation += mouseCurrState.lY * dt*2.0f;/mouse movement already based on time
+
+
+				if (xRotation>XM_PI / 8)
+				{
+					xRotation = XM_PI / 8;
+				}
+
+				if (xRotation<-(XM_PI / 8))
+				{
+					xRotation = -(XM_PI / 8);
+				}
+
+				mousePrevState = mouseCurrState;
+			}
+
+			camera_.Move(moveLeftRight, moveBackForward, moveUpDown);
+			//camera_.setControllable(false);
+			camera_.ApplyRotation(xRotation, yRotation);
+
+		}
+
 		camera_.ApplyZoom(zoom);
-		camera_.ApplyRotation(xRotation, yRotation);
-
-		
-		
-
-
-
-
+		camera_.update(&Player1, &Player2);
 
 	}
 
@@ -1266,11 +1182,6 @@ void ModelsDemo::Render()
 
 		}
 
-		d3dContext_->IASetVertexBuffers(0, 1, robotDead.getCurrentFrame()->getVertexBuffer(), &stride, &offset);
-		d3dContext_->PSSetShaderResources(0, 1, robotDead.getTexture()->getColorMap());
-		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &robotDead.getWorldMat(), 0, 0);
-		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-		d3dContext_->Draw(robotDead.getCurrentFrame()->getTotalVerts(), 0);
 
 		////////////////////terrain////////////////////////////////
 		d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
