@@ -38,12 +38,8 @@ public:
 	void setWalkMesh(Mesh * meshFrames[]);
 
 	void SetPlayer(bool player);
-
 	XMFLOAT3 getPosition();
 	XMVECTOR getDirection();
-	
-	void setRadius( float radius2);
-	float getRadius();
 
 private:
 	Mesh * m_mesh;
@@ -77,7 +73,7 @@ private:
 	float m_health;
 	float m_speed;
 	float m_strength;
-	float m_radius;
+
 	bool m_player1 = true;
 };
 

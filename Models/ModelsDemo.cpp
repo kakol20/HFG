@@ -867,49 +867,42 @@ void ModelsDemo::Update(float dt)
 	float moveLeftRight = 0.0;
 	float moveBackForward = 0.0;
 	float moveUpDown = 0.0;
-
-	float radius1 = 2.0f;
-	Player1.setRadius(radius1);
-
-	float radius2 = 2.0f;
-	Player2.setRadius(radius2);
-
-	
-	float dist = Player1.getRadius() + Player2.getRadius() ;
 	Player2.SetPlayer(false);
-
 	if (gameState_ == RUN)
 	{
 		// =========== MODEL MOVEMENTS 1 =================
-		if ((keystate[DIK_W] & 0x80))
-		{
-			float tempx = m_x1;
-			tempx -= moveSpeed2 * dt;
-			
-				//m_x1 -= moveSpeed2 * dt;
-				bool right = false;
-				Player1.moveRight(dt, right);
-			
-		}
 		if ((keystate[DIK_S] & 0x80))
 		{
 			float tempx = m_x1;
+			tempx -= moveSpeed2 * dt;
+			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt) != 1)
+			{
+				//m_x1 -= moveSpeed2 * dt;
+				bool right = false;
+				Player1.moveRight(dt, right);
+			}
+		}
+		if ((keystate[DIK_W] & 0x80))
+		{
+			float tempx = m_x1;
 			tempx += moveSpeed2 * dt;
-			
+			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt) != 2)
+			{
 				//m_x1 += moveSpeed2 * dt;
 				bool right = true;
 				Player1.moveRight(dt, right);
-				  
+			}	  
 		}
 
 		if ((keystate[DIK_A] & 0x80))
 		{
 			float tempx = m_z1;
 			tempx -= moveSpeed2 * dt;
-			
+			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt) != 3)
+			{
 				//m_z1 -= moveSpeed2 * dt;
 				Player1.moveForward(dt, true);
-			
+			}
 		}
 		if ((keystate[DIK_D] & 0x80))
 
@@ -917,7 +910,7 @@ void ModelsDemo::Update(float dt)
 		{
 			float tempx = m_z1;
 			tempx += moveSpeed2 * dt;
-			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) != 1)
+			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt) != 4)
 			{
 				//m_z1 += moveSpeed2 * dt;
 				bool forward = false;
@@ -929,28 +922,37 @@ void ModelsDemo::Update(float dt)
 		{
 			float tempx = m_x2;
 			tempx -= moveSpeed2 * dt;
-			bool right = false;
-			Player2.moveRight(dt, right);
+			if (collision.colliding(Player2.getPosition(), Player1.getPosition(), dt) != 1)
+			{
+				bool right = false;
+				Player2.moveRight(dt, right);
+			}
 		}
 		if ((keystate[DIK_UP] & 0x80))
 		{
 			float tempx = m_x2;
 			tempx += moveSpeed2 * dt;
-			bool right = true;
-			Player2.moveRight(dt, right);
+			if (collision.colliding(Player2.getPosition(),Player1.getPosition(), dt) != 2)
+			{
+				bool right = true;
+				Player2.moveRight(dt, right);
+			}
 		}
 
 		if ((keystate[DIK_RIGHT] & 0x80))
 		{
 			float tempx = m_z2;
 			tempx -= moveSpeed2 * dt;
-			Player2.moveForward(dt, true);	  
+			if (collision.colliding(Player2.getPosition(), Player1.getPosition(), dt) != 3)
+			{
+				Player2.moveForward(dt, true);
+			}	  
 		}
 		if ((keystate[DIK_LEFT] & 0x80))
 		{
 			float tempx = m_z2;
 			tempx += moveSpeed2 * dt;
-			if (collision.colliding(Player2.getPosition(), Player1.getPosition(), dt, dist) != 1)
+			if (collision.colliding(Player2.getPosition(), Player1.getPosition(), dt) != 4)
 			{
 				bool forward = false;
 				Player2.moveForward(dt, forward);
