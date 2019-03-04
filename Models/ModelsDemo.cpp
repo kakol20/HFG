@@ -280,9 +280,9 @@ bool ModelsDemo::LoadContent()
 	// temporary - comment out before commiting to github
 
 	Player1.setWalkMesh(KremitWalk);
-	Player1.setTexture(&KremitTexture);
-	Player1.setIsAnimated(true);
-	Player1.setAnimation("walk");
+	//Player1.setTexture(&KremitTexture);
+	Player1.setIsAnimated(false);
+	Player1.setAnimation("none");
 	Player1.setFPS(1.0f);
 
 	// end
@@ -291,19 +291,19 @@ bool ModelsDemo::LoadContent()
 
 	// ---------- LOADING PLAYERS ----------
 
-	if (!Player1Mesh.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
-	if (!Player1Texture.Init("PlayerModels/Nathan_ExoSuit/Walk/LabRatUV.png", d3dResult, d3dDevice_)) return false;
+	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.obj", d3dResult, d3dDevice_)) return false;
+	if (!Player1Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
 	Player1.setMesh(&Player1Mesh);
-	//Player1.setTexture(&Player1Texture);
+	Player1.setTexture(&Player1Texture);
 	Player1.setPosition({ -10.0f, 0.0f, 20.0f });
-	Player1.setScale({ 0.275f, 0.275f, 0.275f });
+	//Player1.setScale({ 0.275f, 0.275f, 0.275f });
 
-	if (!Player2Mesh.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
-	if (!Player2Texture.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Machine_Texture.png", d3dResult, d3dDevice_)) return false;
+	if (!Player2Mesh.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_V3.obj", d3dResult, d3dDevice_)) return false;
+	if (!Player2Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
 	Player2.setMesh(&Player2Mesh);
 	Player2.setTexture(&Player2Texture);
 	Player2.setPosition({ 10.0f, 0.0f, 20.0f });
-	Player2.setScale({ 0.02f, 0.02f, 0.02f });
+	//Player2.setScale({ 0.02f, 0.02f, 0.02f });
 
 	// ---------- LOADING OBJECTS ----------
 
