@@ -13,13 +13,13 @@ By Allen Sherrod and Wendy Jones
 
 
 
-struct Models {
-	char* TEXTURE;
-	char* MODEL;
-};
-
-Models model2 = { "Tom.png", "Tom.obj" };
-Models Antonina = { "Antonina.jpg", "Antonina.obj" };
+//struct Models {
+//	char* TEXTURE;
+//	char* MODEL;
+//};
+//
+//Models model2 = { "Tom.png", "Tom.obj" };
+//Models Antonina = { "Antonina.jpg", "Antonina.obj" };
 
 //char* MODEL_NAME = "building smaller scale.obj";
 //char* MODEL_NAME = "138k.obj";
@@ -255,30 +255,6 @@ bool ModelsDemo::LoadContent()
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Load meshes
-	if (!model1Mesh.Init(Antonina.MODEL, d3dResult, d3dDevice_)) {
-		return false;
-	}
-
-	if (!model2Mesh.Init(model2.MODEL, d3dResult, d3dDevice_)) {
-		return false;
-	}
-
-	// Textures
-	if (!model1Texture.Init(Antonina.TEXTURE, d3dResult, d3dDevice_)) {
-		return false;
-	}
-	
-
-	if (!model2Texture.Init(model2.TEXTURE, d3dResult, d3dDevice_)) {
-		return false;
-	}
-
-	/*for (int i = 0; i < 10; i++)
-	{
-		robotDeadMeshes[i] = new Mesh();
-	}*/
-
 	
 	// ------------------------------ LOADING CHARACTER MODELS ------------------------------
 
@@ -313,26 +289,6 @@ bool ModelsDemo::LoadContent()
 
 	// ------------------------------ GAME OBJECT LOADING ------------------------------
 
-	for (int i = 1; i < 3; i++)
-	{
-		models[i].setMesh(&model1Mesh);
-		models[i].setTexture(&model1Texture);
-
-	}
-
-	models[0].setMesh(&model2Mesh);
-	models[0].setTexture(&model2Texture);
-
-	models[0].setPosition({ -4.0f, 0.0f, -10.0f });
-	models[1].setPosition({ m_x2, m_y2, m_z2 });
-	models[2].setPosition({ m_x1, m_y1, m_z1 });
-
-	models[0].setScale({ 0.55f, 0.55f, 0.55f });
-
-	models[0].setDirection(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f));
-	models[1].setDirection(XMVectorSet(1.0f, 0.0f, 1.0f, 0.0f));
-	models[2].setDirection(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f));
-
 	// ---------- LOADING PLAYERS ----------
 
 	if (!Player1Mesh.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
@@ -348,6 +304,8 @@ bool ModelsDemo::LoadContent()
 	Player2.setTexture(&Player2Texture);
 	Player2.setPosition({ 10.0f, 0.0f, 20.0f });
 	Player2.setScale({ 0.02f, 0.02f, 0.02f });
+
+	// ---------- LOADING OBJECTS ----------
 
 	// ------------------------------ END ------------------------------
 
@@ -517,11 +475,6 @@ void ModelsDemo::UnloadContent()
 	if (colorMapSampler_) colorMapSampler_->Release();
 	if (textColorMapSampler_) textColorMapSampler_->Release();
 
-	model1Texture.unloadTexture();
-	model2Texture.unloadTexture();
-	model1Mesh.Unload();
-	model2Mesh.Unload();
-
 	if (terrainColorMap_) terrainColorMap_->Release();
 	if (textColorMap_) textColorMap_->Release();
 	if (textureMapVS_) textureMapVS_->Release();
@@ -641,27 +594,6 @@ void ModelsDemo::Update(float dt)
 	if (gameState_ == RUN)
 	{
 		XMVECTOR cameraPosition = XMLoadFloat3(&camera_.GetPosition());
-
-		for (int i = 0; i < 3; i++)
-		{
-			if (i == 0)
-			{
-
-				/*d3dContext_->IASetVertexBuffers(0, 1, models[0].getMesh()->getVertexBuffer(), &stride, &offset);
-				d3dContext_->PSSetShaderResources(0, 1, models[0].getTexture()->getColorMap());*/
-				//models[i].moveForward(10);
-
-				models[i].setDirection(XMVectorSet(XMVectorGetX(cameraPosition) - models[i].getPosition().x, 0.0f,
-				XMVectorGetZ(cameraPosition) - models[i].getPosition().z, 0.0f));
-
-			}
-			else {
-				/*d3dContext_->IASetVertexBuffers(0, 1, models[i].getMesh()->getVertexBuffer(), &stride, &offset);
-				d3dContext_->PSSetShaderResources(0, 1, models[i].getTexture()->getColorMap());*/
-				models[i].setDirection(XMVectorSet(models[i - 1].getPosition().x - models[i].getPosition().x, 0.0f,
-					models[i - 1].getPosition().z - models[i].getPosition().z, 0.0f));
-			}
-		}
 		
 		// following each other
 		
@@ -925,9 +857,6 @@ void ModelsDemo::Update(float dt)
 			gameState_ = PAUSED;
 		}
 
-		models[1].setPosition(XMFLOAT3(m_x1, m_y1, m_z1));
-		models[2].setPosition(XMFLOAT3(m_x2, m_y2, m_z2));
-
 		if (camera_.getControllable())
 		{
 			if ((mouseCurrState.lX != mousePrevState.lX) || (mouseCurrState.lY != mousePrevState.lY))
@@ -1121,7 +1050,7 @@ void ModelsDemo::Render()
 
 
 		d3dContext_->IASetInputLayout(inputLayout_);
-		d3dContext_->IASetVertexBuffers(0, 1, model2Mesh.getVertexBuffer(), &stride, &offset);
+		//d3dContext_->IASetVertexBuffers(0, 1, model2Mesh.getVertexBuffer(), &stride, &offset);
 		d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		d3dContext_->VSSetShader(textureMapVS_, 0, 0);
@@ -1136,7 +1065,7 @@ void ModelsDemo::Render()
 		//TurnZBufferOff();
 		// 1st objects
 
-		d3dContext_->PSSetShaderResources(0, 1, model2Texture.getColorMap());
+		//d3dContext_->PSSetShaderResources(0, 1, model2Texture.getColorMap());
 		XMMATRIX worldMat = XMMatrixIdentity();
 		worldMat = XMMatrixTranspose(worldMat);
 
@@ -1161,27 +1090,6 @@ void ModelsDemo::Render()
 		///////////////////second object///////////////////////
 
 		XMVECTOR cameraPosition = XMLoadFloat3(&camera_.GetPosition());
-
-		d3dContext_->IASetVertexBuffers(0, 1, models[0].getMesh()->getVertexBuffer(), &stride, &offset);
-		d3dContext_->PSSetShaderResources(0, 1, models[0].getTexture()->getColorMap());
-
-		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &models[0].getWorldMat(), 0, 0);
-		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-		d3dContext_->Draw(models[0].getMesh()->getTotalVerts(), 0);
-
-		for (int i = 1; i < 3; i++)
-		{
-			d3dContext_->IASetVertexBuffers(0, 1, models[i].getMesh()->getVertexBuffer(), &stride, &offset);
-			d3dContext_->PSSetShaderResources(0, 1, models[i].getTexture()->getColorMap());
-
-			d3dContext_->UpdateSubresource(worldCB_, 0, 0, &models[i].getWorldMat(), 0, 0);
-			d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-			d3dContext_->Draw(models[i].getMesh()->getTotalVerts(), 0);
-
-			//d3dContext_->PSSetShaderResources(0, 1, models[i].getTexture()->getColorMap());
-
-		}
-
 
 		////////////////////terrain////////////////////////////////
 		d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
