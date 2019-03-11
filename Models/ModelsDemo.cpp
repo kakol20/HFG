@@ -305,6 +305,8 @@ bool ModelsDemo::LoadContent()
 	Player2.setPosition({ 10.0f, 0.0f, 0.0f });
 	//Player2.setScale({ 0.02f, 0.02f, 0.02f });
 
+	camera_.snapPosition(&Player1, &Player2);
+
 	// ---------- LOADING OBJECTS ----------
 
 	if (!SkyBoxMesh.Init("GameObjects/Skybox1.obj", d3dResult, d3dDevice_)) return false;
@@ -898,8 +900,7 @@ void ModelsDemo::Update(float dt)
 		}
 
 		camera_.ApplyZoom(zoom);
-		camera_.update(&Player1, &Player2);
-
+		camera_.update(dt, &Player1, &Player2);
 	}
 
 	memcpy(&prevController1State_, &controller1State_, sizeof(XINPUT_STATE));

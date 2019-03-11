@@ -28,10 +28,14 @@ class FirstPersonCamera
 		XMMATRIX GetViewMatrix();
 
 		// OWN  CODE
-		void update(Player * Player1, Player * Player2);
+		void update(float dt, Player * Player1, Player * Player2);
+
+		void snapPosition(Player * Player1, Player * Player2); // for moving the camera without smooth movement
 
 		void setControllable(bool flag) { m_controllable = flag; };
 		bool getControllable() { return m_controllable; };
+
+		void setSpeed(float speed) { m_speed = speed; };
 
 	private:
 		XMFLOAT3 position_;
@@ -54,6 +58,8 @@ class FirstPersonCamera
 
 		bool m_controllable;
 		float m_distance; // distance to target
+
+		float m_speed;
 };
 
 #endif
