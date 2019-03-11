@@ -261,7 +261,7 @@ bool ModelsDemo::LoadContent()
 	// Kremit
 	for (int i = 0; i < 8; i++)
 	{
-		std::string walkName = "PlayerModels/Nathan_ExoSuit/Walk/EXO_Walk_0";
+		std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
 		//std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
 
 		walkName = walkName + std::to_string(i + 1) + ".obj";
@@ -272,12 +272,12 @@ bool ModelsDemo::LoadContent()
 			return false;
 		}
 	}
-	if (!KremitTexture.Init("PlayerModels/Nathan_ExoSuit/Walk/LabRatUV.png", d3dResult, d3dDevice_))
+	if (!KremitTexture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_))
 	{
 		return false;
 	}
 
-	// temporary - comment out before commiting to github
+	// temporary
 
 	Player1.setWalkMesh(KremitWalk);
 	//Player1.setTexture(&KremitTexture);

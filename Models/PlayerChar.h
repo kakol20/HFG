@@ -37,6 +37,8 @@ public:
 
 	void setIdleMesh(Mesh * meshFrames[]);
 	void setWalkMesh(Mesh * meshFrames[]);
+	void setAttackMesh(Mesh * meshFrames[]);
+	void setDeathMesh(Mesh * meshFrames[]);
 
 	void setFPS(float fps) { m_fps = fps; };
 
