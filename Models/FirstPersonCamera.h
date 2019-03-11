@@ -5,6 +5,8 @@
 
 #include "PlayerChar.h"
 
+#include <iostream>
+
 
 class FirstPersonCamera
 {
@@ -51,7 +53,7 @@ class FirstPersonCamera
 		// own variables
 
 		bool m_controllable;
-		float m_distance;
+		float m_distance; // distance to target
 };
 
 #endif

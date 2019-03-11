@@ -291,7 +291,7 @@ bool ModelsDemo::LoadContent()
 
 	// ---------- LOADING PLAYERS ----------
 
-	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.obj", d3dResult, d3dDevice_)) return false;
+	if (!Player1Mesh.Init("PlayerModels/Matthew_Kremit/KremitTest.obj", d3dResult, d3dDevice_)) return false;
 	if (!Player1Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
 	Player1.setMesh(&Player1Mesh);
 	Player1.setTexture(&Player1Texture);
@@ -306,6 +306,12 @@ bool ModelsDemo::LoadContent()
 	//Player2.setScale({ 0.02f, 0.02f, 0.02f });
 
 	// ---------- LOADING OBJECTS ----------
+
+	if (!SkyBoxMesh.Init("GameObjects/Skybox1.obj", d3dResult, d3dDevice_)) return false;
+	if (!SkyBoxTexture.Init("GameObjects/Space.jpg", d3dResult, d3dDevice_)) return false;
+	SkyBox.setMesh(&SkyBoxMesh);
+	SkyBox.setTexture(&SkyBoxTexture);
+	SkyBox.setPosition({ 0.0f, 0.0f, 0.0f });
 
 	// ------------------------------ END ------------------------------
 
@@ -507,6 +513,12 @@ void ModelsDemo::UnloadContent()
 	Player1Mesh.Unload();
 	Player1Texture.unloadTexture();
 
+	Player2Mesh.Unload();
+	Player2Texture.unloadTexture();
+
+	SkyBoxMesh.Unload();
+	SkyBoxTexture.unloadTexture();
+
 	colorMapSampler_ = 0;
 	textColorMapSampler_ = 0;
 	//colorMap1_ = 0;
@@ -706,8 +718,8 @@ void ModelsDemo::Update(float dt)
 
 	}
 
-//========================== GETTING THE INPUTS / COLLISIONS  ==============================
-//moveSpeed=0.001f;
+	//========================== GETTING THE INPUTS / COLLISIONS  ==============================
+	//moveSpeed=0.001f;
 	float moveLeftRight = 0.0;
 	float moveBackForward = 0.0;
 	float moveUpDown = 0.0;
@@ -1098,6 +1110,14 @@ void ModelsDemo::Render()
 		d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
 
 		d3dContext_->Draw(6, 0);
+
+		// ---------- DRAWING GAME OBJECTS ----------
+
+		d3dContext_->IASetVertexBuffers(0, 1, SkyBox.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->PSSetShaderResources(0, 1, SkyBox.getTexture()->getColorMap());
+		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &SkyBox.getWorldMat(), 0, 0);
+		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		d3dContext_->Draw(SkyBox.getMesh()->getTotalVerts(), 0);
 
 		// ---------- DRAWING PLAYERS ----------
 		d3dContext_->IASetVertexBuffers(0, 1, Player1.getMesh()->getVertexBuffer(), &stride, &offset);

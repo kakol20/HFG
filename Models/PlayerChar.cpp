@@ -167,26 +167,6 @@ void Player::updateWorldMat()
 
 	m_translation = XMMatrixTranslation(m_position.x, m_position.y, m_position.z);
 
-	/*XMVECTOR invertX = XMVectorSet(-1.0f*XMVectorGetX(m_direction), XMVectorGetY(m_direction), XMVectorGetZ(m_direction), 0.0f);
-
-	XMVECTOR xAxis = XMVector3Cross(m_defaultUp, invertX);
-	xAxis = XMVector3Normalize(xAxis);
-
-	m_rotation = XMMatrixSet(
-		XMVectorGetX(xAxis), XMVectorGetX(m_defaultUp), XMVectorGetX(invertX), 0.0f,
-		XMVectorGetY(xAxis), XMVectorGetY(m_defaultUp), XMVectorGetY(invertX), 0.0f,
-		XMVectorGetZ(xAxis), XMVectorGetZ(m_defaultUp), XMVectorGetZ(invertX), 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f);*/
-
-	/*if (m_player1) 
-	{
-		m_rotation = XMMatrixRotationY(XM_PIDIV2);
-	}
-	else
-	{
-		m_rotation = XMMatrixRotationY(XM_PIDIV2 + XM_PI);
-	}*/
-
 	m_rotation = XMMatrixRotationY(m_angle);
 	
 	m_worldMat = m_scaleMat * m_rotation * m_translation;

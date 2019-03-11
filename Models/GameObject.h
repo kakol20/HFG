@@ -5,6 +5,8 @@
 #include "Mesh.h"
 #include "Texture.h"
 
+#include <math.h>
+
 class GameObject {
 public:
 	GameObject();

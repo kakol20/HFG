@@ -143,6 +143,17 @@ void FirstPersonCamera::update(Player * Player1, Player * Player2)
 
 		XMVECTOR tempDirVect = XMLoadFloat3(&tempDir);
 		tempDirVect = XMVector3Normalize(tempDirVect);
+
+		/*XMVECTOR tempV = XMVectorSet(Player1->getPosition().x + Player2->getPosition().x, 0.0f, Player1->getPosition().z + Player2->getPosition().z, 0.0f);
+		tempV = XMVector3Length(tempV);
+		m_distance = XMVectorGetX(tempV);*/
+		m_distance = pow(Player1->getPosition().x - Player2->getPosition().x, 2) + pow(Player1->getPosition().z - Player2->getPosition().z, 2);
+		if (m_distance == 0.0f)
+		{
+			m_distance = 1.0f;
+		}
+		m_distance = sqrt(m_distance) + 10.0f;
+
 		tempDirVect = tempDirVect * m_distance;
 
 		tempDir.x = -1 * XMVectorGetX(tempDirVect);

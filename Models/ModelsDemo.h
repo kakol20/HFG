@@ -123,6 +123,11 @@ class ModelsDemo : public Dx11DemoBase
 		GameStates gameState_;
 		PauseMenuSelection pauseMenuSelection;
 		bool displayFPS;
+
+		// ---------- Game Objects ----------
+		Mesh SkyBoxMesh;
+		Texture SkyBoxTexture;
+		GameObject SkyBox;
 		
 		// ---------- Players ----------
 		Mesh Player1Mesh;
