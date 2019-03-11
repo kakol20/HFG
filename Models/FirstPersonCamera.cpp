@@ -4,7 +4,7 @@
 #include "FirstPersonCamera.h"
 
 FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f ) ),
-    position_( XMFLOAT3( 3.0f, 3.0f, -30.0f )), direction_( XMFLOAT3( 0.0f, 0.0f, 1.0f ) )
+    position_( XMFLOAT3( 3.0f, 10.0f, -30.0f )), direction_( XMFLOAT3( 0.0f, 0.0f, 1.0f ) )
 {
 	SetDistance( 2.0f, 1.0f, 10.0f );
     SetRotation( 0.0f, 0.0f, -XM_PIDIV4/3, XM_PIDIV4/2 );
@@ -19,10 +19,12 @@ FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f 
 	//camTarget = XMVectorSet( 0.0f, 0.0f, 0.0f, 0.0f );
 	camUp_ = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 
-	position_.y = 3.0f;
+	position_.y = 10.0f;
 
 	// set true to move camera freely
-	m_controllable = true;
+	m_controllable = false;
+
+	m_distance = 40.0f;
 }
 
 
@@ -130,7 +132,7 @@ void FirstPersonCamera::update(Player * Player1, Player * Player2)
 
 	if (!m_controllable)
 	{
-		XMFLOAT3 mid = { (Player1->getPosition().x + Player2->getPosition().x) / 2.0f, (Player1->getPosition().y + Player2->getPosition().y) / 2.0f, (Player1->getPosition().z + Player2->getPosition().z) / 2.0f };
+		XMFLOAT3 mid = { (Player1->getPosition().x + Player2->getPosition().x) / 2.0f, position_.y, (Player1->getPosition().z + Player2->getPosition().z) / 2.0f };
 
 		//XMFLOAT3 tempDir = { , Player1->getPosition().y - Player2->getPosition().y,  };
 
@@ -141,7 +143,7 @@ void FirstPersonCamera::update(Player * Player1, Player * Player2)
 
 		XMVECTOR tempDirVect = XMLoadFloat3(&tempDir);
 		tempDirVect = XMVector3Normalize(tempDirVect);
-		tempDirVect = tempDirVect * 20.0f;
+		tempDirVect = tempDirVect * m_distance;
 
 		tempDir.x = -1 * XMVectorGetX(tempDirVect);
 		tempDir.z = -1 * XMVectorGetZ(tempDirVect);

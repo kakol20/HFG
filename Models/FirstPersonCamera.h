@@ -51,6 +51,7 @@ class FirstPersonCamera
 		// own variables
 
 		bool m_controllable;
+		float m_distance;
 };
 
 #endif

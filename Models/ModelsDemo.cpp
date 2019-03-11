@@ -295,14 +295,14 @@ bool ModelsDemo::LoadContent()
 	if (!Player1Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
 	Player1.setMesh(&Player1Mesh);
 	Player1.setTexture(&Player1Texture);
-	Player1.setPosition({ -10.0f, 0.0f, 20.0f });
+	Player1.setPosition({ -10.0f, 0.0f, 0.0f });
 	//Player1.setScale({ 0.275f, 0.275f, 0.275f });
 
 	if (!Player2Mesh.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_V3.obj", d3dResult, d3dDevice_)) return false;
 	if (!Player2Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
 	Player2.setMesh(&Player2Mesh);
 	Player2.setTexture(&Player2Texture);
-	Player2.setPosition({ 10.0f, 0.0f, 20.0f });
+	Player2.setPosition({ 10.0f, 0.0f, 0.0f });
 	//Player2.setScale({ 0.02f, 0.02f, 0.02f });
 
 	// ---------- LOADING OBJECTS ----------

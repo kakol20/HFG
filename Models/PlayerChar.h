@@ -6,6 +6,7 @@
 #include "Texture.h"
 
 #include <string>
+#include <math.h>
 
 class Player
 {
@@ -82,6 +83,8 @@ private:
 	float m_strength;
 	float m_radius;
 	bool m_player1 = true;
+
+	float m_angle;
 };
 
 #endif // !PLAYERCHAR_H
