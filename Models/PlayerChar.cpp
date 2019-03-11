@@ -201,6 +201,45 @@ void Player::SetPlayer(bool player)
 	m_player1 = player;
 }
 
+void Player::SetCharacter(Characters character)
+{
+	/*if (character == WOLF)
+	{
+		
+	
+	};
+
+	else if (character == ROBOT)
+	{
+	
+	};
+
+	else if (character == KREMIT)
+	{
+
+	};
+
+	else if (character == ZOMBIE)
+	{
+
+	};
+
+	else if (character == ALIEN)
+	{
+
+	};
+
+	else if (character == SKINNY)
+	{
+
+	};
+
+	else if (character == PRAVEZ)
+	{
+
+	};*/
+}
+
 void Player::setIsAnimated(bool animated)
 {
 	m_isAnimated = true;

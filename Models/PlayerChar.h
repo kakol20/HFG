@@ -8,6 +8,8 @@
 #include <string>
 #include <math.h>
 
+enum Characters {WOLF,ROBOT,KREMIT,ZOMBIE,ALIEN,SKINNY,PRAVEZ};
+
 class Player
 {
 public:
@@ -40,8 +42,9 @@ public:
 
 	void setFPS(float fps) { m_fps = fps; };
 
-	void SetPlayer(bool player);
 
+	void SetPlayer(bool player);
+	void SetCharacter(Characters character);
 	XMFLOAT3 getPosition();
 	XMVECTOR getDirection();
 	
@@ -78,6 +81,7 @@ private:
 
 	XMVECTOR m_direction;
 
+	int m_Character;
 	float m_health;
 	float m_speed;
 	float m_strength;

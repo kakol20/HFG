@@ -26,7 +26,7 @@
 
 enum GameStates {PLAY_INTRO, START_MENU, RUN, PAUSED, INTRO_MOVIE_REPLAY};
 
-enum PauseMenuSelection {RETURN, FPS, PLAY_MOVIE, QUIT};
+enum PauseMenuSelection {RETURN, FPS, PLAY_MOVIE, QUIT, CHA_SELEC};
 #define PAUSE_MENU_ITEMS 4
 
 inline PauseMenuSelection operator++(PauseMenuSelection &eDOW, int)
@@ -125,16 +125,40 @@ class ModelsDemo : public Dx11DemoBase
 		bool displayFPS;
 		
 		// ---------- Players ----------
+		Player Player1;
+		Player Player2;
+		//========== Here to create every mesh & texture for the characters
+
 		Mesh Player1Mesh;
 		Texture Player1Texture;
-		Player Player1;
 
 		Mesh Player2Mesh;
 		Texture Player2Texture;
-		Player Player2;
+
+		Mesh Wolf_M;
+		Texture Wolf_T;
+
+		Mesh Robot_M;
+		Texture Robot_T;
+
+		Mesh Kremit_M;
+		Texture Kremit_T;
+
+		Mesh Zombie_M;
+		Texture Zombie_T;
+
+		Mesh Alien_M;
+		Texture Alien_T;
+
+		Mesh Skinny_M;
+		Texture Skinny_T;
+
+		Mesh Pravez_M;
+		Texture Pravez_T;
 
 		// ---------- CHARACTERS ----------
 		Mesh * KremitWalk[8];
+		Mesh * KremitIdle[8];
 		Texture KremitTexture;
 
 		//////////////time globals///////////////////

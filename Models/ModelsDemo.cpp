@@ -291,22 +291,53 @@ bool ModelsDemo::LoadContent()
 
 	// ---------- LOADING PLAYERS ----------
 
-	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/Antonina.obj", d3dResult, d3dDevice_)) return false;
+	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/WolfUVd.obj", d3dResult, d3dDevice_)) return false;
 	if (!Player1Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
-	Player1.setMesh(&Player1Mesh);
-	Player1.setTexture(&Player1Texture);
-	Player1.setPosition({ -10.0f, 0.0f, 0.0f });
-	//Player1.setScale({ 0.275f, 0.275f, 0.275f });
 
 	if (!Player2Mesh.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_V3.obj", d3dResult, d3dDevice_)) return false;
 	if (!Player2Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+
+
+	//============ WOLF ============
+	if (!Wolf_M.Init("PlayerModels/Antonina_Wolf/Idle/WolfUVd.obj", d3dResult, d3dDevice_)) return false;
+	if (!Wolf_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	//============ ROBOT ============
+	if (!Robot_M.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_V3.obj", d3dResult, d3dDevice_)) return false;
+	if (!Robot_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	//============ KREMIT ============
+	if (!Kremit_M.Init("PlayerModels/Matthew_Kremit/Idle/KremitTest.obj", d3dResult, d3dDevice_)) return false;
+	if (!Kremit_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	//============ ZOMBIE ============
+	if (!Zombie_M.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
+	if (!Zombie_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	//============ ALIEN ============
+	if (!Alien_M.Init("PlayerModels/Lucy_Alien/Idle/Alien_Walk_1.obj", d3dResult, d3dDevice_)) return false;
+	if (!Alien_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	//============ SKINNY ============
+	//============ PRAVEZ ============
+
+	//============================================
+	Player1.setMesh(&Player1Mesh);
+	Player1.setTexture(&Player1Texture);
+	Player1.setPosition({ -10.0f, 0.0f, 0.0f });
+	//================================================
+
+	//Player1.setScale({ 0.275f, 0.275f, 0.275f });
+
+	//============================================
 	Player2.setMesh(&Player2Mesh);
 	Player2.setTexture(&Player2Texture);
 	Player2.setPosition({ 10.0f, 0.0f, 0.0f });
-	//Player2.setScale({ 0.02f, 0.02f, 0.02f });
+	//============================================
 
 	// ---------- LOADING OBJECTS ----------
-
+	/*if (enter pressed on bob)
+	{
+		Player1.setMesh(& Player1Mesh)
+			set texture
+			set animations*/
+	Player1.SetCharacter(WOLF);
+	/*}*/
 	// ------------------------------ END ------------------------------
 
 	D3D11_BUFFER_DESC vertexDesc;
@@ -1013,7 +1044,7 @@ void ModelsDemo::Render()
 
 	unsigned int stride = sizeof(VertexPos);
 	unsigned int offset = 0;
-
+	//======================= MENU !!! =======================
 	if (gameState_ == START_MENU)
 	{
 		/////////////////////////////////////////////TEXT//////////////////////////////////////////////
@@ -1039,6 +1070,11 @@ void ModelsDemo::Render()
 		TurnZBufferOn();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
+	}
+	if (gameState_ == CHA_SELEC) 
+	{
+		/*Player1.SetCharacter();*/
+	
 	}
 
 	if ((gameState_ == RUN) || (gameState_ == PAUSED))
