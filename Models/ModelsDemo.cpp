@@ -11,24 +11,7 @@ By Allen Sherrod and Wendy Jones
 #include<stdio.h>
 #include"objLoader.h"
 
-
-
-//struct Models {
-//	char* TEXTURE;
-//	char* MODEL;
-//};
-//
-//Models model2 = { "Tom.png", "Tom.obj" };
-//Models Antonina = { "Antonina.jpg", "Antonina.obj" };
-
-//char* MODEL_NAME = "building smaller scale.obj";
-//char* MODEL_NAME = "138k.obj";
-//char* TEXTURE_NAME = "Tom.png";
-//char* MODEL_NAME = "Tom.obj";
-char* TERRAIN_TEXTURE_NAME = "Concrete_texture.jpg";
-//char* MODEL_NAME = "sphere.obj";
-//char* MODEL_NAME = "TestBlock.obj";
-
+char* TERRAIN_TEXTURE_NAME = "GameObjects/DomeTexture.png";
 struct VertexPos
 {
 	XMFLOAT3 pos;
@@ -261,7 +244,7 @@ bool ModelsDemo::LoadContent()
 	// Kremit
 	for (int i = 0; i < 8; i++)
 	{
-		std::string walkName = "PlayerModels/Nathan_ExoSuit/Walk/EXO_Walk_0";
+		std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
 		//std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
 
 		walkName = walkName + std::to_string(i + 1) + ".obj";
@@ -272,12 +255,12 @@ bool ModelsDemo::LoadContent()
 			return false;
 		}
 	}
-	if (!KremitTexture.Init("PlayerModels/Nathan_ExoSuit/Walk/LabRatUV.png", d3dResult, d3dDevice_))
+	if (!KremitTexture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_))
 	{
 		return false;
 	}
 
-	// temporary - comment out before commiting to github
+	// temporary
 
 	Player1.setWalkMesh(KremitWalk);
 	//Player1.setTexture(&KremitTexture);
@@ -291,8 +274,6 @@ bool ModelsDemo::LoadContent()
 
 	// ---------- LOADING PLAYERS ----------
 
-	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/WolfUVd.obj", d3dResult, d3dDevice_)) return false;
-	if (!Player1Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
 
 	if (!Player2Mesh.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_V3.obj", d3dResult, d3dDevice_)) return false;
 	if (!Player2Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
@@ -317,6 +298,8 @@ bool ModelsDemo::LoadContent()
 	//============ PRAVEZ ============
 
 	//============================================
+	if (!Player1Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/WolfUVd.obj", d3dResult, d3dDevice_)) return false;
 	Player1.setMesh(&Player1Mesh);
 	Player1.setTexture(&Player1Texture);
 	Player1.setPosition({ -10.0f, 0.0f, 0.0f });
@@ -330,7 +313,16 @@ bool ModelsDemo::LoadContent()
 	Player2.setPosition({ 10.0f, 0.0f, 0.0f });
 	//============================================
 
+	camera_.snapPosition(&Player1, &Player2);
+
 	// ---------- LOADING OBJECTS ----------
+
+	if (!SkyBoxMesh.Init("GameObjects/Skybox1.obj", d3dResult, d3dDevice_)) return false;
+	if (!SkyBoxTexture.Init("GameObjects/SkyBoxTextureSpace.png", d3dResult, d3dDevice_)) return false;
+	SkyBox.setMesh(&SkyBoxMesh);
+	SkyBox.setTexture(&SkyBoxTexture);
+	SkyBox.setPosition({ 0.0f, 0.0f, 0.0f });
+
 	/*if (enter pressed on bob)
 	{
 		Player1.setMesh(& Player1Mesh)
@@ -344,15 +336,25 @@ bool ModelsDemo::LoadContent()
 
 	D3D11_SUBRESOURCE_DATA resourceData;
 
-	VertexPos terrainVertices[] =
+	/*VertexPos terrainVertices[] =
 	{
 		{ XMFLOAT3(100.0f, 0.0f , 100.0f), XMFLOAT2(1.0f, 0.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
-	{ XMFLOAT3(100.0f, 0.0f , -100.0f), XMFLOAT2(1.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
-	{ XMFLOAT3(-100.0f , -0.0f , -100.0f), XMFLOAT2(0.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(100.0f, 0.0f , -100.0f), XMFLOAT2(1.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(-100.0f , -0.0f , -100.0f), XMFLOAT2(0.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
 
-	{ XMFLOAT3(-100.0f , -0.0f , -100.0f), XMFLOAT2(0.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
-	{ XMFLOAT3(-100.0f ,  0.0f, 100.0f), XMFLOAT2(0.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
-	{ XMFLOAT3(100.0f,  0.0f, 100.0f), XMFLOAT2(1.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(-100.0f , -0.0f , -100.0f), XMFLOAT2(0.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(-100.0f ,  0.0f, 100.0f), XMFLOAT2(0.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(100.0f,  0.0f, 100.0f), XMFLOAT2(1.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+	};*/
+	VertexPos terrainVertices[] =
+	{
+		{ XMFLOAT3(1.0f, 0.0f , 1.0f),		XMFLOAT2(1.0f, 0.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(1.0f, 0.0f , -1.0f),		XMFLOAT2(1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(-1.0f , -0.0f , -1.0f),	XMFLOAT2(0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
+
+		{ XMFLOAT3(-1.0f , -0.0f , -1.0f),	XMFLOAT2(0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(-1.0f ,  0.0f, 1.0f),	XMFLOAT2(0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(1.0f,  0.0f, 1.0f),		XMFLOAT2(1.0f, 0.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
 	};
 
 	//D3D11_BUFFER_DESC vertexDesc;
@@ -537,6 +539,12 @@ void ModelsDemo::UnloadContent()
 
 	Player1Mesh.Unload();
 	Player1Texture.unloadTexture();
+
+	Player2Mesh.Unload();
+	Player2Texture.unloadTexture();
+
+	SkyBoxMesh.Unload();
+	SkyBoxTexture.unloadTexture();
 
 	colorMapSampler_ = 0;
 	textColorMapSampler_ = 0;
@@ -737,8 +745,8 @@ void ModelsDemo::Update(float dt)
 
 	}
 
-//========================== GETTING THE INPUTS / COLLISIONS  ==============================
-//moveSpeed=0.001f;
+	//========================== GETTING THE INPUTS / COLLISIONS  ==============================
+	//moveSpeed=0.001f;
 	float moveLeftRight = 0.0;
 	float moveBackForward = 0.0;
 	float moveUpDown = 0.0;
@@ -917,8 +925,7 @@ void ModelsDemo::Update(float dt)
 		}
 
 		camera_.ApplyZoom(zoom);
-		camera_.update(&Player1, &Player2);
-
+		camera_.update(dt, &Player1, &Player2);
 	}
 
 	memcpy(&prevController1State_, &controller1State_, sizeof(XINPUT_STATE));
@@ -1118,22 +1125,29 @@ void ModelsDemo::Render()
 		d3dContext_->VSSetConstantBuffers(2, 1, &projCB_);
 		d3dContext_->VSSetConstantBuffers(3, 1, &camPosCB_);
 
-		//d3dContext_->Draw(model2Mesh.getTotalVerts(), 0);
-
-		//z = 0;
-		///////////////////second object///////////////////////
-
 		XMVECTOR cameraPosition = XMLoadFloat3(&camera_.GetPosition());
 
 		////////////////////terrain////////////////////////////////
 		d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
 		worldMat = XMMatrixIdentity();
 		worldMat = XMMatrixTranspose(worldMat);
+		XMMATRIX scale = XMMatrixIdentity();
+		scale = XMMatrixScaling(250.0f, 250.0f, 250.0f);
+		worldMat = scale;
+
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &worldMat, 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
 		d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
 
 		d3dContext_->Draw(6, 0);
+
+		// ---------- DRAWING GAME OBJECTS ----------
+
+		d3dContext_->IASetVertexBuffers(0, 1, SkyBox.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->PSSetShaderResources(0, 1, SkyBox.getTexture()->getColorMap());
+		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &SkyBox.getWorldMat(), 0, 0);
+		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		d3dContext_->Draw(SkyBox.getMesh()->getTotalVerts(), 0);
 
 		// ---------- DRAWING PLAYERS ----------
 		d3dContext_->IASetVertexBuffers(0, 1, Player1.getMesh()->getVertexBuffer(), &stride, &offset);

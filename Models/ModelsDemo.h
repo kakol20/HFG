@@ -123,6 +123,11 @@ class ModelsDemo : public Dx11DemoBase
 		GameStates gameState_;
 		PauseMenuSelection pauseMenuSelection;
 		bool displayFPS;
+
+		// ---------- Game Objects ----------
+		Mesh SkyBoxMesh;
+		Texture SkyBoxTexture;
+		GameObject SkyBox;
 		
 		// ---------- Players ----------
 		Player Player1;
@@ -158,8 +163,22 @@ class ModelsDemo : public Dx11DemoBase
 
 		// ---------- CHARACTERS ----------
 		Mesh * KremitWalk[8];
+		Mesh * KremitAttack[8];
 		Mesh * KremitIdle[8];
+		Mesh * KremitDeath[8];
 		Texture KremitTexture;
+
+		Mesh * WolfWalk[8];
+		Mesh * WolfAttack[8];
+		Mesh * WolfIdle[8];
+		Mesh * WolfDeath[8];
+		Texture WolfTexture;
+
+		Mesh * RobotWalk[8];
+		Mesh * RobotAttack[8];
+		Mesh * RobotIdle[8];
+		Mesh * RobotDeath[8];
+		Texture RobotTexture;
 
 		//////////////time globals///////////////////
 public:
