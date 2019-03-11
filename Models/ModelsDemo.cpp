@@ -1078,11 +1078,11 @@ void ModelsDemo::Render()
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 	}
-	if (gameState_ == CHA_SELEC) 
-	{
-		/*Player1.SetCharacter();*/
-	
-	}
+	//if (gameState_ == CHA_SELEC) 
+	//{
+	//	/*Player1.SetCharacter();*/
+	//
+	//}
 
 	if ((gameState_ == RUN) || (gameState_ == PAUSED))
 	{
