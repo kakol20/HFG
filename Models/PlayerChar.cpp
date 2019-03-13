@@ -1,5 +1,5 @@
 #include "PlayerChar.h"
-
+enum Characters { WOLF, ROBOT, KREMIT, ZOMBIE, ALIEN, SKINNY, PRAVEZ };
 Player::Player()
 {
 	m_defaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
@@ -181,44 +181,44 @@ void Player::SetPlayer(bool player)
 	m_player1 = player;
 }
 
-void Player::SetCharacter(Characters character)
-{
-	/*if (character == WOLF)
-	{
-		
-	
-	};
-
-	else if (character == ROBOT)
-	{
-	
-	};
-
-	else if (character == KREMIT)
-	{
-
-	};
-
-	else if (character == ZOMBIE)
-	{
-
-	};
-
-	else if (character == ALIEN)
-	{
-
-	};
-
-	else if (character == SKINNY)
-	{
-
-	};
-
-	else if (character == PRAVEZ)
-	{
-
-	};*/
-}
+//void Player::SetCharacter(Characters character)
+//{
+//	/*if (character == WOLF)
+//	{
+//		
+//	
+//	};
+//
+//	else if (character == ROBOT)
+//	{
+//	
+//	};
+//
+//	else if (character == KREMIT)
+//	{
+//
+//	};
+//
+//	else if (character == ZOMBIE)
+//	{
+//
+//	};
+//
+//	else if (character == ALIEN)
+//	{
+//
+//	};
+//
+//	else if (character == SKINNY)
+//	{
+//
+//	};
+//
+//	else if (character == PRAVEZ)
+//	{
+//
+//	};*/
+//}
 
 void Player::setIsAnimated(bool animated)
 {
