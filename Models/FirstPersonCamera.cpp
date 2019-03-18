@@ -25,7 +25,13 @@ FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f 
 	m_controllable = false;
 
 	m_distance = 40.0f;
-	m_speed = 2.0f;
+	m_minDistance = 25.0f;
+	m_maxSpeed = 8.0f;
+	m_speedAc = 2.0f;
+	m_curSpeed = 0.0f;
+
+	m_lookAtY = 10.0f;
+	m_lookAngle = 10.0f;
 }
 
 
@@ -131,63 +137,9 @@ void FirstPersonCamera::update(float dt, Player * Player1, Player * Player2)
 
 	if (!m_controllable)
 	{
-		XMFLOAT3 mid = { (Player1->getPosition().x + Player2->getPosition().x) / 2.0f, position_.y, (Player1->getPosition().z + Player2->getPosition().z) / 2.0f };
+		//m_moveCameraSameHeight(dt, Player1, Player2);
 
-		XMFLOAT3 targetPosition = position_;
-
-		//XMFLOAT3 tempDir = { , Player1->getPosition().y - Player2->getPosition().y,  };
-
-		float tempX = Player1->getPosition().x - Player2->getPosition().x;
-		float tempZ = Player1->getPosition().z - Player2->getPosition().z;
-
-		XMFLOAT3 tempDir = { tempZ, 0.0f, -1 * tempX };
-
-		XMVECTOR tempDirVect = XMLoadFloat3(&tempDir);
-		tempDirVect = XMVector3Normalize(tempDirVect);
-
-		/*XMVECTOR tempV = XMVectorSet(Player1->getPosition().x + Player2->getPosition().x, 0.0f, Player1->getPosition().z + Player2->getPosition().z, 0.0f);
-		tempV = XMVector3Length(tempV);
-		m_distance = XMVectorGetX(tempV);*/
-		m_distance = pow(Player1->getPosition().x - Player2->getPosition().x, 2) + pow(Player1->getPosition().z - Player2->getPosition().z, 2);
-		if (m_distance == 0.0f)
-		{
-			m_distance = 1.0f;
-		}
-		m_distance = sqrt(m_distance) + 10.0f;
-
-		tempDirVect = tempDirVect * m_distance;
-
-		tempDir.x = -1 * XMVectorGetX(tempDirVect);
-		tempDir.z = -1 * XMVectorGetZ(tempDirVect);
-
-		targetPosition.x = mid.x + tempDir.x;
-		targetPosition.z = mid.z + tempDir.z;
-
-		XMFLOAT3 deltaPos = { targetPosition.x - position_.x, targetPosition.y - position_.y, targetPosition.z - position_.z };
-
-		XMVECTOR deltaPosV = XMLoadFloat3(&deltaPos);
-		float distToTarget = pow(XMVectorGetX(deltaPosV), 2) + pow(XMVectorGetZ(deltaPosV), 2);
-		if (distToTarget != 0) // does not need to move if the camera is already at the target position
-		{
-			distToTarget = sqrt(distToTarget);
-			if (distToTarget < (m_speed * m_speed))
-			{
-				distToTarget = m_speed * m_speed;
-			}
-		
-			deltaPosV = XMVector3Normalize(deltaPosV);
-
-			float calSpeed = distToTarget / m_speed;
-			deltaPosV = deltaPosV * calSpeed * dt;
-
-			XMVECTOR newPosition = XMLoadFloat3(&position_) + deltaPosV;
-
-			position_ = { XMVectorGetX(newPosition), XMVectorGetY(newPosition), XMVectorGetZ(newPosition) };
-
-			XMVECTOR camTarget = XMLoadFloat3(&mid);
-			//camTarget = XMVector3Normalize(camTarget);
-			camView_ = XMMatrixLookAtLH(newPosition, camTarget, camUp_);
-		}		
+		m_moveCameraTilted(dt, Player1, Player2, true);
 	}
 }
 
@@ -195,40 +147,162 @@ void FirstPersonCamera::snapPosition(Player * Player1, Player * Player2)
 {
 	if (!m_controllable)
 	{
-		XMFLOAT3 mid = { (Player1->getPosition().x + Player2->getPosition().x) / 2.0f, position_.y, (Player1->getPosition().z + Player2->getPosition().z) / 2.0f };
+		m_moveCameraTilted(0.0f, Player1, Player2, false);
+	}
+}
 
-		//XMFLOAT3 tempDir = { , Player1->getPosition().y - Player2->getPosition().y,  };
+void FirstPersonCamera::m_moveCameraSameHeight(float dt, Player * Player1, Player * Player2, bool tween)
+{
+	XMFLOAT3 mid = { (Player1->getPosition().x + Player2->getPosition().x) / 2.0f, position_.y, (Player1->getPosition().z + Player2->getPosition().z) / 2.0f };
 
-		float tempX = Player1->getPosition().x - Player2->getPosition().x;
-		float tempZ = Player1->getPosition().z - Player2->getPosition().z;
+	XMFLOAT3 targetPosition = position_;
 
-		XMFLOAT3 tempDir = { tempZ, 0.0f, -1 * tempX };
+	//XMFLOAT3 tempDir = { , Player1->getPosition().y - Player2->getPosition().y,  };
 
-		XMVECTOR tempDirVect = XMLoadFloat3(&tempDir);
-		tempDirVect = XMVector3Normalize(tempDirVect);
+	float tempX = Player1->getPosition().x - Player2->getPosition().x;
+	float tempZ = Player1->getPosition().z - Player2->getPosition().z;
 
-		/*XMVECTOR tempV = XMVectorSet(Player1->getPosition().x + Player2->getPosition().x, 0.0f, Player1->getPosition().z + Player2->getPosition().z, 0.0f);
-		tempV = XMVector3Length(tempV);
-		m_distance = XMVectorGetX(tempV);*/
-		m_distance = pow(Player1->getPosition().x - Player2->getPosition().x, 2) + pow(Player1->getPosition().z - Player2->getPosition().z, 2);
-		if (m_distance == 0.0f)
+	XMFLOAT3 tempDir = { tempZ, 0.0f, -1 * tempX };
+
+	XMVECTOR tempDirVect = XMLoadFloat3(&tempDir);
+	tempDirVect = XMVector3Normalize(tempDirVect);
+
+	/*XMVECTOR tempV = XMVectorSet(Player1->getPosition().x + Player2->getPosition().x, 0.0f, Player1->getPosition().z + Player2->getPosition().z, 0.0f);
+	tempV = XMVector3Length(tempV);
+	m_distance = XMVectorGetX(tempV);*/
+	m_distance = pow(Player1->getPosition().x - Player2->getPosition().x, 2) + pow(Player1->getPosition().z - Player2->getPosition().z, 2);
+	if (m_distance == 0.0f)
+	{
+		m_distance = 1.0f;
+	}
+	m_distance = sqrt(m_distance);
+
+	tempDirVect = tempDirVect * m_distance;
+
+	tempDir.x = -1 * XMVectorGetX(tempDirVect);
+	tempDir.z = -1 * XMVectorGetZ(tempDirVect);
+
+	targetPosition.x = mid.x + tempDir.x;
+	targetPosition.z = mid.z + tempDir.z;
+
+	XMFLOAT3 deltaPos = { targetPosition.x - position_.x, targetPosition.y - position_.y, targetPosition.z - position_.z };
+
+	XMVECTOR deltaPosV = XMLoadFloat3(&deltaPos);
+	float distToTarget = pow(XMVectorGetX(deltaPosV), 2) + pow(XMVectorGetZ(deltaPosV), 2);
+	if (distToTarget != 0) // does not need to move if the camera is already at the target position
+	{
+		distToTarget = sqrt(distToTarget);
+		if (distToTarget < m_maxSpeed * m_maxSpeed)
 		{
-			m_distance = 1.0f;
+			distToTarget = m_maxSpeed * m_maxSpeed;
 		}
-		m_distance = sqrt(m_distance) + 10.0f;
 
-		tempDirVect = tempDirVect * m_distance;
+		deltaPosV = XMVector3Normalize(deltaPosV);
 
-		tempDir.x = -1 * XMVectorGetX(tempDirVect);
-		tempDir.z = -1 * XMVectorGetZ(tempDirVect);
+		if (m_curSpeed < m_maxSpeed)
+		{
+			m_curSpeed += m_speedAc;
+		}
+		else
+		{
+			m_curSpeed = m_maxSpeed;
+		}
 
-		position_.x = mid.x + tempDir.x;
-		position_.z = mid.z + tempDir.z;
+		deltaPosV = deltaPosV * m_curSpeed * dt;
+
+		XMVECTOR newPosition = XMLoadFloat3(&position_) + deltaPosV;
+
+		position_ = { XMVectorGetX(newPosition), XMVectorGetY(newPosition), XMVectorGetZ(newPosition) };
 
 		XMVECTOR camTarget = XMLoadFloat3(&mid);
 		//camTarget = XMVector3Normalize(camTarget);
-		camView_ = XMMatrixLookAtLH(XMLoadFloat3(&position_), camTarget, camUp_);
+		camView_ = XMMatrixLookAtLH(newPosition, camTarget, camUp_);
 	}
+	else
+	{
+		m_curSpeed = 0.0f;
+	}
+}
+
+void FirstPersonCamera::m_moveCameraTilted(float dt, Player * Player1, Player * Player2, bool tween)
+{
+	XMFLOAT3 mid = { (Player1->getPosition().x + Player2->getPosition().x) / 2.0f, m_lookAtY, (Player1->getPosition().z + Player2->getPosition().z) / 2.0f };
+
+	float tempX = Player1->getPosition().x - Player2->getPosition().x;
+	float tempZ = Player1->getPosition().z - Player2->getPosition().z;
+
+	float tempY = sqrt(tempX * tempX + tempZ * tempZ);
+	tempY *= tan(XMConvertToRadians(m_lookAngle));
+
+	XMFLOAT3 tempDir = { tempZ, tempY, -1.0f * tempX };
+	tempDir.x *= -1.0f;
+	tempDir.z *= -1.0f;
+
+	m_distance = sqrt(tempX * tempX + tempZ * tempZ) + 10.0f;
+
+	if (m_distance < m_minDistance)
+	{
+		m_distance = m_minDistance;
+	}
+
+	XMVECTOR tempDirVect = XMLoadFloat3(&tempDir);
+	tempDirVect = XMVector3Normalize(tempDirVect) * m_distance;
+
+	XMFLOAT3 targetPosition = { mid.x + XMVectorGetX(tempDirVect), mid.y + XMVectorGetY(tempDirVect), mid.z + XMVectorGetZ(tempDirVect) };
+
+	if (tween)
+	{
+		XMFLOAT3 deltaPos = { targetPosition.x - position_.x, targetPosition.y - position_.y, targetPosition.z - position_.z };
+		float distToTarget = deltaPos.x * deltaPos.x + deltaPos.y * deltaPos.y + deltaPos.z * deltaPos.z;
+
+		if (distToTarget > 0.0f)
+		{
+			distToTarget = sqrt(distToTarget);
+
+			if (m_curSpeed < m_maxSpeed)
+			{
+				m_curSpeed += m_speedAc * dt;
+			}
+			else
+			{
+				m_curSpeed = m_maxSpeed;
+			}
+
+			if (distToTarget > m_curSpeed * dt)
+			{
+				XMVECTOR deltaPosV = XMLoadFloat3(&deltaPos);
+				deltaPosV = XMVector3Normalize(deltaPosV);
+
+				deltaPosV *= m_curSpeed * dt;
+
+				position_.x += XMVectorGetX(deltaPosV);
+				position_.y += XMVectorGetY(deltaPosV);
+				position_.z += XMVectorGetZ(deltaPosV);
+			}
+			else
+			{
+				position_.x = targetPosition.x;
+				position_.y = targetPosition.y;
+				position_.z = targetPosition.z;
+			}
+		}
+		else
+		{
+			m_curSpeed = 0.0f;
+		}
+	}
+	else
+	{
+		position_.x = targetPosition.x;
+		position_.y = targetPosition.y;
+		position_.z = targetPosition.z;
+
+	}
+
+	XMVECTOR camTarget = XMLoadFloat3(&mid);
+	XMVECTOR positionV = XMLoadFloat3(&position_);
+
+	camView_ = XMMatrixLookAtLH(positionV, camTarget, camUp_);
 }
 
 XMMATRIX FirstPersonCamera::GetViewMatrix( )

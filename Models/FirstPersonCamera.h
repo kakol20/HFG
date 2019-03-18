@@ -35,7 +35,7 @@ class FirstPersonCamera
 		void setControllable(bool flag) { m_controllable = flag; };
 		bool getControllable() { return m_controllable; };
 
-		void setSpeed(float speed) { m_speed = speed; };
+		void setSpeed(float speed) { m_maxSpeed = speed; };
 
 	private:
 		XMFLOAT3 position_;
@@ -58,8 +58,17 @@ class FirstPersonCamera
 
 		bool m_controllable;
 		float m_distance; // distance to target
+		float m_minDistance;
 
-		float m_speed;
+		float m_maxSpeed;
+		float m_speedAc; // camera movement acceleration
+		float m_curSpeed; // current speed
+
+		float m_lookAtY; // y axis of what the camera is looking at - fixed
+		float m_lookAngle; // angle the camera is looking down
+
+		void m_moveCameraSameHeight(float dt, Player * Player1, Player * Player2, bool tween);
+		void m_moveCameraTilted(float dt, Player * Player1, Player * Player2, bool tween);
 };
 
 #endif
