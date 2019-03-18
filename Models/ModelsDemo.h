@@ -29,6 +29,8 @@ enum GameStates {PLAY_INTRO, START_MENU, RUN, PAUSED, INTRO_MOVIE_REPLAY,SELECTI
 enum PauseMenuSelection {RETURN, FPS, PLAY_MOVIE, QUIT, CHA_SELEC};
 //this Enum has been declared in PlayerChar.h
 enum Characters { WOLF, ROBOT, KREMIT, ZOMBIE, ALIEN, SKINNY, PRAVEZ };
+enum Characters1 { WOLF1, ROBOT1, KREMIT1, ZOMBIE1, ALIEN1, SKINNY1, PRAVEZ1 };
+
 
 #define PAUSE_MENU_ITEMS 4
 #define CHAR_SELECTION_ITEMS 7
@@ -77,6 +79,29 @@ inline Characters operator--(Characters &eDOW, int)
 	return ePrev;
 }
 
+//=============== character 2 =====================
+
+inline Characters1 operator++(Characters1 &eDOW, int)
+{
+	const Characters1 ePrev = eDOW;
+	const int i = static_cast<int>(eDOW);
+	eDOW = static_cast<Characters1>((i + 1) % CHAR_SELECTION_ITEMS);
+	return ePrev;
+}
+inline Characters1 operator--(Characters1 &eDOW, int)
+{
+	const Characters1 ePrev = eDOW;
+	const int i = static_cast<int>(eDOW);
+	if (i > 0)
+	{
+		eDOW = static_cast<Characters1>(i - 1);
+	}
+	else
+	{
+		eDOW = static_cast<Characters1>(CHAR_SELECTION_ITEMS - 1);
+	}
+	return ePrev;
+}
 
 
 class ModelsDemo : public Dx11DemoBase
@@ -152,6 +177,7 @@ class ModelsDemo : public Dx11DemoBase
 		GameStates gameState_;
 		PauseMenuSelection pauseMenuSelection;
 		Characters charSelection;
+		Characters1 charSelection1;
 		bool displayFPS;
 
 		// ---------- Game Objects ----------
