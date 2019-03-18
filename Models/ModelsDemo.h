@@ -24,10 +24,14 @@
 #include "PlayerChar.h"
 #include "Collision.h"
 
-enum GameStates {PLAY_INTRO, START_MENU, RUN, PAUSED, INTRO_MOVIE_REPLAY};
+enum GameStates {PLAY_INTRO, START_MENU, RUN, PAUSED, INTRO_MOVIE_REPLAY,SELECTION};
 
 enum PauseMenuSelection {RETURN, FPS, PLAY_MOVIE, QUIT, CHA_SELEC};
+//this Enum has been declared in PlayerChar.h
+enum Characters { WOLF, ROBOT, KREMIT, ZOMBIE, ALIEN, SKINNY, PRAVEZ };
+
 #define PAUSE_MENU_ITEMS 4
+#define CHAR_SELECTION_ITEMS 7
 
 inline PauseMenuSelection operator++(PauseMenuSelection &eDOW, int)
 {
@@ -50,6 +54,30 @@ inline PauseMenuSelection operator--(PauseMenuSelection &eDOW, int)
    }
    return ePrev;
 }
+//=========== PROPOSAL ==========
+inline Characters operator++(Characters &eDOW, int)
+{
+	const Characters ePrev = eDOW;
+	const int i = static_cast<int>(eDOW);
+	eDOW = static_cast<Characters>((i + 1) % CHAR_SELECTION_ITEMS);
+	return ePrev;
+}
+inline Characters operator--(Characters &eDOW, int)
+{
+	const Characters ePrev = eDOW;
+	const int i = static_cast<int>(eDOW);
+	if (i > 0)
+	{
+		eDOW = static_cast<Characters>(i - 1);
+	}
+	else
+	{
+		eDOW = static_cast<Characters>(CHAR_SELECTION_ITEMS - 1);
+	}
+	return ePrev;
+}
+
+
 
 class ModelsDemo : public Dx11DemoBase
 {
@@ -97,6 +125,7 @@ class ModelsDemo : public Dx11DemoBase
 		float m_z1 = -10.0f;
 
 		float Tank3Speed;
+		float wait;
 
         ID3D11ShaderResourceView* colorMap1_;
 		ID3D11ShaderResourceView* colorMap2_;
@@ -122,12 +151,17 @@ class ModelsDemo : public Dx11DemoBase
 
 		GameStates gameState_;
 		PauseMenuSelection pauseMenuSelection;
+		Characters charSelection;
 		bool displayFPS;
 
 		// ---------- Game Objects ----------
 		Mesh SkyBoxMesh;
 		Texture SkyBoxTexture;
 		GameObject SkyBox;
+
+		Mesh DomeMesh;
+		Texture DomeTexture;
+		GameObject DomeObj;
 		
 		// ---------- Players ----------
 		Player Player1;

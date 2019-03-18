@@ -8,7 +8,7 @@
 #include <string>
 #include <math.h>
 
-enum Characters {WOLF,ROBOT,KREMIT,ZOMBIE,ALIEN,SKINNY,PRAVEZ};
+
 
 class Player
 {
@@ -46,7 +46,7 @@ public:
 
 
 	void SetPlayer(bool player);
-	void SetCharacter(Characters character);
+	//void SetCharacter(Characters character);
 	XMFLOAT3 getPosition();
 	XMVECTOR getDirection();
 	

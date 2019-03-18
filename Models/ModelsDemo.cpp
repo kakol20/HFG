@@ -323,12 +323,18 @@ bool ModelsDemo::LoadContent()
 	SkyBox.setTexture(&SkyBoxTexture);
 	SkyBox.setPosition({ 0.0f, 0.0f, 0.0f });
 
+	if (!DomeMesh.Init("GameObjects/DOME1.obj", d3dResult, d3dDevice_)) return false;
+	if (!DomeTexture.Init("GameObjects/DomeTexture.png", d3dResult, d3dDevice_)) return false;
+	DomeObj.setMesh(&DomeMesh);
+	DomeObj.setTexture(&DomeTexture);
+	DomeObj.setPosition({ 0.0f, 0.0f, 0.0f });
+
 	/*if (enter pressed on bob)
 	{
 		Player1.setMesh(& Player1Mesh)
 			set texture
 			set animations*/
-	Player1.SetCharacter(WOLF);
+	//Player1.SetCharacter(WOLF);
 	/*}*/
 	// ------------------------------ END ------------------------------
 
@@ -654,7 +660,7 @@ void ModelsDemo::Update(float dt)
 	float zoom = 0.0;
 	float xRotation = 0.0;
 	float yRotation = 0.0;
-
+	wait -= dt;
 	/*if(keystate[DIK_LEFT] & 0x80)
 	{
 	yRotation += moveSpeed;
@@ -682,15 +688,44 @@ void ModelsDemo::Update(float dt)
 	}*/
 
 	
-
+	//============================= STATES CONTROLS !!! ==================
 	
 
 	if (gameState_ == START_MENU)
 	{
 
-		if (keystate[DIK_RETURN] & 0x80)
+		if ((keystate[DIK_RETURN] & 0x80) && (wait <= 0))
+		{
+			gameState_ = SELECTION;
+			wait = 0.1;
+		}
+	}
+
+	if (gameState_ == SELECTION)
+	{
+
+		if ((keystate[DIK_RETURN] & 0x80) && (wait <= 0))
 		{
 			gameState_ = RUN;
+			wait = 0.1;
+		}
+
+		if (
+			(!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80))
+			||
+			(!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80))
+			)
+		{
+			charSelection++;
+		}
+		if (
+			(!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80))
+			||
+			(!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80))
+			)
+
+		{
+			charSelection--;
 		}
 	}
 
@@ -1071,18 +1106,94 @@ void ModelsDemo::Render()
 		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
 		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);
 
+		
 		DrawString("PRESS ENTER to START", -0.4f, 0.0f);
-
 		TurnOffAlphaBlending();
 		TurnZBufferOn();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 	}
-	//if (gameState_ == CHA_SELEC) 
-	//{
-	//	/*Player1.SetCharacter();*/
-	//
-	//}
+	if (gameState_ == SELECTION) 
+	{
+		TurnZBufferOff();
+		TurnOnAlphaBlending();
+
+		stride = sizeof(TextVertexPos);
+		offset = 0;
+
+		d3dContext_->IASetInputLayout(textInputLayout_);
+		d3dContext_->IASetVertexBuffers(0, 1, &textVertexBuffer_, &stride, &offset);
+		d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		d3dContext_->VSSetShader(textTextureMapVS_, 0, 0);
+		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
+		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
+		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);
+		/*Player1.SetCharacter();*/
+		DrawString("PRESS ENTER to SELECT CHARACTER", -0.4f, 0.0f);
+		if (charSelection == WOLF)
+		{
+			DrawString("->WOLF<-", -0.33f, -0.1f);
+		}
+		else
+		{
+			DrawString("WOLF", -0.25f, -0.1f);
+		}
+		if (charSelection == ROBOT)
+		{
+			DrawString("->ROBOT<-", -0.33f, -0.2f);
+		}
+		else
+		{
+			DrawString("ROBOT", -0.25f, -0.2f);
+		}
+
+		if (charSelection == KREMIT)
+		{
+			DrawString("->KREMIT<-", -0.33f, -0.3f);
+		}
+		else
+		{
+			DrawString("KREMIT", -0.25f, -0.3f);
+		}
+
+		if (charSelection == ZOMBIE)
+		{
+			DrawString("->ZOMBIE<-", -0.33f, -0.4f);
+		}
+		else
+		{
+			DrawString("ZOMBIE", -0.25f, -0.4f);
+		}
+		if (charSelection == ALIEN)
+		{
+			DrawString("->ALIEN<-", -0.33f, -0.5f);
+		}
+		else
+		{
+			DrawString("ALIEN", -0.25f, -0.5f);
+		}
+		if (charSelection == SKINNY)
+		{
+			DrawString("->SKINNY<-", -0.33f, -0.6f);
+		}
+		else
+		{
+			DrawString("SKINNY", -0.25f, -0.6f);
+		}
+		if (charSelection == PRAVEZ)
+		{
+			DrawString("->PRAVEZ<-", -0.33f, -0.7f);
+		}
+		else
+		{
+			DrawString("PRAVEZ", -0.25f, -0.7f);
+		}
+
+		TurnOffAlphaBlending();
+		TurnZBufferOn();
+		
+	}
 
 	if ((gameState_ == RUN) || (gameState_ == PAUSED))
 	{
@@ -1148,6 +1259,15 @@ void ModelsDemo::Render()
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &SkyBox.getWorldMat(), 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
 		d3dContext_->Draw(SkyBox.getMesh()->getTotalVerts(), 0);
+
+		//========================= DOME =====================
+
+	/*	d3dContext_->IASetVertexBuffers(0, 1, DomeObj.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->PSSetShaderResources(0, 1, DomeObj.getTexture()->getColorMap());
+		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &DomeObj.getWorldMat(), 0, 0);
+		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		d3dContext_->Draw(DomeObj.getMesh()->getTotalVerts(), 0);*/
+
 
 		// ---------- DRAWING PLAYERS ----------
 		d3dContext_->IASetVertexBuffers(0, 1, Player1.getMesh()->getVertexBuffer(), &stride, &offset);
