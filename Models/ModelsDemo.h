@@ -158,6 +158,10 @@ class ModelsDemo : public Dx11DemoBase
 		Mesh SkyBoxMesh;
 		Texture SkyBoxTexture;
 		GameObject SkyBox;
+
+		Mesh DomeMesh;
+		Texture DomeTexture;
+		GameObject DomeObj;
 		
 		// ---------- Players ----------
 		Player Player1;

@@ -323,11 +323,11 @@ bool ModelsDemo::LoadContent()
 	SkyBox.setTexture(&SkyBoxTexture);
 	SkyBox.setPosition({ 0.0f, 0.0f, 0.0f });
 
-	/*if (!SkyBoxMesh.Init("GameObjects/DOME1.obj", d3dResult, d3dDevice_)) return false;
-	if (!SkyBoxTexture.Init("GameObjects/DomeTexture.png", d3dResult, d3dDevice_)) return false;*/
-	/*SkyBox.setMesh(&SkyBoxMesh);
-	SkyBox.setTexture(&SkyBoxTexture);
-	SkyBox.setPosition({ 0.0f, 0.0f, 0.0f });*/
+	if (!DomeMesh.Init("GameObjects/DOME1.obj", d3dResult, d3dDevice_)) return false;
+	if (!DomeTexture.Init("GameObjects/DomeTexture.png", d3dResult, d3dDevice_)) return false;
+	DomeObj.setMesh(&DomeMesh);
+	DomeObj.setTexture(&DomeTexture);
+	DomeObj.setPosition({ 0.0f, 0.0f, 0.0f });
 
 	/*if (enter pressed on bob)
 	{
@@ -1259,6 +1259,15 @@ void ModelsDemo::Render()
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &SkyBox.getWorldMat(), 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
 		d3dContext_->Draw(SkyBox.getMesh()->getTotalVerts(), 0);
+
+		//========================= DOME =====================
+
+	/*	d3dContext_->IASetVertexBuffers(0, 1, DomeObj.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->PSSetShaderResources(0, 1, DomeObj.getTexture()->getColorMap());
+		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &DomeObj.getWorldMat(), 0, 0);
+		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		d3dContext_->Draw(DomeObj.getMesh()->getTotalVerts(), 0);*/
+
 
 		// ---------- DRAWING PLAYERS ----------
 		d3dContext_->IASetVertexBuffers(0, 1, Player1.getMesh()->getVertexBuffer(), &stride, &offset);
