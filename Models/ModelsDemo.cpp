@@ -273,10 +273,10 @@ bool ModelsDemo::LoadContent()
 	// ------------------------------ GAME OBJECT LOADING ------------------------------
 
 	// ---------- LOADING PLAYERS ----------
+	Player1.setPosition({ -10.0f, 0.0f, 0.0f });
+	Player2.setPosition({ 10.0f, 0.0f, 0.0f });
 
-
-	if (!Player2Mesh.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_V3.obj", d3dResult, d3dDevice_)) return false;
-	if (!Player2Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	camera_.snapPosition(&Player1, &Player2);
 
 
 	//============ WOLF ============
@@ -297,23 +297,9 @@ bool ModelsDemo::LoadContent()
 	//============ SKINNY ============
 	//============ PRAVEZ ============
 
-	//============================================
-	if (!Player1Texture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
-	if (!Player1Mesh.Init("PlayerModels/Antonina_Wolf/Idle/WolfUVd.obj", d3dResult, d3dDevice_)) return false;
-	Player1.setMesh(&Player1Mesh);
-	Player1.setTexture(&Player1Texture);
-	Player1.setPosition({ -10.0f, 0.0f, 0.0f });
-	//================================================
 
 	//Player1.setScale({ 0.275f, 0.275f, 0.275f });
 
-	//============================================
-	Player2.setMesh(&Player2Mesh);
-	Player2.setTexture(&Player2Texture);
-	Player2.setPosition({ 10.0f, 0.0f, 0.0f });
-	//============================================
-
-	camera_.snapPosition(&Player1, &Player2);
 
 	// ---------- LOADING OBJECTS ----------
 
@@ -694,7 +680,7 @@ void ModelsDemo::Update(float dt)
 	if (gameState_ == START_MENU)
 	{
 
-		if ((keystate[DIK_RETURN] & 0x80) && (wait <= 0))
+		if (!(keystate[DIK_RETURN] & 0x80) && ((keyPrevState[DIK_RETURN] & 0x80)))
 		{
 			gameState_ = SELECTION;
 			wait = 0.1;
@@ -709,51 +695,61 @@ void ModelsDemo::Update(float dt)
 			gameState_ = RUN;
 			wait = 0.1;
 		}
-
+		//=========== Select Player 1 ===================
 		if (
-			(!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80))
-			||
 			(!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80))
 			)
 		{
 			charSelection++;
 		}
 		if (
-			(!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80))
-			||
 			(!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80))
 			)
 
 		{
 			charSelection--;
 		}
+		//=========== Select Player 2 ================
+		if (
+			(!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80))
+			)
+		{
+			charSelection1 ++;
+		}
+		if (
+			(!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80))
+			)
+
+		{
+			charSelection1 --;
+		}
 	}
 
 	if (gameState_ == PAUSED)
 	{
 
-		if (!(keystate[DIK_ESCAPE] & 0x80) && (keyPrevState[DIK_ESCAPE] & 0x80))
+		if (!(keystate[DIK_ESCAPE] & 0x80) && (keyPrevState[DIK_ESCAPE] & 0x80) && (wait <= 0))
 		{
 			//PostQuitMessage(0);
 			gameState_ = RUN;
 		}
-		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == RETURN))
+		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == RETURN) && (wait <= 0))
 		{
 			//PostQuitMessage(0);
 			gameState_ = RUN;
 		}
-		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == PLAY_MOVIE))
+		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == PLAY_MOVIE) && (wait <= 0))
 		{
 			//PostQuitMessage(0);
 			gameState_ = INTRO_MOVIE_REPLAY;
 		}
 
-		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == QUIT))
+		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == QUIT) && (wait <= 0))
 		{
-			PostQuitMessage(0);
+			gameState_ = START_MENU;
 		}
 
-		if ((!(keystate[DIK_RETURN] & 0x80) && (keyPrevState[DIK_RETURN] & 0x80))
+		if ((!(keystate[DIK_RETURN] & 0x80) && (keyPrevState[DIK_RETURN] & 0x80) && (wait <= 0))
 			&& (pauseMenuSelection == FPS))
 		{
 			displayFPS = !displayFPS;
@@ -776,7 +772,6 @@ void ModelsDemo::Update(float dt)
 		{
 			pauseMenuSelection--;
 		}
-
 
 	}
 
@@ -1113,6 +1108,9 @@ void ModelsDemo::Render()
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 	}
+
+	//============= Character Selection =============
+
 	if (gameState_ == SELECTION) 
 	{
 		TurnZBufferOff();
@@ -1129,65 +1127,158 @@ void ModelsDemo::Render()
 		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
 		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
 		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);
-		/*Player1.SetCharacter();*/
+		
 		DrawString("PRESS ENTER to SELECT CHARACTER", -0.4f, 0.0f);
+
+		//=============== Player 1 ==============
 		if (charSelection == WOLF)
 		{
-			DrawString("->WOLF<-", -0.33f, -0.1f);
+			DrawString("->WOLF<-", -0.63f, -0.1f);
+
+			Player1.setMesh(&Wolf_M);
+			Player1.setTexture(&Wolf_T);
 		}
 		else
 		{
-			DrawString("WOLF", -0.25f, -0.1f);
+			DrawString("WOLF", -0.55f, -0.1f);
 		}
 		if (charSelection == ROBOT)
 		{
-			DrawString("->ROBOT<-", -0.33f, -0.2f);
+			DrawString("->ROBOT<-", -0.63f, -0.2f);
+
+			Player1.setMesh(&Robot_M);
+			Player1.setTexture(&Robot_T);
 		}
 		else
 		{
-			DrawString("ROBOT", -0.25f, -0.2f);
+			DrawString("ROBOT", -0.55f, -0.2f);
 		}
 
 		if (charSelection == KREMIT)
 		{
-			DrawString("->KREMIT<-", -0.33f, -0.3f);
+			DrawString("->KREMIT<-", -0.63f, -0.3f);
+			Player1.setMesh(&Kremit_M);
+			Player1.setTexture(&Kremit_T);
 		}
 		else
 		{
-			DrawString("KREMIT", -0.25f, -0.3f);
+			DrawString("KREMIT", -0.55f, -0.3f);
 		}
 
 		if (charSelection == ZOMBIE)
 		{
-			DrawString("->ZOMBIE<-", -0.33f, -0.4f);
+			DrawString("->ZOMBIE<-", -0.63f, -0.4f);
+			Player1.setMesh(&Zombie_M);
+			Player1.setTexture(&Zombie_T);
 		}
 		else
 		{
-			DrawString("ZOMBIE", -0.25f, -0.4f);
+			DrawString("ZOMBIE", -0.55f, -0.4f);
 		}
 		if (charSelection == ALIEN)
 		{
-			DrawString("->ALIEN<-", -0.33f, -0.5f);
+			DrawString("->ALIEN<-", -0.63f, -0.5f);
+			Player1.setMesh(&Alien_M);
+			Player1.setTexture(&Alien_T);
 		}
 		else
 		{
-			DrawString("ALIEN", -0.25f, -0.5f);
+			DrawString("ALIEN", -0.55f, -0.5f);
 		}
 		if (charSelection == SKINNY)
 		{
-			DrawString("->SKINNY<-", -0.33f, -0.6f);
+			DrawString("->SKINNY<-", -0.63f, -0.6f);
+			Player1.setMesh(&Player1Mesh);
+			Player1.setTexture(&Player1Texture);
 		}
 		else
 		{
-			DrawString("SKINNY", -0.25f, -0.6f);
+			DrawString("SKINNY", -0.55f, -0.6f);
 		}
 		if (charSelection == PRAVEZ)
 		{
-			DrawString("->PRAVEZ<-", -0.33f, -0.7f);
+			DrawString("->PRAVEZ<-", -0.63f, -0.7f);
+			Player1.setMesh(&Player1Mesh);
+			Player1.setTexture(&Player1Texture);
 		}
 		else
 		{
-			DrawString("PRAVEZ", -0.25f, -0.7f);
+			DrawString("PRAVEZ", -0.55f, -0.7f);
+		}
+
+		//=============== Player 2 ==============
+
+		if (charSelection1 == WOLF)
+		{
+			DrawString("->WOLF<-", 0.33f, -0.1f);
+			Player2.setMesh(&Wolf_M);
+			Player2.setTexture(&Wolf_T);
+		}
+		else
+		{
+			DrawString("WOLF", 0.41f, -0.1f);
+		}
+		if (charSelection1 == ROBOT)
+		{
+			DrawString("->ROBOT<-", 0.33f, -0.2f);
+			Player2.setMesh(&Robot_M);
+			Player2.setTexture(&Robot_T);
+		}
+		else
+		{
+			DrawString("ROBOT", 0.41f, -0.2f);
+		}
+
+		if (charSelection1 == KREMIT)
+		{
+			DrawString("->KREMIT<-", 0.33f, -0.3f);
+			Player2.setMesh(&Kremit_M);
+			Player2.setTexture(&Kremit_T);
+		}
+		else
+		{
+			DrawString("KREMIT", 0.41f, -0.3f);
+		}
+
+		if (charSelection1 == ZOMBIE)
+		{
+			DrawString("->ZOMBIE<-", 0.33f, -0.4f);
+			Player2.setMesh(&Zombie_M);
+			Player2.setTexture(&Zombie_T);
+		}
+		else
+		{
+			DrawString("ZOMBIE", 0.41f, -0.4f);
+		}
+		if (charSelection1 == ALIEN)
+		{
+			DrawString("->ALIEN<-", 0.33f, -0.5f);
+			Player2.setMesh(&Alien_M);
+			Player2.setTexture(&Alien_T);
+		}
+		else
+		{
+			DrawString("ALIEN", 0.41f, -0.5f);
+		}
+		if (charSelection1 == SKINNY)
+		{
+			DrawString("->SKINNY<-", 0.33f, -0.6f);
+			Player2.setMesh(&Player2Mesh);
+			Player2.setTexture(&Player2Texture);
+		}
+		else
+		{
+			DrawString("SKINNY", 0.41f, -0.6f);
+		}
+		if (charSelection1 == PRAVEZ)
+		{
+			DrawString("->PRAVEZ<-", 0.33f, -0.7f);
+			Player2.setMesh(&Player2Mesh);
+			Player2.setTexture(&Player2Texture);
+		}
+		else
+		{
+			DrawString("PRAVEZ", 0.41f, -0.7f);
 		}
 
 		TurnOffAlphaBlending();
