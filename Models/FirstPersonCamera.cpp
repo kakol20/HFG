@@ -22,7 +22,7 @@ FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f 
 	position_.y = 10.0f;
 
 	// set true to move camera freely
-	m_controllable = true;
+	m_controllable = false;
 
 	m_distance = 40.0f;
 	m_speed = 2.0f;
@@ -170,9 +170,9 @@ void FirstPersonCamera::update(float dt, Player * Player1, Player * Player2)
 		if (distToTarget != 0) // does not need to move if the camera is already at the target position
 		{
 			distToTarget = sqrt(distToTarget);
-			if (distToTarget < (m_speed * 2.0f))
+			if (distToTarget < (m_speed * m_speed))
 			{
-				distToTarget = m_speed * 2.0f;
+				distToTarget = m_speed * m_speed;
 			}
 		
 			deltaPosV = XMVector3Normalize(deltaPosV);
