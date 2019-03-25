@@ -69,6 +69,10 @@ class FirstPersonCamera
 
 		void m_moveCameraSameHeight(float dt, Player * Player1, Player * Player2, bool tween);
 		void m_moveCameraTilted(float dt, Player * Player1, Player * Player2, bool tween);
+
+		void m_smoothMove(XMFLOAT3 & mid, XMFLOAT3 & targetPos, float dt);
+
+		XMVECTOR m_previousMovement;
 };
 
 #endif
