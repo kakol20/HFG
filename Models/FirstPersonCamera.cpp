@@ -243,6 +243,64 @@ void FirstPersonCamera::m_moveCameraTilted(float dt, Player * Player1, Player * 
 	camView_ = XMMatrixLookAtLH(positionV, camTarget, camUp_);
 }
 
+void FirstPersonCamera::calculateSteps(float dt, XMFLOAT3 & targetPos)
+{
+	// TODO
+	// Try spline interpolation
+	// https://andrewhungblog.wordpress.com/2017/03/03/catmull-rom-splines-in-plain-english/
+	/*
+	public static List GenerateSpline(List points, int stepsPerCurve = 3, float tension = 1)
+	{
+		List result = new List();
+
+		for (int i = 0; i < points.Count - 1; i++)
+		{
+			Vector3 prev = i == 0 ? points[i] : points[i - 1];
+			Vector3 currStart = points[i];
+			Vector3 currEnd = points[i + 1];
+			Vector3 next = i == points.Count - 2 ? points[i + 1] : points[i + 2];
+
+			for (int step = 0; step <= stepsPerCurve; step++)
+			{
+				float t = (float)step / stepsPerCurve;
+				float tSquared = t * t;
+				float tCubed = tSquared * t;
+
+				Vector3 interpolatedPoint =
+					(-.5f * tension * tCubed + tension * tSquared - .5f * tension * t) * prev +
+					(1 + .5f * tSquared * (tension - 6) + .5f * tCubed * (4 - tension)) * currStart +
+					(.5f * tCubed * (tension - 4) + .5f * tension * t - (tension - 3) * tSquared) * currEnd +
+					(-.5f * tension * tSquared + .5f * tension * tCubed) * next;
+
+				result.Add(interpolatedPoint);
+			}
+		}
+
+		return result;
+	}
+*/
+	int stepsPerCurve = 4;
+	float tension = 1.0f;
+
+	XMVECTOR prev = XMLoadFloat3(&position_);
+	XMVECTOR currStart = XMLoadFloat3(&position_);
+	XMVECTOR currEnd = XMLoadFloat3(&targetPos);
+	XMVECTOR next = XMLoadFloat3(&targetPos);
+
+	float t = 1.0f / (float)stepsPerCurve;
+	float tSquared = t * t;
+	float tCubed = tSquared * t;
+
+	XMVECTOR interpolatedPoint = (0.5f * tension * tCubed + tension * tSquared - 0.5f * tension * t) * prev +
+		(1 + .5f * tSquared * (tension - 6) + .5f * tCubed * (4 - tension)) * currStart +
+		(.5f * tCubed * (tension - 4) + .5f * tension * t - (tension - 3) * tSquared) * currEnd +
+		(-.5f * tension * tSquared + .5f * tension * tCubed) * next;
+
+	position_.x = XMVectorGetX(interpolatedPoint);
+	position_.y = XMVectorGetY(interpolatedPoint);
+	position_.z = XMVectorGetZ(interpolatedPoint);
+}
+
 void FirstPersonCamera::m_smoothMove(XMFLOAT3 & mid, XMFLOAT3 & targetPos, float dt)
 {
 	XMFLOAT3 deltaPos = { targetPos.x - position_.x, targetPos.y - position_.y, targetPos.z - position_.z };
@@ -296,7 +354,7 @@ void FirstPersonCamera::m_smoothMove(XMFLOAT3 & mid, XMFLOAT3 & targetPos, float
 	else
 	{
 		m_curSpeed = 0.0f;
-	}	
+	}
 }
 
 XMMATRIX FirstPersonCamera::GetViewMatrix( )

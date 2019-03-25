@@ -5,6 +5,8 @@
 
 #include "PlayerChar.h"
 
+#include <vector>
+
 #include <iostream>
 
 
@@ -69,6 +71,11 @@ class FirstPersonCamera
 
 		void m_moveCameraSameHeight(float dt, Player * Player1, Player * Player2, bool tween);
 		void m_moveCameraTilted(float dt, Player * Player1, Player * Player2, bool tween);
+
+		int m_currStep;
+		
+		std::vector<XMVECTOR> m_steps;
+		void calculateSteps(float dt, XMFLOAT3 & targetPos);
 
 		void m_smoothMove(XMFLOAT3 & mid, XMFLOAT3 & targetPos, float dt);
 
