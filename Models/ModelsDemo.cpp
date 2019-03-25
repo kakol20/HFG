@@ -647,6 +647,8 @@ void ModelsDemo::Update(float dt)
 	float xRotation = 0.0;
 	float yRotation = 0.0;
 	wait -= dt;
+	attack_time1 -= dt;
+	attack_time2 -= dt;
 	/*if(keystate[DIK_LEFT] & 0x80)
 	{
 	yRotation += moveSpeed;
@@ -700,28 +702,28 @@ void ModelsDemo::Update(float dt)
 			(!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80))
 			)
 		{
-			charSelection++;
+			P1charSelection++;
 		}
 		if (
 			(!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80))
 			)
 
 		{
-			charSelection--;
+			P1charSelection--;
 		}
 		//=========== Select Player 2 ================
 		if (
 			(!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80))
 			)
 		{
-			charSelection1 ++;
+			P2charSelection ++;
 		}
 		if (
 			(!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80))
 			)
 
 		{
-			charSelection1 --;
+			P2charSelection --;
 		}
 	}
 
@@ -825,8 +827,6 @@ void ModelsDemo::Update(float dt)
 			
 		}
 		if ((keystate[DIK_D] & 0x80))
-
-
 		{
 			float tempx = m_z1;
 			tempx += moveSpeed2 * dt;
@@ -835,7 +835,13 @@ void ModelsDemo::Update(float dt)
 				//m_z1 += moveSpeed2 * dt;
 				bool forward = false;
 				Player1.moveForward(dt, forward);
+				
 			}		  
+		}
+		if ((keystate[DIK_F] & 0x80)&& collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) == 1 && (attack_time1 <= 0))
+		{
+			Player2.ApplyDamage(Player1.GetAttack());
+			attack_time1 = 0.1f;
 		}
 		// =========== MODEL MOVEMENTS 2 =================
 		if ((keystate[DIK_DOWN] & 0x80))
@@ -867,7 +873,14 @@ void ModelsDemo::Update(float dt)
 			{
 				bool forward = false;
 				Player2.moveForward(dt, forward);
+				
 			}
+		}
+		
+		if ((keystate[DIK_NUMPAD4] & 0x80)&& collision.colliding(Player2.getPosition(), Player1.getPosition(), dt, dist) == 1 && (attack_time2 <= 0))
+		{
+			Player1.ApplyDamage(Player2.GetAttack());
+			attack_time2 = 0.1f;
 		}
 		//============================== CAMERA  =====================================
 
@@ -1131,7 +1144,7 @@ void ModelsDemo::Render()
 		DrawString("PRESS ENTER to SELECT CHARACTER", -0.4f, 0.0f);
 
 		//=============== Player 1 ==============
-		if (charSelection == WOLF)
+		if (P1charSelection == WOLF)
 		{
 			DrawString("->WOLF<-", -0.63f, -0.1f);
 
@@ -1142,7 +1155,7 @@ void ModelsDemo::Render()
 		{
 			DrawString("WOLF", -0.55f, -0.1f);
 		}
-		if (charSelection == ROBOT)
+		if (P1charSelection == ROBOT)
 		{
 			DrawString("->ROBOT<-", -0.63f, -0.2f);
 
@@ -1154,7 +1167,7 @@ void ModelsDemo::Render()
 			DrawString("ROBOT", -0.55f, -0.2f);
 		}
 
-		if (charSelection == KREMIT)
+		if (P1charSelection == KREMIT)
 		{
 			DrawString("->KREMIT<-", -0.63f, -0.3f);
 			Player1.setMesh(&Kremit_M);
@@ -1165,7 +1178,7 @@ void ModelsDemo::Render()
 			DrawString("KREMIT", -0.55f, -0.3f);
 		}
 
-		if (charSelection == ZOMBIE)
+		if (P1charSelection == ZOMBIE)
 		{
 			DrawString("->ZOMBIE<-", -0.63f, -0.4f);
 			Player1.setMesh(&Zombie_M);
@@ -1175,7 +1188,7 @@ void ModelsDemo::Render()
 		{
 			DrawString("ZOMBIE", -0.55f, -0.4f);
 		}
-		if (charSelection == ALIEN)
+		if (P1charSelection == ALIEN)
 		{
 			DrawString("->ALIEN<-", -0.63f, -0.5f);
 			Player1.setMesh(&Alien_M);
@@ -1185,7 +1198,7 @@ void ModelsDemo::Render()
 		{
 			DrawString("ALIEN", -0.55f, -0.5f);
 		}
-		if (charSelection == SKINNY)
+		if (P1charSelection == SKINNY)
 		{
 			DrawString("->SKINNY<-", -0.63f, -0.6f);
 			Player1.setMesh(&Player1Mesh);
@@ -1195,7 +1208,7 @@ void ModelsDemo::Render()
 		{
 			DrawString("SKINNY", -0.55f, -0.6f);
 		}
-		if (charSelection == PRAVEZ)
+		if (P1charSelection == PRAVEZ)
 		{
 			DrawString("->PRAVEZ<-", -0.63f, -0.7f);
 			Player1.setMesh(&Player1Mesh);
@@ -1208,7 +1221,7 @@ void ModelsDemo::Render()
 
 		//=============== Player 2 ==============
 
-		if (charSelection1 == WOLF)
+		if (P2charSelection == WOLF)
 		{
 			DrawString("->WOLF<-", 0.33f, -0.1f);
 			Player2.setMesh(&Wolf_M);
@@ -1218,7 +1231,7 @@ void ModelsDemo::Render()
 		{
 			DrawString("WOLF", 0.41f, -0.1f);
 		}
-		if (charSelection1 == ROBOT)
+		if (P2charSelection == ROBOT)
 		{
 			DrawString("->ROBOT<-", 0.33f, -0.2f);
 			Player2.setMesh(&Robot_M);
@@ -1229,7 +1242,7 @@ void ModelsDemo::Render()
 			DrawString("ROBOT", 0.41f, -0.2f);
 		}
 
-		if (charSelection1 == KREMIT)
+		if (P2charSelection == KREMIT)
 		{
 			DrawString("->KREMIT<-", 0.33f, -0.3f);
 			Player2.setMesh(&Kremit_M);
@@ -1240,7 +1253,7 @@ void ModelsDemo::Render()
 			DrawString("KREMIT", 0.41f, -0.3f);
 		}
 
-		if (charSelection1 == ZOMBIE)
+		if (P2charSelection == ZOMBIE)
 		{
 			DrawString("->ZOMBIE<-", 0.33f, -0.4f);
 			Player2.setMesh(&Zombie_M);
@@ -1250,7 +1263,7 @@ void ModelsDemo::Render()
 		{
 			DrawString("ZOMBIE", 0.41f, -0.4f);
 		}
-		if (charSelection1 == ALIEN)
+		if (P2charSelection == ALIEN)
 		{
 			DrawString("->ALIEN<-", 0.33f, -0.5f);
 			Player2.setMesh(&Alien_M);
@@ -1260,7 +1273,7 @@ void ModelsDemo::Render()
 		{
 			DrawString("ALIEN", 0.41f, -0.5f);
 		}
-		if (charSelection1 == SKINNY)
+		if (P2charSelection == SKINNY)
 		{
 			DrawString("->SKINNY<-", 0.33f, -0.6f);
 			Player2.setMesh(&Player2Mesh);
@@ -1270,7 +1283,7 @@ void ModelsDemo::Render()
 		{
 			DrawString("SKINNY", 0.41f, -0.6f);
 		}
-		if (charSelection1 == PRAVEZ)
+		if (P2charSelection == PRAVEZ)
 		{
 			DrawString("->PRAVEZ<-", 0.33f, -0.7f);
 			Player2.setMesh(&Player2Mesh);
@@ -1350,6 +1363,8 @@ void ModelsDemo::Render()
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &SkyBox.getWorldMat(), 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
 		d3dContext_->Draw(SkyBox.getMesh()->getTotalVerts(), 0);
+		//health bar
+	
 
 		//========================= DOME =====================
 
@@ -1401,6 +1416,14 @@ void ModelsDemo::Render()
 		sprintf_s(output, "Frame Time:%.6f", frameTime_);
 
 		DrawString(output, -0.9f, 0.6f);
+
+		sprintf_s(output, "Player1 HP:%.1f", Player1.GetHealth());
+
+		DrawString(output, -1.0f, 0.7f);
+
+		sprintf_s(output, "Player2 HP:%.1f", Player2.GetHealth());
+
+		DrawString(output, 0.4f, 0.7f);
 
 		TurnOffAlphaBlending();
 		TurnZBufferOn();

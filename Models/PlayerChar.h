@@ -39,10 +39,16 @@ public:
 
 	void setIdleMesh(Mesh * meshFrames[]);
 	void setWalkMesh(Mesh * meshFrames[]);
+
 	void setAttackMesh(Mesh * meshFrames[]);
 	void setDeathMesh(Mesh * meshFrames[]);
 
-	void setFPS(float fps) { m_fps = fps; };
+
+	float const GetAttack() { return m_attack; };
+	void ApplyDamage(float damage) { m_health -= damage; if (m_health < 0.0f) { m_health = 0.0f;} }
+
+	float const GetHealth() { return m_health; }
+	void setFPS(float fps) { m_fps = fps; }
 
 
 	void SetPlayer(bool player);
@@ -84,9 +90,9 @@ private:
 	XMVECTOR m_direction;
 
 	int m_Character;
-	float m_health;
+	float m_health = 20.0f;
 	float m_speed;
-	float m_strength;
+	float m_attack = 1.0f;
 	float m_radius;
 	bool m_player1 = true;
 
