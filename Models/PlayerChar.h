@@ -51,7 +51,6 @@ public:
 	
 	void setFPS(float fps) { m_fps = fps; }
 	void setFrame(int frame) { m_currFrame = frame; };
-	void setAnimation(const std::string & name) { m_animation = name; };
 
 	void SetPlayer(bool player);
 	//void SetCharacter(Characters character);
@@ -83,8 +82,6 @@ private:
 	XMMATRIX m_translation;
 	XMMATRIX m_rotation;
 	XMMATRIX m_scaleMat;
-
-	static enum Animations;
 
 	XMVECTOR m_defaultForward;
 	XMVECTOR m_defaultRight;

@@ -27,16 +27,17 @@ FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f 
 	// 
 	m_distance = 40.0f;
 	m_minDistance = 25.0f;
-	m_maxSpeed = 20.0f;
-	//m_speedAc = 16.0f;
-	m_speedAc = m_maxSpeed;
+	m_maxSpeed = 40.0f;
+	m_speedAc = 0.5f;
+	//m_speedAc = m_maxSpeed;
 	m_curSpeed = 0.0f;
 
 	m_lookAtY = 10.0f;
 	m_lookAngle = 10.0f;
 
-	m_maxSteps = 4;
-	m_maxPoints = 10;
+	m_maxSteps = 3;
+	m_maxPoints = 4;
+	m_tension = 10;
 	m_isMoving = false;
 
 	m_points.reserve(m_maxPoints);
@@ -144,10 +145,10 @@ void FirstPersonCamera::update(float dt, Player * Player1, Player * Player2)
 	// delay - make look more natural
 	// - have smooth speed
 
-	if (m_isMoving)
+	/*if (m_isMoving)
 	{
-		m_maxPoints = m_maxPoints;
-	}
+		m_maxPoints = m_maxPoints / (1 / 30.0f);
+	}*/
 
 	if (!m_controllable)
 	{
@@ -272,6 +273,12 @@ void FirstPersonCamera::m_moveCameraTilted(float dt, Player * Player1, Player * 
 
 				m_smoothMove(mid, temp, dt);
 
+/*
+				position_.x = XMVectorGetX(*it);
+				position_.y = XMVectorGetY(*it);
+				position_.z = XMVectorGetZ(*it);
+*/
+
 				m_steps.erase(m_steps.end() - 1);
 			}
 		}
@@ -337,8 +344,6 @@ void FirstPersonCamera::calculateSteps(float dt)
 		XMVECTOR currEnd = m_points[i + 1];
 		XMVECTOR next = i == m_points.size() - 2 ? m_points[i + 1] : m_points[i + 2];
 
-		float tension = 10.0f;
-
 		for (int step = 0; step <= m_maxSteps; step++)
 		{
 			float t = step / (float)m_maxSteps;
@@ -346,10 +351,10 @@ void FirstPersonCamera::calculateSteps(float dt)
 			float tCubed = tSquared * t;
 
 			XMVECTOR interpolatedPoint = 
-				(-0.5f * tension * tCubed + tension * tSquared - 0.5f * tension * t) * prev +
-				(1.0f + 0.5f * tSquared * (tension - 6.0f) + 0.5f * tCubed * (4.0f - tension)) * currStart +
-				(0.5f * tCubed * (tension - 4.0f) + 0.5f * tension * t - (tension - 3.0f) * tSquared) * currEnd +
-				(-0.5f * tension * tSquared + 0.5f * tension * tCubed) * next;
+				(-0.5f * m_tension * tCubed + m_tension * tSquared - 0.5f * m_tension * t) * prev +
+				(1.0f + 0.5f * tSquared * (m_tension - 6.0f) + 0.5f * tCubed * (4.0f - m_tension)) * currStart +
+				(0.5f * tCubed * (m_tension - 4.0f) + 0.5f * m_tension * t - (m_tension - 3.0f) * tSquared) * currEnd +
+				(-0.5f * m_tension * tSquared + 0.5f * m_tension * tCubed) * next;
 
 			m_steps.push_back(interpolatedPoint);
 		}

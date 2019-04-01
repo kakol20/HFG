@@ -22,7 +22,7 @@ Player::Player()
 
 	m_speed = 2.0f;
 
-	m_fps = 12.0f;
+	m_fps = 4.0f;
 }
 
 Player::~Player()
