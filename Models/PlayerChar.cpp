@@ -21,7 +21,7 @@ Player::Player()
 
 	m_speed = 2.0f;
 
-	m_fps = 12.0f;
+	m_fps = 4.0f;
 }
 
 Player::~Player()
@@ -45,6 +45,18 @@ Mesh * Player::getMesh()
 		if (m_animation == "walk")
 		{
 			return m_walkAnim[m_currFrame];
+		}
+		else if (m_animation == "idle")
+		{
+			return m_idleAnim[m_currFrame];
+		}
+		else if (m_animation == "attack")
+		{
+			return m_attackAnim[m_currFrame];
+		}
+		else if (m_animation == "damaged")
+		{
+			return m_damagedAnim[m_currFrame];
 		}
 	}
 	
@@ -264,10 +276,26 @@ void Player::setWalkMesh(Mesh * meshFrames[])
 
 void Player::setAttackMesh(Mesh * meshFrames[])
 {
+	for (int i = 0; i < 8; i++)
+	{
+		m_attackAnim[i] = meshFrames[i];
+	}
+}
+
+void Player::setDamagedMesh(Mesh * meshFrames[])
+{
+	for (int i = 0; i < 8; i++)
+	{
+		m_damagedAnim[i] = meshFrames[i];
+	}
 }
 
 void Player::setDeathMesh(Mesh * meshFrames[])
 {
+	for (int i = 0; i < 8; i++)
+	{
+		m_deathAnim[i] = meshFrames[i];
+	}
 }
 
 void Player::ApplyDamage(float damage)
