@@ -27,21 +27,13 @@ FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f 
 	// 
 	m_distance = 40.0f;
 	m_minDistance = 25.0f;
-	m_maxSpeed = 40.0f;
-	m_speedAc = 1.0f;
-	//m_speedAc = m_maxSpeed;
+	m_maxSpeed = 20.0f;
+	//m_speedAc = 16.0f;
+	m_speedAc = m_maxSpeed;
 	m_curSpeed = 0.0f;
 
 	m_lookAtY = 10.0f;
 	m_lookAngle = 10.0f;
-
-	m_maxSteps = 5;
-	m_maxPoints = 5;
-	m_tension = 1;
-	m_isMoving = false;
-
-	m_points.reserve(m_maxPoints);
-	m_points.reserve((m_maxSteps + 1) * m_maxPoints);
 }
 
 
@@ -145,10 +137,6 @@ void FirstPersonCamera::update(float dt, Player * Player1, Player * Player2)
 	// delay - make look more natural
 	// - have smooth speed
 
-	/*if (m_isMoving)
-	{
-		m_maxPoints = m_maxPoints / (1 / 30.0f);
-	}*/
 
 	if (!m_controllable)
 	{
@@ -199,7 +187,6 @@ void FirstPersonCamera::m_moveCameraSameHeight(float dt, Player * Player1, Playe
 	
 	if (tween)
 	{
-
 		m_smoothMove(mid, targetPosition, dt);
 	}
 	else
@@ -238,15 +225,10 @@ void FirstPersonCamera::m_moveCameraTilted(float dt, Player * Player1, Player * 
 
 	//float distToTarget = deltaPos.x * deltaPos.x + deltaPos.y * deltaPos.y + deltaPos.z * deltaPos.z;
 
-	bool isStill = XMVector3Equal(XMLoadFloat3(&position_), XMLoadFloat3(&targetPosition));
-
-	if (tween && !isStill)
+	if (tween)
 	{
-		// old movement
-		//m_smoothMove(mid, targetPosition, dt);
-		
-		// experimental movement
-		m_moveSpline(mid, targetPosition, dt);
+		m_smoothMove(mid, targetPosition, dt);
+
 	}
 	else
 	{
@@ -261,64 +243,12 @@ void FirstPersonCamera::m_moveCameraTilted(float dt, Player * Player1, Player * 
 	camView_ = XMMatrixLookAtLH(positionV, camTarget, camUp_);
 }
 
-void FirstPersonCamera::m_moveSpline(XMFLOAT3 mid, XMFLOAT3 targetPosition, float dt)
-{
-	if (m_points.size() == (size_t)m_maxPoints && !m_isMoving)
-	{
-		m_isMoving = true;
-
-		calculateSteps(dt);
-	}
-	else if (m_isMoving)
-	{
-		if (m_steps.empty())
-		{
-			m_isMoving = false;
-
-			// delete points except last one
-
-			auto it = m_points.end() - 1;
-
-			m_points.erase(m_points.begin(), it);
-
-			m_previousMovement = m_points[0];
-
-			m_points.clear();
-		}
-		else
-		{
-			auto it = m_steps.end() - 1;
-			//it--;
-
-			XMFLOAT3 temp;
-			temp.x = XMVectorGetX(*it);
-			temp.y = XMVectorGetY(*it);
-			temp.z = XMVectorGetZ(*it);
-
-			m_smoothMove(mid, temp, dt);
-
-			/*
-			position_.x = XMVectorGetX(*it);
-			position_.y = XMVectorGetY(*it);
-			position_.z = XMVectorGetZ(*it);
-			*/
-
-			m_steps.erase(m_steps.end() - 1);
-		}
-
-	}
-	else
-	{
-		m_points.push_back(XMLoadFloat3(&targetPosition));
-	}
-}
-
-void FirstPersonCamera::calculateSteps(float dt)
+void FirstPersonCamera::calculateSteps(float dt, XMFLOAT3 & targetPos)
 {
 	// TODO
 	// Try spline interpolation
 	// https://andrewhungblog.wordpress.com/2017/03/03/catmull-rom-splines-in-plain-english/
-/*
+	/*
 	public static List GenerateSpline(List points, int stepsPerCurve = 3, float tension = 1)
 	{
 		List result = new List();
@@ -349,29 +279,26 @@ void FirstPersonCamera::calculateSteps(float dt)
 		return result;
 	}
 */
+	int stepsPerCurve = 4;
+	float tension = 1.0f;
 
-	for (size_t i = 0; i < m_points.size() - 1; i++)
-	{
-		XMVECTOR prev = i == 0 ? m_previousMovement : m_points[i - 1];
-		XMVECTOR currStart = m_points[i];
-		XMVECTOR currEnd = m_points[i + 1];
-		XMVECTOR next = i == m_points.size() - 2 ? m_points[i + 1] : m_points[i + 2];
+	XMVECTOR prev = XMLoadFloat3(&position_);
+	XMVECTOR currStart = XMLoadFloat3(&position_);
+	XMVECTOR currEnd = XMLoadFloat3(&targetPos);
+	XMVECTOR next = XMLoadFloat3(&targetPos);
 
-		for (int step = 0; step <= m_maxSteps; step++)
-		{
-			float t = step / (float)m_maxSteps;
-			float tSquared = t * t;
-			float tCubed = tSquared * t;
+	float t = 1.0f / (float)stepsPerCurve;
+	float tSquared = t * t;
+	float tCubed = tSquared * t;
 
-			XMVECTOR interpolatedPoint = 
-				(-0.5f * m_tension * tCubed + m_tension * tSquared - 0.5f * m_tension * t) * prev +
-				(1.0f + 0.5f * tSquared * (m_tension - 6.0f) + 0.5f * tCubed * (4.0f - m_tension)) * currStart +
-				(0.5f * tCubed * (m_tension - 4.0f) + 0.5f * m_tension * t - (m_tension - 3.0f) * tSquared) * currEnd +
-				(-0.5f * m_tension * tSquared + 0.5f * m_tension * tCubed) * next;
+	XMVECTOR interpolatedPoint = (0.5f * tension * tCubed + tension * tSquared - 0.5f * tension * t) * prev +
+		(1 + .5f * tSquared * (tension - 6) + .5f * tCubed * (4 - tension)) * currStart +
+		(.5f * tCubed * (tension - 4) + .5f * tension * t - (tension - 3) * tSquared) * currEnd +
+		(-.5f * tension * tSquared + .5f * tension * tCubed) * next;
 
-			m_steps.push_back(interpolatedPoint);
-		}
-	}
+	position_.x = XMVectorGetX(interpolatedPoint);
+	position_.y = XMVectorGetY(interpolatedPoint);
+	position_.z = XMVectorGetZ(interpolatedPoint);
 }
 
 void FirstPersonCamera::m_smoothMove(XMFLOAT3 & mid, XMFLOAT3 & targetPos, float dt)

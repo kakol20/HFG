@@ -242,10 +242,10 @@ bool ModelsDemo::LoadContent()
 	// ------------------------------ LOADING CHARACTER MODELS ------------------------------
 
 	// Kremit
-	/*for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
-		std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
+		//std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
 
 		walkName = walkName + std::to_string(i + 1) + ".obj";
 
@@ -260,13 +260,13 @@ bool ModelsDemo::LoadContent()
 		return false;
 	}
 
-	 temporary
+	// temporary
 
 	//Player1.setWalkMesh(KremitWalk);
 	//Player1.setTexture(&KremitTexture);
 	Player1.setIsAnimated(false);
 	Player1.setAnimation("none");
-	Player1.setFPS(1.0f);*/
+	Player1.setFPS(1.0f);
 
 	// end
 
@@ -282,26 +282,19 @@ bool ModelsDemo::LoadContent()
 	//============ WOLF ============
 	if (!Wolf_M.Init("PlayerModels/Antonina_Wolf/Idle/WolfUVd.obj", d3dResult, d3dDevice_)) return false;
 	if (!Wolf_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
-	
 	//============ ROBOT ============
 	if (!Robot_M.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_V3.obj", d3dResult, d3dDevice_)) return false;
 	if (!Robot_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
-	
 	//============ KREMIT ============
 	if (!Kremit_M.Init("PlayerModels/Matthew_Kremit/Idle/KremitTest.obj", d3dResult, d3dDevice_)) return false;
 	if (!Kremit_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
-	
 	//============ ZOMBIE ============
 	if (!Zombie_M.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
 	if (!Zombie_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
-	
 	//============ ALIEN ============
 	if (!Alien_M.Init("PlayerModels/Lucy_Alien/Idle/Alien_Walk_1.obj", d3dResult, d3dDevice_)) return false;
 	if (!Alien_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
-
 	//============ SKINNY ============
-
-
 	//============ PRAVEZ ============
 
 

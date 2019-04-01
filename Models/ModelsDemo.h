@@ -88,47 +88,47 @@ class ModelsDemo : public Dx11DemoBase
 
     private:
 		Collision collision;
-		ID3D11PixelShader* textureMapPS_;
-		ID3D11VertexShader* textureMapVS_;
-		ID3D11PixelShader* textTextureMapPS_;
+        ID3D11VertexShader* textureMapVS_;
+        ID3D11PixelShader* textureMapPS_;
 		ID3D11VertexShader* textTextureMapVS_;
+        ID3D11PixelShader* textTextureMapPS_;
 
-		ID3D11Buffer* vertexBuffer1_;
+        ID3D11InputLayout* inputLayout_;
+		ID3D11InputLayout* textInputLayout_;
+        ID3D11Buffer* vertexBuffer1_;
 		ID3D11Buffer* vertexBuffer2_;
-		ID3D11InputLayout* inputLayout_;
 		ID3D11Buffer* textVertexBuffer_;
 		ID3D11Buffer* vertexBufferTerrain_;
-		ID3D11InputLayout* textInputLayout_;
 		//================= MODIFIED STUFF ================
-		int totalVerts1_;
+        int totalVerts1_;
 		int totalVerts2_;
 		float m_x2 = 6.0f;
 		float m_y2 = 0.0f;
-		float m_y1 = 0.0f;
-		float m_x1 = 16.0f;
 		float m_z2 = -10.0f;
+		float m_x1 = 16.0f;
+		float m_y1 = 0.0f;
 		float m_z1 = -10.0f;
 
-		float wait;
 		float Tank3Speed;
+		float wait;
 		float attack_time1;
 		float attack_time2;
 
         ID3D11ShaderResourceView* colorMap1_;
 		ID3D11ShaderResourceView* colorMap2_;
 
-		ID3D11SamplerState* colorMapSampler_;
-		ID3D11ShaderResourceView* textColorMap_;
 		ID3D11ShaderResourceView* terrainColorMap_;
+		ID3D11ShaderResourceView* textColorMap_;
+        ID3D11SamplerState* colorMapSampler_;
 		//ID3D11SamplerState* terrainColorMapSampler_;
 
 		ID3D11SamplerState* textColorMapSampler_;
 
-		XMMATRIX projMatrix_;
-		ID3D11Buffer* viewCB_;
-		ID3D11Buffer* projCB_;
-		ID3D11Buffer* worldCB_;
-		ID3D11Buffer* camPosCB_;
+        ID3D11Buffer* viewCB_;
+        ID3D11Buffer* projCB_;
+        ID3D11Buffer* worldCB_;
+        ID3D11Buffer* camPosCB_;
+        XMMATRIX projMatrix_;
 
         //ArcCamera camera_;
 		FirstPersonCamera camera_;
@@ -136,11 +136,11 @@ class ModelsDemo : public Dx11DemoBase
         XINPUT_STATE controller1State_;
         XINPUT_STATE prevController1State_;
 
-		bool displayFPS;
 		GameStates gameState_;
+		PauseMenuSelection pauseMenuSelection;
 		Characters P1charSelection;
 		Characters P2charSelection;
-		PauseMenuSelection pauseMenuSelection;
+		bool displayFPS;
 
 		// ---------- Game Objects ----------
 		Mesh SkyBoxMesh;
@@ -162,60 +162,45 @@ class ModelsDemo : public Dx11DemoBase
 		Mesh Player2Mesh;
 		Texture Player2Texture;
 
-		
-
-		// ---------- CHARACTERS ----------
-		Mesh Kremit_M;
-		Texture Kremit_T;
-		Mesh * KremitWalk[8];
-		Mesh * KremitIdle[8];
-		Mesh * KremitDeath[8];
-		Mesh * KremitAttack[8];
-		Mesh * KremitAttacked[8];
-
 		Mesh Wolf_M;
 		Texture Wolf_T;
-		Mesh * WolfWalk[8];
-		Mesh * WolfIdle[8];
-		Mesh * WolfDeath[8];
-		Mesh * WolfAttack[8];
-		Mesh * WolfAttacked[8];
 
 		Mesh Robot_M;
 		Texture Robot_T;
-		Mesh * RobotWalk[8];
-		Mesh * RobotIdle[8];
-		Mesh * RobotDeath[8];
-		Mesh * RobotAttack[8];
-		Mesh * RobotAttacked[8];
+
+		Mesh Kremit_M;
+		Texture Kremit_T;
 
 		Mesh Zombie_M;
 		Texture Zombie_T;
-		Mesh * ZombieWalk[8];
-		Mesh * ZombieIdle[8];
-		Mesh * ZombieDeath[8];
-		Mesh * ZombieAttack[8];
-		Mesh * ZombieAttacked[8];
 
 		Mesh Alien_M;
 		Texture Alien_T;
-		Mesh * AlienWalk[8];
-		Mesh * AlienIdle[8];
-		Mesh * AlienDeath[8];
-		Mesh * AlienAttack[8];
-		Mesh * AlienAttacked[8];
 
 		Mesh Skinny_M;
 		Texture Skinny_T;
-		Mesh * SkinnyWalk[8];
-		Mesh * SkinnyIdle[8];
-		Mesh * SkinnyDeath[8];
-		Mesh * SkinnyAttack[8];
-		Mesh * SkinnyAttacked[8];
 
 		Mesh Pravez_M;
 		Texture Pravez_T;
-		// ???????
+
+		// ---------- CHARACTERS ----------
+		Mesh * KremitWalk[8];
+		Mesh * KremitAttack[8];
+		Mesh * KremitIdle[8];
+		Mesh * KremitDeath[8];
+		Texture KremitTexture;
+
+		Mesh * WolfWalk[8];
+		Mesh * WolfAttack[8];
+		Mesh * WolfIdle[8];
+		Mesh * WolfDeath[8];
+		Texture WolfTexture;
+
+		Mesh * RobotWalk[8];
+		Mesh * RobotAttack[8];
+		Mesh * RobotIdle[8];
+		Mesh * RobotDeath[8];
+		Texture RobotTexture;
 
 		//////////////time globals///////////////////
 public:
