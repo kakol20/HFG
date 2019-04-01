@@ -73,9 +73,15 @@ class FirstPersonCamera
 		void m_moveCameraTilted(float dt, Player * Player1, Player * Player2, bool tween);
 
 		int m_currStep;
+
+		float m_maxPoints;
+		int m_maxSteps;
+		bool m_isMoving;
 		
 		std::vector<XMVECTOR> m_steps;
-		void calculateSteps(float dt, XMFLOAT3 & targetPos);
+		std::vector<XMVECTOR> m_points;
+
+		void calculateSteps(float dt);
 
 		void m_smoothMove(XMFLOAT3 & mid, XMFLOAT3 & targetPos, float dt);
 
