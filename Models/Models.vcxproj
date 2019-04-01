@@ -91,6 +91,7 @@
     <ClCompile Include="PlayerChar.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TokenStream.cpp" />
+    <ClCompile Include="Wolf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -106,6 +107,7 @@
     <ClInclude Include="PlayerChar.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TokenStream.h" />
+    <ClInclude Include="Wolf.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TextTextureMap.fx" />

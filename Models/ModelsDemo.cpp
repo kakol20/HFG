@@ -262,7 +262,7 @@ bool ModelsDemo::LoadContent()
 
 	// temporary
 
-	Player1.setWalkMesh(KremitWalk);
+	//Player1.setWalkMesh(KremitWalk);
 	//Player1.setTexture(&KremitTexture);
 	Player1.setIsAnimated(false);
 	Player1.setAnimation("none");
@@ -679,13 +679,13 @@ void ModelsDemo::Update(float dt)
 	//============================= STATES CONTROLS !!! ==================
 	
 
-	if (gameState_ == START_MENU)
+	if (gameState_ == START_MENU )
 	{
 
-		if (!(keystate[DIK_RETURN] & 0x80) && ((keyPrevState[DIK_RETURN] & 0x80)))
+		if (!(keystate[DIK_RETURN] & 0x80) && ((keyPrevState[DIK_RETURN] & 0x80)) && (wait <= 0))
 		{
 			gameState_ = SELECTION;
-			wait = 0.1;
+			wait = 1.0;
 		}
 	}
 
@@ -749,6 +749,7 @@ void ModelsDemo::Update(float dt)
 		if ((keystate[DIK_RETURN] & 0x80) && (pauseMenuSelection == QUIT) && (wait <= 0))
 		{
 			gameState_ = START_MENU;
+			wait = 0.1;
 		}
 
 		if ((!(keystate[DIK_RETURN] & 0x80) && (keyPrevState[DIK_RETURN] & 0x80) && (wait <= 0))
@@ -841,6 +842,11 @@ void ModelsDemo::Update(float dt)
 		if ((keystate[DIK_F] & 0x80)&& collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) == 1 && (attack_time1 <= 0))
 		{
 			Player2.ApplyDamage(Player1.GetAttack());
+			if (!Player1.GetAlive()) 
+			{
+				gameState_ = START_MENU;
+			}
+
 			attack_time1 = 0.1f;
 		}
 		// =========== MODEL MOVEMENTS 2 =================
@@ -881,6 +887,16 @@ void ModelsDemo::Update(float dt)
 		{
 			Player1.ApplyDamage(Player2.GetAttack());
 			attack_time2 = 0.1f;
+		}
+//=================== AM I STILL ALIVE??? ==================
+		if (!Player1.GetAlive())
+		{
+			gameState_ = START_MENU;
+		}
+
+		else if (!Player2.GetAlive())
+		{
+			gameState_ = START_MENU;
 		}
 		//============================== CAMERA  =====================================
 
@@ -1126,6 +1142,20 @@ void ModelsDemo::Render()
 
 	if (gameState_ == SELECTION) 
 	{
+		/*TurnZBufferOff();
+		TurnOnAlphaBlending();
+
+		stride = sizeof(TextVertexPos);
+		offset = 0;
+
+		d3dContext_->IASetInputLayout(textInputLayout_);
+		d3dContext_->IASetVertexBuffers(0, 1, &textVertexBuffer_, &stride, &offset);
+		d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		d3dContext_->VSSetShader(textTextureMapVS_, 0, 0);
+		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
+		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
+		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);*/
 		TurnZBufferOff();
 		TurnOnAlphaBlending();
 
@@ -1140,14 +1170,17 @@ void ModelsDemo::Render()
 		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
 		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
 		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);
-		
+
+		Player1.SetAlive(true);
+		Player2.SetAlive(true);
+
 		DrawString("PRESS ENTER to SELECT CHARACTER", -0.4f, 0.0f);
 
 		//=============== Player 1 ==============
 		if (P1charSelection == WOLF)
 		{
 			DrawString("->WOLF<-", -0.63f, -0.1f);
-
+			Player1.SetCharacter(WOLF);
 			Player1.setMesh(&Wolf_M);
 			Player1.setTexture(&Wolf_T);
 		}
@@ -1159,6 +1192,7 @@ void ModelsDemo::Render()
 		{
 			DrawString("->ROBOT<-", -0.63f, -0.2f);
 
+			Player1.SetCharacter(ROBOT);
 			Player1.setMesh(&Robot_M);
 			Player1.setTexture(&Robot_T);
 		}
@@ -1170,6 +1204,8 @@ void ModelsDemo::Render()
 		if (P1charSelection == KREMIT)
 		{
 			DrawString("->KREMIT<-", -0.63f, -0.3f);
+
+			Player1.SetCharacter(KREMIT);
 			Player1.setMesh(&Kremit_M);
 			Player1.setTexture(&Kremit_T);
 		}
@@ -1180,6 +1216,7 @@ void ModelsDemo::Render()
 
 		if (P1charSelection == ZOMBIE)
 		{
+			Player1.SetCharacter(ZOMBIE);
 			DrawString("->ZOMBIE<-", -0.63f, -0.4f);
 			Player1.setMesh(&Zombie_M);
 			Player1.setTexture(&Zombie_T);
@@ -1191,6 +1228,8 @@ void ModelsDemo::Render()
 		if (P1charSelection == ALIEN)
 		{
 			DrawString("->ALIEN<-", -0.63f, -0.5f);
+
+			Player1.SetCharacter(ALIEN);
 			Player1.setMesh(&Alien_M);
 			Player1.setTexture(&Alien_T);
 		}
@@ -1201,6 +1240,8 @@ void ModelsDemo::Render()
 		if (P1charSelection == SKINNY)
 		{
 			DrawString("->SKINNY<-", -0.63f, -0.6f);
+
+			Player1.SetCharacter(SKINNY);
 			Player1.setMesh(&Player1Mesh);
 			Player1.setTexture(&Player1Texture);
 		}
@@ -1211,6 +1252,8 @@ void ModelsDemo::Render()
 		if (P1charSelection == PRAVEZ)
 		{
 			DrawString("->PRAVEZ<-", -0.63f, -0.7f);
+
+			Player1.SetCharacter(PRAVEZ);
 			Player1.setMesh(&Player1Mesh);
 			Player1.setTexture(&Player1Texture);
 		}
@@ -1224,6 +1267,8 @@ void ModelsDemo::Render()
 		if (P2charSelection == WOLF)
 		{
 			DrawString("->WOLF<-", 0.33f, -0.1f);
+
+			Player2.SetCharacter(WOLF);
 			Player2.setMesh(&Wolf_M);
 			Player2.setTexture(&Wolf_T);
 		}
@@ -1234,6 +1279,8 @@ void ModelsDemo::Render()
 		if (P2charSelection == ROBOT)
 		{
 			DrawString("->ROBOT<-", 0.33f, -0.2f);
+
+			Player2.SetCharacter(ROBOT);
 			Player2.setMesh(&Robot_M);
 			Player2.setTexture(&Robot_T);
 		}
@@ -1245,6 +1292,8 @@ void ModelsDemo::Render()
 		if (P2charSelection == KREMIT)
 		{
 			DrawString("->KREMIT<-", 0.33f, -0.3f);
+
+			Player2.SetCharacter(KREMIT);
 			Player2.setMesh(&Kremit_M);
 			Player2.setTexture(&Kremit_T);
 		}
@@ -1256,6 +1305,8 @@ void ModelsDemo::Render()
 		if (P2charSelection == ZOMBIE)
 		{
 			DrawString("->ZOMBIE<-", 0.33f, -0.4f);
+
+			Player2.SetCharacter(ZOMBIE);
 			Player2.setMesh(&Zombie_M);
 			Player2.setTexture(&Zombie_T);
 		}
@@ -1266,6 +1317,8 @@ void ModelsDemo::Render()
 		if (P2charSelection == ALIEN)
 		{
 			DrawString("->ALIEN<-", 0.33f, -0.5f);
+
+			Player2.SetCharacter(ALIEN);
 			Player2.setMesh(&Alien_M);
 			Player2.setTexture(&Alien_T);
 		}
@@ -1276,6 +1329,8 @@ void ModelsDemo::Render()
 		if (P2charSelection == SKINNY)
 		{
 			DrawString("->SKINNY<-", 0.33f, -0.6f);
+
+			Player2.SetCharacter(SKINNY);
 			Player2.setMesh(&Player2Mesh);
 			Player2.setTexture(&Player2Texture);
 		}
@@ -1286,6 +1341,8 @@ void ModelsDemo::Render()
 		if (P2charSelection == PRAVEZ)
 		{
 			DrawString("->PRAVEZ<-", 0.33f, -0.7f);
+
+			Player2.SetCharacter(PRAVEZ);
 			Player2.setMesh(&Player2Mesh);
 			Player2.setTexture(&Player2Texture);
 		}
@@ -1294,6 +1351,8 @@ void ModelsDemo::Render()
 			DrawString("PRAVEZ", 0.41f, -0.7f);
 		}
 
+		/*TurnOffAlphaBlending();
+		TurnZBufferOn();*/
 		TurnOffAlphaBlending();
 		TurnZBufferOn();
 		

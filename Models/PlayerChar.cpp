@@ -1,5 +1,5 @@
 #include "PlayerChar.h"
-enum Characters { WOLF, ROBOT, KREMIT, ZOMBIE, ALIEN, SKINNY, PRAVEZ };
+
 Player::Player()
 {
 	m_defaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
@@ -77,6 +77,17 @@ void Player::setPosition(XMFLOAT3 position)
 	//m_translation = XMMatrixTranslation(m_position.x, m_position.y, m_position.z);
 
 	updateWorldMat();
+}
+
+void Player::SetCharacter(Characters character)
+{
+	switch (character)
+	{
+	case WOLF: { m_health = 30 ; }
+			   break;
+	default: {m_health = 20; }
+
+	}
 }
 
 void Player::moveForward(float dt, bool reverse)
@@ -257,6 +268,16 @@ void Player::setAttackMesh(Mesh * meshFrames[])
 
 void Player::setDeathMesh(Mesh * meshFrames[])
 {
+}
+
+void Player::ApplyDamage(float damage)
+{
+	m_health -= damage;
+	if (m_health <= 0.0f) 
+	{ 
+		m_Alive = false;
+	} 
+	
 }
 
 

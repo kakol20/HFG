@@ -160,7 +160,7 @@ void FirstPersonCamera::m_moveCameraSameHeight(float dt, Player * Player1, Playe
 
 	XMFLOAT3 targetPosition = position_;
 
-	//XMFLOAT3 tempDir = { , Player1->getPosition().y - Player2->getPosition().y,  };
+	//XMFLOAT3 tempDir = { , Player1.getPosition().y - Player2.getPosition().y,  };
 
 	float tempX = Player1->getPosition().x - Player2->getPosition().x;
 	float tempZ = Player1->getPosition().z - Player2->getPosition().z;

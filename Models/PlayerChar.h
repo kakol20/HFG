@@ -28,6 +28,8 @@ public:
 	//void setDirection(XMVECTOR direction);
 	void setPosition(XMFLOAT3 position);
 
+	void SetCharacter(Characters character);
+
 	void moveForward(float dt, bool reverse);
 	void moveRight(float dt, bool reverse);
 	void update(float dt, XMFLOAT3 opponentPosition);
@@ -43,9 +45,12 @@ public:
 	void setAttackMesh(Mesh * meshFrames[]);
 	void setDeathMesh(Mesh * meshFrames[]);
 
+	void SetAlive(bool Alive) { m_Alive = Alive; }
+	bool GetAlive() { return m_Alive; }
+
 
 	float const GetAttack() { return m_attack; };
-	void ApplyDamage(float damage) { m_health -= damage; if (m_health < 0.0f) { m_health = 0.0f;} }
+	void ApplyDamage(float damage);
 
 	float const GetHealth() { return m_health; }
 	void setFPS(float fps) { m_fps = fps; }
@@ -59,7 +64,7 @@ public:
 	void setRadius( float radius2);
 	float getRadius();
 
-private:
+protected:
 	Mesh * m_mesh;
 	Texture* m_texture;
 	XMFLOAT3 m_position;
@@ -95,6 +100,7 @@ private:
 	float m_attack = 1.0f;
 	float m_radius;
 	bool m_player1 = true;
+	bool m_Alive = true;
 
 	float m_angle;
 };

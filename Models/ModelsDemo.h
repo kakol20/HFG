@@ -22,17 +22,18 @@
 #include "Animation.h"
 
 #include "PlayerChar.h"
+#include"Wolf.h"
 #include "Collision.h"
 
 enum GameStates {PLAY_INTRO, START_MENU, RUN, PAUSED, INTRO_MOVIE_REPLAY,SELECTION};
 
 enum PauseMenuSelection {RETURN, FPS, PLAY_MOVIE, QUIT, CHA_SELEC};
 //this Enum has been declared in PlayerChar.h
-enum Characters { WOLF, ROBOT, KREMIT, ZOMBIE, ALIEN, SKINNY, PRAVEZ };
+
 
 
 #define PAUSE_MENU_ITEMS 4
-#define CHAR_SELECTION_ITEMS 7
+
 
 inline PauseMenuSelection operator++(PauseMenuSelection &eDOW, int)
 {
@@ -56,27 +57,7 @@ inline PauseMenuSelection operator--(PauseMenuSelection &eDOW, int)
    return ePrev;
 }
 //=========== PROPOSAL ==========
-inline Characters operator++(Characters &eDOW, int)
-{
-	const Characters ePrev = eDOW;
-	const int i = static_cast<int>(eDOW);
-	eDOW = static_cast<Characters>((i + 1) % CHAR_SELECTION_ITEMS);
-	return ePrev;
-}
-inline Characters operator--(Characters &eDOW, int)
-{
-	const Characters ePrev = eDOW;
-	const int i = static_cast<int>(eDOW);
-	if (i > 0)
-	{
-		eDOW = static_cast<Characters>(i - 1);
-	}
-	else
-	{
-		eDOW = static_cast<Characters>(CHAR_SELECTION_ITEMS - 1);
-	}
-	return ePrev;
-}
+
 
 
 

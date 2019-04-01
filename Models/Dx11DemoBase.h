@@ -17,8 +17,29 @@
 #pragma comment (lib, "dinput8.lib")
 #pragma comment (lib, "dxguid.lib")
 
-
-
+enum Characters { WOLF, ROBOT, KREMIT, ZOMBIE, ALIEN, SKINNY, PRAVEZ };
+#define CHAR_SELECTION_ITEMS 7
+inline Characters operator++(Characters &eDOW, int)
+{
+	const Characters ePrev = eDOW;
+	const int i = static_cast<int>(eDOW);
+	eDOW = static_cast<Characters>((i + 1) % CHAR_SELECTION_ITEMS);
+	return ePrev;
+}
+inline Characters operator--(Characters &eDOW, int)
+{
+	const Characters ePrev = eDOW;
+	const int i = static_cast<int>(eDOW);
+	if (i > 0)
+	{
+		eDOW = static_cast<Characters>(i - 1);
+	}
+	else
+	{
+		eDOW = static_cast<Characters>(CHAR_SELECTION_ITEMS - 1);
+	}
+	return ePrev;
+}
 
 class Dx11DemoBase
 {
