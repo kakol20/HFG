@@ -28,16 +28,16 @@ FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f 
 	m_distance = 40.0f;
 	m_minDistance = 25.0f;
 	m_maxSpeed = 40.0f;
-	m_speedAc = 0.5f;
+	m_speedAc = 1.0f;
 	//m_speedAc = m_maxSpeed;
 	m_curSpeed = 0.0f;
 
 	m_lookAtY = 10.0f;
 	m_lookAngle = 10.0f;
 
-	m_maxSteps = 3;
-	m_maxPoints = 4;
-	m_tension = 10;
+	m_maxSteps = 5;
+	m_maxPoints = 5;
+	m_tension = 1;
 	m_isMoving = false;
 
 	m_points.reserve(m_maxPoints);
@@ -246,46 +246,7 @@ void FirstPersonCamera::m_moveCameraTilted(float dt, Player * Player1, Player * 
 		//m_smoothMove(mid, targetPosition, dt);
 		
 		// experimental movement
-
-		if (m_points.size() == (size_t)m_maxPoints && !m_isMoving)
-		{
-			m_isMoving = true;
-
-			calculateSteps(dt);
-		}
-		else if (m_isMoving)
-		{
-			if (m_steps.empty())
-			{
-				m_isMoving = false;
-
-				m_points.clear();
-			}
-			else
-			{
-				auto it = m_steps.end() - 1;
-				//it--;
-
-				XMFLOAT3 temp;
-				temp.x = XMVectorGetX(*it);
-				temp.y = XMVectorGetY(*it);
-				temp.z = XMVectorGetZ(*it);
-
-				m_smoothMove(mid, temp, dt);
-
-/*
-				position_.x = XMVectorGetX(*it);
-				position_.y = XMVectorGetY(*it);
-				position_.z = XMVectorGetZ(*it);
-*/
-
-				m_steps.erase(m_steps.end() - 1);
-			}
-		}
-		else
-		{
-			m_points.push_back(XMLoadFloat3(&targetPosition));
-		}
+		m_moveSpline(mid, targetPosition, dt);
 	}
 	else
 	{
@@ -298,6 +259,58 @@ void FirstPersonCamera::m_moveCameraTilted(float dt, Player * Player1, Player * 
 	XMVECTOR positionV = XMLoadFloat3(&position_);
 
 	camView_ = XMMatrixLookAtLH(positionV, camTarget, camUp_);
+}
+
+void FirstPersonCamera::m_moveSpline(XMFLOAT3 mid, XMFLOAT3 targetPosition, float dt)
+{
+	if (m_points.size() == (size_t)m_maxPoints && !m_isMoving)
+	{
+		m_isMoving = true;
+
+		calculateSteps(dt);
+	}
+	else if (m_isMoving)
+	{
+		if (m_steps.empty())
+		{
+			m_isMoving = false;
+
+			// delete points except last one
+
+			auto it = m_points.end() - 1;
+
+			m_points.erase(m_points.begin(), it);
+
+			m_previousMovement = m_points[0];
+
+			m_points.clear();
+		}
+		else
+		{
+			auto it = m_steps.end() - 1;
+			//it--;
+
+			XMFLOAT3 temp;
+			temp.x = XMVectorGetX(*it);
+			temp.y = XMVectorGetY(*it);
+			temp.z = XMVectorGetZ(*it);
+
+			m_smoothMove(mid, temp, dt);
+
+			/*
+			position_.x = XMVectorGetX(*it);
+			position_.y = XMVectorGetY(*it);
+			position_.z = XMVectorGetZ(*it);
+			*/
+
+			m_steps.erase(m_steps.end() - 1);
+		}
+
+	}
+	else
+	{
+		m_points.push_back(XMLoadFloat3(&targetPosition));
+	}
 }
 
 void FirstPersonCamera::calculateSteps(float dt)
@@ -339,7 +352,7 @@ void FirstPersonCamera::calculateSteps(float dt)
 
 	for (size_t i = 0; i < m_points.size() - 1; i++)
 	{
-		XMVECTOR prev = i == 0 ? m_points[i] : m_points[i - 1];
+		XMVECTOR prev = i == 0 ? m_previousMovement : m_points[i - 1];
 		XMVECTOR currStart = m_points[i];
 		XMVECTOR currEnd = m_points[i + 1];
 		XMVECTOR next = i == m_points.size() - 2 ? m_points[i + 1] : m_points[i + 2];

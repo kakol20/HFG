@@ -5,6 +5,7 @@
 
 #include "PlayerChar.h"
 
+#include <algorithm>
 #include <vector>
 
 #include <iostream>
@@ -71,6 +72,8 @@ class FirstPersonCamera
 
 		void m_moveCameraSameHeight(float dt, Player * Player1, Player * Player2, bool tween);
 		void m_moveCameraTilted(float dt, Player * Player1, Player * Player2, bool tween);
+		
+		void m_moveSpline(XMFLOAT3 mid, XMFLOAT3 targetPosition, float dt);
 
 		int m_currStep;
 
