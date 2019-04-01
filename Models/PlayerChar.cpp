@@ -251,6 +251,14 @@ void Player::setWalkMesh(Mesh * meshFrames[])
 	}
 }
 
+void Player::setAttackMesh(Mesh * meshFrames[])
+{
+}
+
+void Player::setDeathMesh(Mesh * meshFrames[])
+{
+}
+
 
 XMFLOAT3 Player::getPosition()
 {
