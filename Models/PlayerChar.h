@@ -28,10 +28,11 @@ public:
 	//void setDirection(XMVECTOR direction);
 	void setPosition(XMFLOAT3 position);
 
-	void moveForward(float dt, bool reverse);
 	void moveRight(float dt, bool reverse);
-	void update(float dt, XMFLOAT3 opponentPosition);
+	void moveForward(float dt, bool reverse);
+
 	void updateWorldMat();
+	void update(float dt, XMFLOAT3 opponentPosition);
 
 	void setIsAnimated(bool animated);
 	bool getIsAnimated();
@@ -39,17 +40,18 @@ public:
 
 	void setIdleMesh(Mesh * meshFrames[]);
 	void setWalkMesh(Mesh * meshFrames[]);
-
-	void setAttackMesh(Mesh * meshFrames[]);
 	void setDeathMesh(Mesh * meshFrames[]);
-
+	void setAttackMesh(Mesh * meshFrames[]);
+	void setDamagedMesh(Mesh * meshFrames[]);
 
 	float const GetAttack() { return m_attack; };
 	void ApplyDamage(float damage) { m_health -= damage; if (m_health < 0.0f) { m_health = 0.0f;} }
 
 	float const GetHealth() { return m_health; }
+	
 	void setFPS(float fps) { m_fps = fps; }
-
+	void setFrame(int frame) { m_currFrame = frame; };
+	void setAnimation(const std::string & name) { m_animation = name; };
 
 	void SetPlayer(bool player);
 	//void SetCharacter(Characters character);
@@ -67,9 +69,10 @@ private:
 
 	Mesh * m_idleAnim[8];
 	Mesh * m_walkAnim[8];
-	Mesh * m_attackAnim[8];
 	Mesh * m_deathAnim[8];
+	Mesh * m_attackAnim[8];
 	Mesh * m_damagedAnim[8];
+
 	int m_currFrame;
 	bool m_isAnimated;
 	std::string m_animation;
@@ -81,7 +84,7 @@ private:
 	XMMATRIX m_rotation;
 	XMMATRIX m_scaleMat;
 
-	//enum Animations { IDLE, WALK, ATTACK, DEATH, DAMAGED };
+	static enum Animations;
 
 	XMVECTOR m_defaultForward;
 	XMVECTOR m_defaultRight;

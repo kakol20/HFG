@@ -1,5 +1,6 @@
 #include "PlayerChar.h"
 enum Characters { WOLF, ROBOT, KREMIT, ZOMBIE, ALIEN, SKINNY, PRAVEZ };
+
 Player::Player()
 {
 	m_defaultForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
@@ -45,6 +46,18 @@ Mesh * Player::getMesh()
 		if (m_animation == "walk")
 		{
 			return m_walkAnim[m_currFrame];
+		}
+		else if (m_animation == "idle")
+		{
+			return m_idleAnim[m_currFrame];
+		}
+		else if (m_animation == "attack")
+		{
+			return m_attackAnim[m_currFrame];
+		}
+		else if (m_animation == "damaged")
+		{
+			return m_damagedAnim[m_currFrame];
 		}
 	}
 	
@@ -253,10 +266,26 @@ void Player::setWalkMesh(Mesh * meshFrames[])
 
 void Player::setAttackMesh(Mesh * meshFrames[])
 {
+	for (int i = 0; i < 8; i++)
+	{
+		m_attackAnim[i] = meshFrames[i];
+	}
+}
+
+void Player::setDamagedMesh(Mesh * meshFrames[])
+{
+	for (int i = 0; i < 8; i++)
+	{
+		m_damagedAnim[i] = meshFrames[i];
+	}
 }
 
 void Player::setDeathMesh(Mesh * meshFrames[])
 {
+	for (int i = 0; i < 8; i++)
+	{
+		m_deathAnim[i] = meshFrames[i];
+	}
 }
 
 
