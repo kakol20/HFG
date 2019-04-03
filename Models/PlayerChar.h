@@ -41,9 +41,9 @@ public:
 
 	void setIdleMesh(Mesh * meshFrames[]);
 	void setWalkMesh(Mesh * meshFrames[]);
-
-	void setAttackMesh(Mesh * meshFrames[]);
+	void setDamagedMesh(Mesh * meshFrames[]);
 	void setDeathMesh(Mesh * meshFrames[]);
+	void setAttackMesh(Mesh* meshFrames[]);
 
 	void SetAlive(bool Alive) { m_Alive = Alive; }
 	bool GetAlive() { return m_Alive; }
