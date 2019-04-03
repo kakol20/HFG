@@ -241,18 +241,7 @@ bool ModelsDemo::LoadContent()
 	
 	// ------------------------------ LOADING CHARACTER MODELS ------------------------------
 
-	//============ WOLF ============
-	if (!Wolf_M.Init("PlayerModels/Antonina_Wolf/Idle/WolfUVd.obj", d3dResult, d3dDevice_)) return false;
-	if (!Wolf_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
-
-	//============ ROBOT ============
-	if (!Robot_M.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_V3.obj", d3dResult, d3dDevice_)) return false;
-	if (!Robot_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
-
-	//============ KREMIT ============
-	if (!Kremit_M.Init("PlayerModels/Matthew_Kremit/Idle/KremitTest.obj", d3dResult, d3dDevice_)) return false;
-	if (!Kremit_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
-
+	// Kremit
 	for (int i = 0; i < 8; i++)
 	{
 		std::string walkName = "PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_";
@@ -261,29 +250,15 @@ bool ModelsDemo::LoadContent()
 		walkName = walkName + std::to_string(i + 1) + ".obj";
 
 		KremitWalk[i] = new Mesh();
-		if (!KremitWalk[i]->Init(walkName.c_str(), d3dResult, d3dDevice_)) return false;
+		if (!KremitWalk[i]->Init(walkName.c_str(), d3dResult, d3dDevice_))
+		{
+			return false;
+		}
 	}
-
-	//============ ZOMBIE ============
-	if (!Zombie_M.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
-	if (!Zombie_T.Init("PlayerModels/Nathan_ExoSuit/LabRatUVFlipped.png", d3dResult, d3dDevice_)) return false;
-
-	for (int i = 0; i < 8; i++)
+	if (!KremitTexture.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_))
 	{
-		std::string attackName = "PlayerModels/Nathan_ExoSuit/Attack/EXOsuit_Punching_Frame_0";
-		attackName = attackName + std::to_string(i + 1) + ".obj";
-		ZombieAttack[i] = new Mesh();
-		if (!ZombieAttack[i]->Init(attackName.c_str(), d3dResult, d3dDevice_)) return false;
+		return false;
 	}
-
-	//============ ALIEN ============
-	if (!Alien_M.Init("PlayerModels/Lucy_Alien/Idle/Alien_Walk_1.obj", d3dResult, d3dDevice_)) return false;
-	if (!Alien_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
-
-	//============ SKINNY ============
-
-
-	//============ PRAVEZ ============
 
 	// temporary
 
@@ -293,6 +268,8 @@ bool ModelsDemo::LoadContent()
 	Player1.setAnimation("none");
 	Player1.setFPS(1.0f);
 
+	// end
+
 	// ------------------------------ GAME OBJECT LOADING ------------------------------
 
 	// ---------- LOADING PLAYERS ----------
@@ -301,14 +278,39 @@ bool ModelsDemo::LoadContent()
 
 	camera_.snapPosition(&Player1, &Player2);
 
+
+	//============ WOLF ============
+	if (!Wolf_M.Init("PlayerModels/Antonina_Wolf/Idle/WolfUVd.obj", d3dResult, d3dDevice_)) return false;
+	if (!Wolf_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	//============ ROBOT ============
+	if (!Robot_M.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_V3.obj", d3dResult, d3dDevice_)) return false;
+	if (!Robot_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	//============ KREMIT ============
+	if (!Kremit_M.Init("PlayerModels/Matthew_Kremit/Idle/KremitTest.obj", d3dResult, d3dDevice_)) return false;
+	if (!Kremit_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	//============ ZOMBIE ============
+	if (!Zombie_M.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
+	if (!Zombie_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	//============ ALIEN ============
+	if (!Alien_M.Init("PlayerModels/Lucy_Alien/Idle/Alien_Walk_1.obj", d3dResult, d3dDevice_)) return false;
+	if (!Alien_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	//============ SKINNY ============
+	//============ PRAVEZ ============
+
+
+	//Player1.setScale({ 0.275f, 0.275f, 0.275f });
+
+
+	// ---------- LOADING OBJECTS ----------
+
 	if (!SkyBoxMesh.Init("GameObjects/Skybox1.obj", d3dResult, d3dDevice_)) return false;
 	if (!SkyBoxTexture.Init("GameObjects/SkyBoxTextureSpace.png", d3dResult, d3dDevice_)) return false;
 	SkyBox.setMesh(&SkyBoxMesh);
 	SkyBox.setTexture(&SkyBoxTexture);
 	SkyBox.setPosition({ 0.0f, 0.0f, 0.0f });
 
-	if (!DomeMesh.Init("GameObjects/Dome/Dome.obj", d3dResult, d3dDevice_)) return false;
-	if (!DomeTexture.Init("GameObjects/Dome/DomeTexture.png", d3dResult, d3dDevice_)) return false;
+	if (!DomeMesh.Init("GameObjects/DOME1.obj", d3dResult, d3dDevice_)) return false;
+	if (!DomeTexture.Init("GameObjects/DomeTexture.png", d3dResult, d3dDevice_)) return false;
 	DomeObj.setMesh(&DomeMesh);
 	DomeObj.setTexture(&DomeTexture);
 	DomeObj.setPosition({ 0.0f, 0.0f, 0.0f });
@@ -317,10 +319,9 @@ bool ModelsDemo::LoadContent()
 	{
 		Player1.setMesh(& Player1Mesh)
 			set texture
-			set animations
-	Player1.SetCharacter(WOLF);
-	}*/
-
+			set animations*/
+	//Player1.SetCharacter(WOLF);
+	/*}*/
 	// ------------------------------ END ------------------------------
 
 	D3D11_BUFFER_DESC vertexDesc;
@@ -528,67 +529,14 @@ void ModelsDemo::UnloadContent()
 		m_alphaDisableBlendingState = 0;
 	}
 
-	// UNLOADING OBJECTS
-	
-
-	SkyBoxMesh.Unload();
-	SkyBoxTexture.unloadTexture();
-
-	DomeMesh.Unload();
-	DomeTexture.unloadTexture();
-
-	// UNLOADING PLAYERS MODELS
-
 	Player1Mesh.Unload();
 	Player1Texture.unloadTexture();
 
 	Player2Mesh.Unload();
 	Player2Texture.unloadTexture();
 
-	for (int i = 0; i < 8; i++)
-	{
-		m_unloadMeshArray(KremitWalk[i]);
-		m_unloadMeshArray(KremitIdle[i]);
-		m_unloadMeshArray(KremitDeath[i]);
-		m_unloadMeshArray(KremitAttack[i]);
-		m_unloadMeshArray(KremitDamaged[i]);
-
-		m_unloadMeshArray(WolfWalk[i]);
-		m_unloadMeshArray(WolfIdle[i]);
-		m_unloadMeshArray(WolfDeath[i]);
-		m_unloadMeshArray(WolfAttack[i]);
-		m_unloadMeshArray(WolfDamaged[i]);
-
-		m_unloadMeshArray(RobotWalk[i]);
-		m_unloadMeshArray(RobotIdle[i]);
-		m_unloadMeshArray(RobotDeath[i]);
-		m_unloadMeshArray(RobotAttack[i]);
-		m_unloadMeshArray(RobotDamaged[i]);
-
-		m_unloadMeshArray(AlienWalk[i]);
-		m_unloadMeshArray(AlienIdle[i]);
-		m_unloadMeshArray(AlienDeath[i]);
-		m_unloadMeshArray(AlienAttack[i]);
-		m_unloadMeshArray(AlienDamaged[i]);
-	}
-
-	Kremit_M.Unload();
-	Kremit_T.unloadTexture();
-
-	Wolf_M.Unload();
-	Wolf_T.unloadTexture();
-
-	Robot_M.Unload();
-	Robot_T.unloadTexture();
-
-	Alien_M.Unload();
-	Alien_T.unloadTexture();
-
-	Skinny_M.Unload();
-	Skinny_T.unloadTexture();
-
-	Pravez_M.Unload();
-	Pravez_T.unloadTexture();
+	SkyBoxMesh.Unload();
+	SkyBoxTexture.unloadTexture();
 
 	colorMapSampler_ = 0;
 	textColorMapSampler_ = 0;
@@ -668,16 +616,6 @@ void ModelsDemo::SetGameState(GameStates state)
 GameStates ModelsDemo::GetGameState()
 {
 	return gameState_;
-}
-
-void ModelsDemo::m_unloadMeshArray(Mesh* mesh)
-{
-	if (mesh != nullptr)
-	{
-		mesh->Unload();
-		delete mesh;
-		mesh = nullptr;
-	}
 }
 
 void ModelsDemo::Update(float dt)
@@ -1489,11 +1427,11 @@ void ModelsDemo::Render()
 
 		//========================= DOME =====================
 
-		d3dContext_->IASetVertexBuffers(0, 1, DomeObj.getMesh()->getVertexBuffer(), &stride, &offset);
+	/*	d3dContext_->IASetVertexBuffers(0, 1, DomeObj.getMesh()->getVertexBuffer(), &stride, &offset);
 		d3dContext_->PSSetShaderResources(0, 1, DomeObj.getTexture()->getColorMap());
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &DomeObj.getWorldMat(), 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-		d3dContext_->Draw(DomeObj.getMesh()->getTotalVerts(), 0);
+		d3dContext_->Draw(DomeObj.getMesh()->getTotalVerts(), 0);*/
 
 
 		// ---------- DRAWING PLAYERS ----------

@@ -162,46 +162,20 @@ class ModelsDemo : public Dx11DemoBase
 		Mesh Player2Mesh;
 		Texture Player2Texture;
 
-		// ---------- CHARACTERS ----------
-		Mesh Kremit_M;
-		Texture Kremit_T;
-		Mesh* KremitWalk[8];
-		Mesh* KremitIdle[8];
-		Mesh* KremitDeath[8];
-		Mesh* KremitAttack[8];
-		Mesh* KremitDamaged[8];
-		
 		Mesh Wolf_M;
 		Texture Wolf_T;
-		Mesh* WolfWalk[8];
-		Mesh* WolfIdle[8];
-		Mesh* WolfDeath[8];
-		Mesh* WolfAttack[8];
-		Mesh* WolfDamaged[8];
-
-		Mesh Zombie_M;
-		Texture Zombie_T;
-		Mesh* ZombieWalk[8];
-		Mesh* ZombieIdle[8];
-		Mesh* ZombieDeath[8];
-		Mesh* ZombieAttack[8];
-		Mesh* ZombieDamaged[8];
 
 		Mesh Robot_M;
 		Texture Robot_T;
-		Mesh* RobotWalk[8];
-		Mesh* RobotIdle[8];
-		Mesh* RobotDeath[8];
-		Mesh* RobotAttack[8];
-		Mesh* RobotDamaged[8];
+
+		Mesh Kremit_M;
+		Texture Kremit_T;
+
+		Mesh Zombie_M;
+		Texture Zombie_T;
 
 		Mesh Alien_M;
 		Texture Alien_T;
-		Mesh* AlienWalk[8];
-		Mesh* AlienIdle[8];
-		Mesh* AlienDeath[8];
-		Mesh* AlienAttack[8];
-		Mesh* AlienDamaged[8];
 
 		Mesh Skinny_M;
 		Texture Skinny_T;
@@ -209,8 +183,24 @@ class ModelsDemo : public Dx11DemoBase
 		Mesh Pravez_M;
 		Texture Pravez_T;
 
-		void m_unloadMeshArray(Mesh* mesh);
+		// ---------- CHARACTERS ----------
+		Mesh * KremitWalk[8];
+		Mesh * KremitAttack[8];
+		Mesh * KremitIdle[8];
+		Mesh * KremitDeath[8];
+		Texture KremitTexture;
 
+		Mesh * WolfWalk[8];
+		Mesh * WolfAttack[8];
+		Mesh * WolfIdle[8];
+		Mesh * WolfDeath[8];
+		Texture WolfTexture;
+
+		Mesh * RobotWalk[8];
+		Mesh * RobotAttack[8];
+		Mesh * RobotIdle[8];
+		Mesh * RobotDeath[8];
+		Texture RobotTexture;
 
 		//////////////time globals///////////////////
 public:
