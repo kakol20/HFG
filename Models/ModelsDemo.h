@@ -86,17 +86,17 @@ class ModelsDemo : public Dx11DemoBase
 
     private:
 		Collision collision;
-        ID3D11VertexShader* textureMapVS_;
-        ID3D11PixelShader* textureMapPS_;
+		ID3D11PixelShader* textureMapPS_;
+		ID3D11VertexShader* textureMapVS_;
+		ID3D11PixelShader* textTextureMapPS_;
 		ID3D11VertexShader* textTextureMapVS_;
-        ID3D11PixelShader* textTextureMapPS_;
 
-        ID3D11InputLayout* inputLayout_;
-		ID3D11InputLayout* textInputLayout_;
-        ID3D11Buffer* vertexBuffer1_;
+		ID3D11Buffer* vertexBuffer1_;
 		ID3D11Buffer* vertexBuffer2_;
+		ID3D11InputLayout* inputLayout_;
 		ID3D11Buffer* textVertexBuffer_;
 		ID3D11Buffer* vertexBufferTerrain_;
+		ID3D11InputLayout* textInputLayout_;
 		//================= MODIFIED STUFF ================
         int totalVerts1_;
 		int totalVerts2_;
@@ -115,9 +115,9 @@ class ModelsDemo : public Dx11DemoBase
         ID3D11ShaderResourceView* colorMap1_;
 		ID3D11ShaderResourceView* colorMap2_;
 
-		ID3D11ShaderResourceView* terrainColorMap_;
+		ID3D11SamplerState* colorMapSampler_;
 		ID3D11ShaderResourceView* textColorMap_;
-        ID3D11SamplerState* colorMapSampler_;
+		ID3D11ShaderResourceView* terrainColorMap_;
 		//ID3D11SamplerState* terrainColorMapSampler_;
 
 		ID3D11SamplerState* textColorMapSampler_;
@@ -209,6 +209,7 @@ class ModelsDemo : public Dx11DemoBase
 		Mesh * RobotDamaged[8];
 
 		void UnloadMeshPointer(Mesh * mesh);
+		bool AddMesh(const std::string & fileName, Mesh * mesh, int index, HRESULT & d3dResult);
 
 		//////////////time globals///////////////////
 public:

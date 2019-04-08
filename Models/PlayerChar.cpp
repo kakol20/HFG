@@ -249,7 +249,7 @@ void Player::SetPlayer(bool player)
 
 void Player::setIsAnimated(bool animated)
 {
-	m_isAnimated = true;
+	m_isAnimated = animated;
 }
 
 bool Player::getIsAnimated()
@@ -294,7 +294,7 @@ void Player::setDeathMesh(Mesh * meshFrames[])
 	}
 }
 
-void Player::setDamagedMesg(Mesh * meshFrames[])
+void Player::setDamagedMesh(Mesh * meshFrames[])
 {
 	for (int i = 0; i < 8; i++)
 	{
