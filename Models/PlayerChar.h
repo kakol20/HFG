@@ -41,13 +41,12 @@ public:
 
 	void setIdleMesh(Mesh * meshFrames[]);
 	void setWalkMesh(Mesh * meshFrames[]);
-
-	void setAttackMesh(Mesh * meshFrames[]);
 	void setDeathMesh(Mesh * meshFrames[]);
+	void setAttackMesh(Mesh * meshFrames[]);
+	void setDamagedMesg(Mesh * meshFrames[]);
 
 	void SetAlive(bool Alive) { m_Alive = Alive; }
 	bool GetAlive() { return m_Alive; }
-
 
 	float const GetAttack() { return m_attack; };
 	void ApplyDamage(float damage);
@@ -72,9 +71,10 @@ protected:
 
 	Mesh * m_idleAnim[8];
 	Mesh * m_walkAnim[8];
-	Mesh * m_attackAnim[8];
 	Mesh * m_deathAnim[8];
+	Mesh * m_attackAnim[8];
 	Mesh * m_damagedAnim[8];
+
 	int m_currFrame;
 	bool m_isAnimated;
 	std::string m_animation;
