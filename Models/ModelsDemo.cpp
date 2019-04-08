@@ -11,7 +11,7 @@ By Allen Sherrod and Wendy Jones
 #include<stdio.h>
 #include"objLoader.h"
 
-char* TERRAIN_TEXTURE_NAME = "GameObjects/DomeTexture.png";
+char* TERRAIN_TEXTURE_NAME = "GameObjects/Dome/DomeTexture.png";
 struct VertexPos
 {
 	XMFLOAT3 pos;
@@ -253,7 +253,13 @@ bool ModelsDemo::LoadContent()
 
 	for (int i = 0; i < 8; i++)
 	{
-		if (!AddMesh("PlayerModels/Antonina_Wolf/Attack/WolfAttack_F", WolfAttack[i], i, d3dResult)) return false;
+		//if (!AddMesh("PlayerModels/Antonina_Wolf/Attack/WolfAttack_F", &WolfAttack[i], i, d3dResult)) return false;
+
+		std::string name = "PlayerModels/Antonina_Wolf/Attack/WolfAttack_F";
+		name = name + std::to_string(i + 1) + ".obj";
+		if (WolfAttack[i].Init("PlayerModels/Antonina_Wolf/Attack/WolfAttack_F", d3dResult, d3dDevice_)) return false;
+
+		// animation class
 	}
 
 	//============ ROBOT ============
@@ -266,7 +272,7 @@ bool ModelsDemo::LoadContent()
 
 	for (int i = 0; i < 8; i++)
 	{
-		if (!AddMesh("PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_", KremitWalk[i], i, d3dResult)) return false;
+		//if (!AddMesh("PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_", &KremitWalk[i], i, d3dResult)) return false;
 	}
 
 	//============ ZOMBIE ============
@@ -549,32 +555,32 @@ void ModelsDemo::UnloadContent()
 		// UNLOADING FRAMES
 
 		// ZOMBIE
-		UnloadMeshPointer(ZombieWalk[i]);
-		UnloadMeshPointer(ZombieIdle[i]);
-		UnloadMeshPointer(ZombieDeath[i]);
-		UnloadMeshPointer(ZombieAttack[i]);
-		UnloadMeshPointer(ZombieDamaged[i]);
-
-		// ALIEN
-		UnloadMeshPointer(AlienWalk[i]);
-		UnloadMeshPointer(AlienIdle[i]);
-		UnloadMeshPointer(AlienDeath[i]);
-		UnloadMeshPointer(AlienAttack[i]);
-		UnloadMeshPointer(AlienDamaged[i]);
-
-		// WOLF
-		UnloadMeshPointer(WolfWalk[i]);
-		UnloadMeshPointer(WolfIdle[i]);
-		UnloadMeshPointer(WolfDeath[i]);
-		UnloadMeshPointer(WolfAttack[i]);
-		UnloadMeshPointer(WolfDamaged[i]);
-
-		// ROBOT
-		UnloadMeshPointer(RobotWalk[i]);
-		UnloadMeshPointer(RobotIdle[i]);
-		UnloadMeshPointer(RobotDeath[i]);
-		UnloadMeshPointer(RobotAttack[i]);
-		UnloadMeshPointer(RobotDamaged[i]);
+		UnloadMeshPointer(&ZombieWalk[i]);
+		UnloadMeshPointer(&ZombieIdle[i]);
+		UnloadMeshPointer(&ZombieDeath[i]);
+		UnloadMeshPointer(&ZombieAttack[i]);
+		UnloadMeshPointer(&ZombieDamaged[i]);
+						  
+		// ALIEN		  &
+		UnloadMeshPointer(&AlienWalk[i]);
+		UnloadMeshPointer(&AlienIdle[i]);
+		UnloadMeshPointer(&AlienDeath[i]);
+		UnloadMeshPointer(&AlienAttack[i]);
+		UnloadMeshPointer(&AlienDamaged[i]);
+						  
+		// WOLF			  &
+		UnloadMeshPointer(&WolfWalk[i]);
+		UnloadMeshPointer(&WolfIdle[i]);
+		UnloadMeshPointer(&WolfDeath[i]);
+		UnloadMeshPointer(&WolfAttack[i]);
+		UnloadMeshPointer(&WolfDamaged[i]);
+						  
+		// ROBOT		  &
+		UnloadMeshPointer(&RobotWalk[i]);
+		UnloadMeshPointer(&RobotIdle[i]);
+		UnloadMeshPointer(&RobotDeath[i]);
+		UnloadMeshPointer(&RobotAttack[i]);
+		UnloadMeshPointer(&RobotDamaged[i]);
 
 	}
 
@@ -669,15 +675,6 @@ void ModelsDemo::UnloadMeshPointer(Mesh * mesh)
 		delete mesh;
 		mesh = nullptr;
 	}
-}
-
-bool ModelsDemo::AddMesh(const std::string & fileName, Mesh * mesh, int index, HRESULT & d3dResult)
-{
-	std::string name = fileName;
-	name = name + std::to_string(index + 1) + ".obj";
-	mesh = new Mesh();
-
-	return mesh->Init(name.c_str(), d3dResult, d3dDevice_);
 }
 
 void ModelsDemo::Update(float dt)
@@ -1272,6 +1269,8 @@ void ModelsDemo::Render()
 			Player1.SetCharacter(KREMIT);
 			Player1.setMesh(&Kremit_M);
 			Player1.setTexture(&Kremit_T);
+
+			Player1.setWalkMesh(KremitWalk);
 		}
 		else
 		{
@@ -1363,6 +1362,8 @@ void ModelsDemo::Render()
 			Player2.SetCharacter(KREMIT);
 			Player2.setMesh(&Kremit_M);
 			Player2.setTexture(&Kremit_T);
+
+			Player2.setWalkMesh(KremitWalk);
 		}
 		else
 		{

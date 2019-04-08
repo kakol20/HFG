@@ -309,9 +309,7 @@ void Player::ApplyDamage(float damage)
 	{ 
 		m_Alive = false;
 	} 
-	
 }
-
 
 XMFLOAT3 Player::getPosition()
 {
