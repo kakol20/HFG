@@ -251,16 +251,7 @@ bool ModelsDemo::LoadContent()
 	if (!Wolf_M.Init("PlayerModels/Antonina_Wolf/Idle/WolfUVd.obj", d3dResult, d3dDevice_)) return false;
 	if (!Wolf_T.Init("PlayerModels/Antonina_Wolf/WolfBrownTextureNew.png", d3dResult, d3dDevice_)) return false;
 
-	for (int i = 0; i < 8; i++)
-	{
-		//if (!AddMesh("PlayerModels/Antonina_Wolf/Attack/WolfAttack_F", &WolfAttack[i], i, d3dResult)) return false;
-
-		std::string name = "PlayerModels/Antonina_Wolf/Attack/WolfAttack_F";
-		name = name + std::to_string(i + 1) + ".obj";
-		if (WolfAttack[i].Init("PlayerModels/Antonina_Wolf/Attack/WolfAttack_F", d3dResult, d3dDevice_)) return false;
-
-		// animation class
-	}
+	if (!WolfAttack.Load("PlayerModels/Antonina_Wolf/Attack/WolfAttack_F", 8, d3dResult, d3dDevice_)) return false;
 
 	//============ ROBOT ============
 	if (!Robot_M.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_V3.obj", d3dResult, d3dDevice_)) return false;
@@ -270,19 +261,13 @@ bool ModelsDemo::LoadContent()
 	if (!Kremit_M.Init("PlayerModels/Matthew_Kremit/Idle/KremitTest.obj", d3dResult, d3dDevice_)) return false;
 	if (!Kremit_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
 
-	for (int i = 0; i < 8; i++)
-	{
-		//if (!AddMesh("PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_", &KremitWalk[i], i, d3dResult)) return false;
-	}
+	if (!KremitWalk.Load("PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_", 8, d3dResult, d3dDevice_)) return false;
 
 	//============ ZOMBIE ============
 	if (!Zombie_M.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
 	if (!Zombie_T.Init("PlayerModels/Nathan_ExoSuit/LabRatUV.png", d3dResult, d3dDevice_)) return false;
 
-	for (int i = 0; i < 8; i++)
-	{
-		//if (!AddMesh("PlayerModels/Nathan_ExoSuit/Attack/EXOsuit_Punching_Frame_0", ZombieAttack[i], i, d3dResult)) return false;
-	}
+	if (!ZombieAttack.Load("PlayerModels/Nathan_ExoSuit/Attack/EXOsuit_Punching_Frame_0", 8, d3dResult, d3dDevice_)) return false;
 
 	//============ ALIEN ============
 	if (!Alien_M.Init("PlayerModels/Lucy_Alien/Idle/Alien_Walk_1.obj", d3dResult, d3dDevice_)) return false;
@@ -297,7 +282,7 @@ bool ModelsDemo::LoadContent()
 
 	Player1.setIsAnimated(true);
 	Player1.setAnimation("attack");
-	Player1.setFPS(1.0f);
+	Player1.setFPS(8 / 2.0f);
 
 
 	// ---------- LOADING OBJECTS ----------
@@ -549,33 +534,33 @@ void ModelsDemo::UnloadContent()
 
 	Alien_T.unloadTexture();
 	Alien_M.Unload();
-
+/*
 	for (int i = 0; i < 8; i++)
 	{
-		// UNLOADING FRAMES
+		 UNLOADING FRAMES
 
-		// ZOMBIE
+		 ZOMBIE
 		UnloadMeshPointer(&ZombieWalk[i]);
 		UnloadMeshPointer(&ZombieIdle[i]);
 		UnloadMeshPointer(&ZombieDeath[i]);
 		UnloadMeshPointer(&ZombieAttack[i]);
 		UnloadMeshPointer(&ZombieDamaged[i]);
 						  
-		// ALIEN		  &
+		 ALIEN		  &
 		UnloadMeshPointer(&AlienWalk[i]);
 		UnloadMeshPointer(&AlienIdle[i]);
 		UnloadMeshPointer(&AlienDeath[i]);
 		UnloadMeshPointer(&AlienAttack[i]);
 		UnloadMeshPointer(&AlienDamaged[i]);
 						  
-		// WOLF			  &
+		 WOLF			  &
 		UnloadMeshPointer(&WolfWalk[i]);
 		UnloadMeshPointer(&WolfIdle[i]);
 		UnloadMeshPointer(&WolfDeath[i]);
 		UnloadMeshPointer(&WolfAttack[i]);
 		UnloadMeshPointer(&WolfDamaged[i]);
 						  
-		// ROBOT		  &
+		 ROBOT		  &
 		UnloadMeshPointer(&RobotWalk[i]);
 		UnloadMeshPointer(&RobotIdle[i]);
 		UnloadMeshPointer(&RobotDeath[i]);
@@ -583,7 +568,7 @@ void ModelsDemo::UnloadContent()
 		UnloadMeshPointer(&RobotDamaged[i]);
 
 	}
-
+*/
 	SkyBoxMesh.Unload();
 	SkyBoxTexture.unloadTexture();
 
@@ -666,17 +651,6 @@ GameStates ModelsDemo::GetGameState()
 {
 	return gameState_;
 }
-
-void ModelsDemo::UnloadMeshPointer(Mesh * mesh)
-{
-	if (mesh != nullptr)
-	{
-		mesh->Unload();
-		delete mesh;
-		mesh = nullptr;
-	}
-}
-
 void ModelsDemo::Update(float dt)
 {
 	//camera_.ApplyZoom(.01);
@@ -1243,7 +1217,7 @@ void ModelsDemo::Render()
 			Player1.setMesh(&Wolf_M);
 			Player1.setTexture(&Wolf_T);
 
-			Player1.setAttackMesh(WolfAttack);
+			Player1.setAttackMesh(&WolfAttack);
 		}
 		else
 		{
@@ -1270,7 +1244,7 @@ void ModelsDemo::Render()
 			Player1.setMesh(&Kremit_M);
 			Player1.setTexture(&Kremit_T);
 
-			Player1.setWalkMesh(KremitWalk);
+			Player1.setWalkMesh(&KremitWalk);
 		}
 		else
 		{
@@ -1335,7 +1309,7 @@ void ModelsDemo::Render()
 			Player2.setMesh(&Wolf_M);
 			Player2.setTexture(&Wolf_T);
 
-			Player2.setAttackMesh(WolfAttack);
+			Player2.setAttackMesh(&WolfAttack);
 
 		}
 		else
@@ -1363,7 +1337,7 @@ void ModelsDemo::Render()
 			Player2.setMesh(&Kremit_M);
 			Player2.setTexture(&Kremit_T);
 
-			Player2.setWalkMesh(KremitWalk);
+			Player2.setWalkMesh(&KremitWalk);
 		}
 		else
 		{
