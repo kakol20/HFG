@@ -284,6 +284,10 @@ bool ModelsDemo::LoadContent()
 	Player1.setAnimation("attack");
 	Player1.setFPS(8 / 2.0f);
 
+	Player2.setIsAnimated(true);
+	Player2.setAnimation("walk");
+	Player2.setFPS(8 / 2.0f);
+
 
 	// ---------- LOADING OBJECTS ----------
 
@@ -1257,6 +1261,8 @@ void ModelsDemo::Render()
 			DrawString("->ZOMBIE<-", -0.63f, -0.4f);
 			Player1.setMesh(&Zombie_M);
 			Player1.setTexture(&Zombie_T);
+
+			Player1.setAttackMesh(&ZombieAttack);
 		}
 		else
 		{
@@ -1351,6 +1357,8 @@ void ModelsDemo::Render()
 			Player2.SetCharacter(ZOMBIE);
 			Player2.setMesh(&Zombie_M);
 			Player2.setTexture(&Zombie_T);
+
+			Player2.setAttackMesh(&ZombieAttack);
 		}
 		else
 		{
