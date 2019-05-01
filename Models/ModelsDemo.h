@@ -99,7 +99,11 @@ class ModelsDemo : public Dx11DemoBase
 		ID3D11Buffer* vertexBuffer2_;
 		ID3D11Buffer* textVertexBuffer_;
 		ID3D11Buffer* vertexBufferTerrain_;
-		//================= MODIFIED STUFF ================
+		
+		//Bloody QUAD
+		ID3D11Buffer* vertexBufferQuad_;
+		ID3D11ShaderResourceView* quadColorMap_;
+		//==========================
         int totalVerts1_;
 		int totalVerts2_;
 		float m_x2 = 6.0f;
@@ -120,7 +124,6 @@ class ModelsDemo : public Dx11DemoBase
 		ID3D11ShaderResourceView* terrainColorMap_;
 		ID3D11ShaderResourceView* textColorMap_;
         ID3D11SamplerState* colorMapSampler_;
-		//ID3D11SamplerState* terrainColorMapSampler_;
 
 		ID3D11SamplerState* textColorMapSampler_;
 
