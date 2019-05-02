@@ -97,6 +97,7 @@ class ModelsDemo : public Dx11DemoBase
 		ID3D11InputLayout* textInputLayout_;
         ID3D11Buffer* vertexBuffer1_;
 		ID3D11Buffer* vertexBuffer2_;
+
 		ID3D11Buffer* textVertexBuffer_;
 		ID3D11Buffer* vertexBufferTerrain_;
 		

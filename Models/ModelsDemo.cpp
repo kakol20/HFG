@@ -12,7 +12,7 @@ By Allen Sherrod and Wendy Jones
 #include"objLoader.h"
 
 char* TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/MENU_SCREEN3.jpg";
-char* QUAD_TEXTURE_NAME = "GameObjects/Menu_Stuff/MENU_SCREEN3.jpg";;
+char* QUAD_TEXTURE_NAME = "GameObjects/DomeTexture.png";
 struct VertexPos
 {
 	XMFLOAT3 pos;
@@ -263,8 +263,6 @@ bool ModelsDemo::LoadContent()
 
 	// temporary
 
-	//Player1.setWalkMesh(KremitWalk);
-	//Player1.setTexture(&KremitTexture);
 	Player1.setIsAnimated(false);
 	Player1.setAnimation("none");
 	Player1.setFPS(1.0f);
@@ -360,10 +358,7 @@ bool ModelsDemo::LoadContent()
 	}
 
 
-	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_,
-		//"decal.dds", 0, 0, &colorMap_, 0 );
-		//"41.jpg", 0, 0, &colorMap_, 0 );
-		TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_,TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
 
 	if (FAILED(d3dResult))
 	{
@@ -380,13 +375,13 @@ bool ModelsDemo::LoadContent()
 	VertexPos quadVertices[] =
 	{
 
-		{ XMFLOAT3(100.0f, 0.0f , 100.0f), XMFLOAT2(1.0f, 0.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
-		{ XMFLOAT3(100.0f, 0.0f , -100.0f), XMFLOAT2(1.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
-		{ XMFLOAT3(-100.0f , -0.0f , -100.0f), XMFLOAT2(0.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(10.0f, 0.0f , 10.0f), XMFLOAT2(1.0f, 0.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(10.0f, 0.0f , -10.0f), XMFLOAT2(1.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(-10.0f,0.0f , -10.0f), XMFLOAT2(0.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
 
-		{ XMFLOAT3(-100.0f , -0.0f , -100.0f), XMFLOAT2(0.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
-		{ XMFLOAT3(-100.0f ,  0.0f, 100.0f), XMFLOAT2(0.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
-		{ XMFLOAT3(100.0f,  0.0f, 100.0f), XMFLOAT2(1.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(-10.0f ,0.0f , -10.0f), XMFLOAT2(0.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(-10.0f , 0.0f, 10.0f), XMFLOAT2(0.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(10.0f,  0.0f, 10.0f), XMFLOAT2(1.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
 	};
 
 	//D3D11_BUFFER_DESC vertexDesc;
@@ -408,10 +403,7 @@ bool ModelsDemo::LoadContent()
 	}
 
 
-	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_,
-		//"decal.dds", 0, 0, &colorMap_, 0 );
-		//"41.jpg", 0, 0, &colorMap_, 0 );
-		QUAD_TEXTURE_NAME, 0, 0, &quadColorMap_, 0);
+	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_,QUAD_TEXTURE_NAME, 0, 0, &quadColorMap_, 0);
 
 	if (FAILED(d3dResult))
 	{
@@ -1449,24 +1441,25 @@ void ModelsDemo::Render()
 		XMVECTOR cameraPosition = XMLoadFloat3(&camera_.GetPosition());
 
 		////////////////////terrain////////////////////////////////
-		d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
+		//d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
+		//worldMat = XMMatrixIdentity();
+		//worldMat = XMMatrixTranspose(worldMat);
+		//XMMATRIX scale = XMMatrixIdentity();
+		//scale = XMMatrixScaling(250.0f, 250.0f, 250.0f);
+		//worldMat = scale;
+
+		//d3dContext_->UpdateSubresource(worldCB_, 0, 0, &worldMat, 0, 0);
+		//d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		//d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
+
+		//d3dContext_->Draw(6, 0);
+		//================ QUAD =========================
+		
+		d3dContext_->PSSetShaderResources(0, 1, &quadColorMap_);
+		//d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
 		worldMat = XMMatrixIdentity();
 		worldMat = XMMatrixTranspose(worldMat);
 		XMMATRIX scale = XMMatrixIdentity();
-		scale = XMMatrixScaling(250.0f, 250.0f, 250.0f);
-		worldMat = scale;
-
-		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &worldMat, 0, 0);
-		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-		d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
-
-		d3dContext_->Draw(6, 0);
-		//================ QUAD =========================
-
-		d3dContext_->PSSetShaderResources(0, 1, &quadColorMap_);
-		worldMat = XMMatrixIdentity();
-		worldMat = XMMatrixTranspose(worldMat);
-		/*XMMATRIX*/ scale = XMMatrixIdentity();
 		scale = XMMatrixScaling(250.0f, 250.0f, 250.0f);
 		worldMat = scale;
 
