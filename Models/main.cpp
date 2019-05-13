@@ -79,7 +79,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine
         return -1;
 
     //RECT rc = { 0, 0, 640, 480 };
-	RECT rc = { 0, 0, 1280, 720 };
+	RECT rc = { 0, 0, 1024, 768 };
     AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
 
     HWND hwnd = CreateWindowA( "DX11BookWindowClass", "3D Models Demo", WS_OVERLAPPEDWINDOW,
