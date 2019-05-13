@@ -139,16 +139,11 @@ bool ObjModel::LoadOBJ( const char * fileName )
                 faces.push_back( ( int )atoi( faceIndex.c_str( ) ) );
             }
         }
-		/*else if (strcmp(token.c_str(), "s") == 0)
-		{
-			tokenStream.MoveToNextLine(&tempLine);
-		}*/
         else if( strcmp( token.c_str( ), "#" ) == 0 )
         {
             int a = 0;
             int b = a;
         }
-
 
         token[0] = '\0';
     }

@@ -15,11 +15,6 @@ Mesh::Mesh()
 
 Mesh::Mesh(const Mesh & copyMesh)
 {
-	m_objModel = copyMesh.m_objModel;
-	m_totalVerts = copyMesh.m_totalVerts;
-
-	m_vertexBuffer = 0;
-	m_vertexBuffer = copyMesh.m_vertexBuffer;
 }
 
 Mesh & Mesh::operator=(const Mesh & copyMesh)

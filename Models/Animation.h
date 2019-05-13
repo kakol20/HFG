@@ -6,43 +6,63 @@
 
 #include"Dx11DemoBase.h"
 
-#include <vector>
-
 #include "Mesh.h"
-//#include "Texture.h"
-
-#include <string>
-#include <algorithm>
+#include "Texture.h"
 
 class Animation
 {
 public:
 	Animation();
-	Animation(const Animation & copyAnimation);
-	Animation & operator=(const Animation & copyAnimation);
 	~Animation();
 
-	bool Load(const std::string & name, const int numberOfFrames, HRESULT & d3dResult, ID3D11Device * d3dDevice);
-	
+	void setMeshFrames(Mesh* meshFrames[]);
+	void setTexture(Texture* texture);
+
+	Mesh* getCurrentFrame();
+	Texture* getTexture();
+
+	XMMATRIX getWorldMat();
+
+	void setPosition(XMFLOAT3 position);
+	void setDirection(XMVECTOR direction);
+	void setScale(XMFLOAT3 scale);
+
+	void setAnimate(bool animate);
+
+	void moveForward(float speed);
+
+	XMFLOAT3 getPosition();
+	XMVECTOR getDirection();
+
+	void updateWorldMat();
+
 	void Update(float dt);
-
-	void SetFPS(float fps);
-	void SetIsAnimated(bool flag);
-
-	Mesh * GetMesh();
 
 private:
 
-	int m_nOfFrames;
-	//int m_frame;
-	int m_counter;
+	Mesh * m_mesh;
+	Texture* m_texture;
+	XMFLOAT3 m_position;
 
-	std::vector<Mesh *> m_meshes;
-	
+	Mesh* m_meshFrames[10];//for later 8
+
+	XMMATRIX m_worldMat;
+	XMMATRIX m_translation;
+	XMMATRIX m_rotation;
+	XMMATRIX m_scale;
+
+	XMVECTOR m_defaultForward;
+	XMVECTOR m_defaultRight;
+	XMVECTOR m_defaultUp;
+
+	XMVECTOR m_direction;
+
+	int m_frame;
+	int m_maxFrames;
 	float m_fps;
 	float m_dtCumulative;
 
-	bool m_isAnimated;
+	bool m_animate;
 };
 
 #endif // !ANIMATION_H

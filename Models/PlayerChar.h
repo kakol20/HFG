@@ -4,7 +4,6 @@
 #include"Dx11DemoBase.h"
 #include "Mesh.h"
 #include "Texture.h"
-#include "Animation.h"
 
 #include <string>
 #include <math.h>
@@ -40,20 +39,21 @@ public:
 	bool getIsAnimated();
 	void setAnimation(const std::string & name);
 
-	void setIdleMesh(Animation * animation);
-	void setWalkMesh(Animation * animation);
-	void setDeathMesh(Animation * animation);
-	void setAttackMesh(Animation * animation);
-	void setDamagedMesh(Animation * animation);
+	void setIdleMesh(Mesh * meshFrames[]);
+	void setWalkMesh(Mesh * meshFrames[]);
+
+	void setAttackMesh(Mesh * meshFrames[]);
+	void setDeathMesh(Mesh * meshFrames[]);
 
 	void SetAlive(bool Alive) { m_Alive = Alive; }
 	bool GetAlive() { return m_Alive; }
+
 
 	float const GetAttack() { return m_attack; };
 	void ApplyDamage(float damage);
 
 	float const GetHealth() { return m_health; }
-	void setFPS(float fps);
+	void setFPS(float fps) { m_fps = fps; }
 
 
 	void SetPlayer(bool player);
@@ -70,12 +70,11 @@ protected:
 	XMFLOAT3 m_position;
 	XMFLOAT3 m_scale;
 
-	Animation * m_idleAnim;
-	Animation * m_walkAnim;
-	Animation * m_deathAnim;
-	Animation * m_attackAnim;
-	Animation * m_damagedAnim;
-
+	Mesh * m_idleAnim[8];
+	Mesh * m_walkAnim[8];
+	Mesh * m_attackAnim[8];
+	Mesh * m_deathAnim[8];
+	Mesh * m_damagedAnim[8];
 	int m_currFrame;
 	bool m_isAnimated;
 	std::string m_animation;
