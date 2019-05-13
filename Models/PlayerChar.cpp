@@ -272,26 +272,31 @@ void Player::setAnimation(const std::string & name)
 
 void Player::setIdleMesh(Animation * animation)
 {
+	m_idleAnim = nullptr;
 	m_idleAnim = animation;
 }
 
 void Player::setWalkMesh(Animation * animation)
 {
-	m_walkAnim = animation;
+	m_idleAnim = nullptr;
+	m_idleAnim = animation;
 }
 
 void Player::setAttackMesh(Animation * animation)
 {
+	m_attackAnim = nullptr;
 	m_attackAnim = animation;
 }
 
 void Player::setDeathMesh(Animation * animation)
 {
+	m_deathAnim = nullptr;
 	m_deathAnim = animation;
 }
 
 void Player::setDamagedMesh(Animation * animation)
 {
+	m_damagedAnim = nullptr;
 	m_damagedAnim = animation;
 
 }
@@ -308,6 +313,31 @@ void Player::ApplyDamage(float damage)
 void Player::setFPS(float fps)
 {
 	m_fps = fps;
+
+	if (m_idleAnim != nullptr)
+	{
+		m_idleAnim->SetFPS(fps);
+	}
+
+	if (m_walkAnim != nullptr)
+	{
+		m_walkAnim->SetFPS(fps);
+	}
+
+	if (m_deathAnim != nullptr)
+	{
+		m_deathAnim->SetFPS(fps);
+	}
+
+	if (m_attackAnim != nullptr)
+	{
+		m_attackAnim->SetFPS(fps);
+	}
+
+	if (m_damagedAnim != nullptr)
+	{
+		m_damagedAnim->SetFPS(fps);
+	}
 }
 
 XMFLOAT3 Player::getPosition()

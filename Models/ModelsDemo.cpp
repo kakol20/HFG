@@ -272,8 +272,11 @@ bool ModelsDemo::LoadContent()
 	if (!Zombie_M.Init("PlayerModels/Nathan_ExoSuit/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
 	if (!Zombie_T.Init("PlayerModels/Nathan_ExoSuit/CorpseBodTexture2.png", d3dResult, d3dDevice_)) return false;
 
-	//if (!ZombieAttack.Load("PlayerModels/Nathan_ExoSuit/Attack/EXOsuit_Punching_Frame_0", 8, d3dResult, d3dDevice_)) return false;
 	if (!ZombieIdle.Load("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Idle_0", 8, d3dResult, d3dDevice_)) return false;
+	if (!ZombieWalk.Load("PlayerModels/Nathan_ExoSuit/Walk/Exo_Suit_Walk_0", 8, d3dResult, d3dDevice_)) return false;
+	if (!ZombieDeath.Load("PlayerModels/Nathan_ExoSuit/Death/Exo_Suit_Death_0", 8, d3dResult, d3dDevice_)) return false;
+	if (!ZombieDamaged.Load("PlayerModels/Nathan_ExoSuit/Damage/Exo_suit_Hit_0", 8, d3dResult, d3dDevice_)) return false;
+	if (!ZombieAttack.Load("PlayerModels/Nathan_Exosuit/Attack/Exo_Suit_Punching_0", 8, d3dResult, d3dDevice_)) return false;
 
 	//============ ALIEN ============
 	if (!Alien_M.Init("PlayerModels/Lucy_Alien/Idle/Alien_Walk_1.obj", d3dResult, d3dDevice_)) return false;
@@ -287,9 +290,9 @@ bool ModelsDemo::LoadContent()
 
 	// SETTING THE ANIMATIONS!!!!
 
-	Player1.setIsAnimated(false);
-	Player1.setAnimation("death");
-	Player1.setFPS(8 / 1.0f);
+	Player1.setIsAnimated(true);
+	Player1.setAnimation("attack");
+	Player1.setFPS(8 / 1.0f); // number of frames / the length of animation in seconds
 
 	Player2.setIsAnimated(false);
 	Player2.setAnimation("death");
@@ -1286,6 +1289,8 @@ void ModelsDemo::Render()
 
 			Player1.setDeathMesh(&WolfDeath);
 			Player1.setAttackMesh(&WolfAttack);
+			Player1.setDeathMesh(&WolfDeath);
+			Player1.setIdleMesh(&WolfIdle);
 		}
 		else
 		{
@@ -1328,6 +1333,10 @@ void ModelsDemo::Render()
 			Player1.setTexture(&Zombie_T);
 
 			Player1.setIdleMesh(&ZombieIdle);
+			Player1.setWalkMesh(&ZombieWalk);
+			Player1.setDeathMesh(&ZombieDeath);
+			Player1.setAttackMesh(&ZombieAttack);
+			Player1.setDamagedMesh(&ZombieDamaged);
 		}
 		else
 		{
@@ -1383,6 +1392,8 @@ void ModelsDemo::Render()
 
 			Player1.setDeathMesh(&WolfDeath);
 			Player2.setAttackMesh(&WolfAttack);
+			Player2.setDeathMesh(&WolfDeath);
+			Player2.setIdleMesh(&WolfIdle);
 		}
 		else
 		{
@@ -1428,6 +1439,10 @@ void ModelsDemo::Render()
 			Player2.setTexture(&Zombie_T);
 
 			Player2.setIdleMesh(&ZombieIdle);
+			Player2.setWalkMesh(&ZombieWalk);
+			Player2.setDeathMesh(&ZombieDeath);
+			Player2.setAttackMesh(&ZombieAttack);
+			Player2.setDamagedMesh(&ZombieDamaged);
 		}
 		else
 		{

@@ -1,6 +1,5 @@
 #include "Animation.h"
 
-
 Animation::Animation()
 {
 	m_counter = 0;
@@ -165,7 +164,6 @@ void Animation::SetIsAnimated(bool flag)
 
 Mesh * Animation::GetMesh()
 {
-
 	int frame = m_counter % m_nOfFrames;
 
 	return m_meshes[frame];
