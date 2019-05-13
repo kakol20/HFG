@@ -22,12 +22,6 @@ Player::Player()
 	m_speed = 2.0f;
 
 	m_fps = 12.0f;
-
-	m_idleAnim = nullptr;
-	m_walkAnim = nullptr;
-	m_deathAnim = nullptr;
-	m_attackAnim = nullptr;
-	m_damagedAnim = nullptr;
 }
 
 Player::~Player()
@@ -50,23 +44,7 @@ Mesh * Player::getMesh()
 	{
 		if (m_animation == "walk")
 		{
-			return m_walkAnim->GetMesh();
-		}
-		else if (m_animation == "attack")
-		{
-			return m_attackAnim->GetMesh();
-		}
-		else if (m_animation == "death")
-		{
-			return m_deathAnim->GetMesh();
-		}
-		else if (m_animation == "damaged")
-		{
-			return m_damagedAnim->GetMesh();
-		}
-		else
-		{
-			return m_idleAnim->GetMesh();
+			return m_walkAnim[m_currFrame];
 		}
 	}
 	
@@ -161,24 +139,22 @@ void Player::update(float dt, XMFLOAT3 opponentPosition)
 		, 0.0f,
 		XMVectorGetZ(Opponent) - XMVectorGetZ(Self),
 		0.0f);
+	// animation
 
-	if (m_walkAnim != nullptr) m_walkAnim->SetIsAnimated(m_isAnimated);
-	if (m_idleAnim != nullptr) m_idleAnim->SetIsAnimated(m_isAnimated);
-	if (m_deathAnim != nullptr) m_deathAnim->SetIsAnimated(m_isAnimated);
-	if (m_attackAnim != nullptr) m_attackAnim->SetIsAnimated(m_isAnimated);
-	if (m_damagedAnim != nullptr) m_damagedAnim->SetIsAnimated(m_isAnimated);
+	if (m_isAnimated)
+	{
+		m_dtCumulative += dt;
+		if (m_dtCumulative >= (1 / m_fps))
+		{
+			m_dtCumulative = 0.0f;
+			m_currFrame++;
 
-	if (m_walkAnim != nullptr) m_walkAnim->SetFPS(m_fps);
-	if (m_idleAnim != nullptr) m_idleAnim->SetFPS(m_fps);
-	if (m_deathAnim != nullptr) m_deathAnim->SetFPS(m_fps);
-	if (m_attackAnim != nullptr) m_attackAnim->SetFPS(m_fps);
-	if (m_damagedAnim != nullptr) m_damagedAnim->SetFPS(m_fps);
-	
-	if (m_walkAnim != nullptr) m_walkAnim->Update(dt);
-	if (m_idleAnim != nullptr) m_idleAnim->Update(dt);
-	if (m_deathAnim != nullptr) m_deathAnim->Update(dt);
-	if (m_attackAnim != nullptr) m_attackAnim->Update(dt);
-	if (m_damagedAnim != nullptr) m_damagedAnim->Update(dt);
+			if (m_currFrame == 7)
+			{
+				m_currFrame = 0;
+			}
+		}
+	}
 
 	//m_direction = XMdVector3ClampLength(m_direction, 0.0f, 1.0f);
 	m_direction = XMVector3Normalize(m_direction);
@@ -257,7 +233,7 @@ void Player::SetPlayer(bool player)
 
 void Player::setIsAnimated(bool animated)
 {
-	m_isAnimated = animated;
+	m_isAnimated = true;
 }
 
 bool Player::getIsAnimated()
@@ -270,30 +246,28 @@ void Player::setAnimation(const std::string & name)
 	m_animation = name;
 }
 
-void Player::setIdleMesh(Animation * animation)
+void Player::setIdleMesh(Mesh * meshFrames[])
 {
-	m_idleAnim = animation;
+	for (int i = 0; i < 8; i++)
+	{
+		m_idleAnim[i] = meshFrames[i];
+	}
 }
 
-void Player::setWalkMesh(Animation * animation)
+void Player::setWalkMesh(Mesh * meshFrames[])
 {
-	m_walkAnim = animation;
+	for (int i = 0; i < 8; i++)
+	{
+		m_walkAnim[i] = meshFrames[i];
+	}
 }
 
-void Player::setAttackMesh(Animation * animation)
+void Player::setAttackMesh(Mesh * meshFrames[])
 {
-	m_attackAnim = animation;
 }
 
-void Player::setDeathMesh(Animation * animation)
+void Player::setDeathMesh(Mesh * meshFrames[])
 {
-	m_deathAnim = animation;
-}
-
-void Player::setDamagedMesh(Animation * animation)
-{
-	m_damagedAnim = animation;
-
 }
 
 void Player::ApplyDamage(float damage)
@@ -303,12 +277,9 @@ void Player::ApplyDamage(float damage)
 	{ 
 		m_Alive = false;
 	} 
+	
 }
 
-void Player::setFPS(float fps)
-{
-	m_fps = fps;
-}
 
 XMFLOAT3 Player::getPosition()
 {
