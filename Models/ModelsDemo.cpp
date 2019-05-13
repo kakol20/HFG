@@ -262,7 +262,7 @@ bool ModelsDemo::LoadContent()
 	if (!Kremit_M.Init("PlayerModels/Matthew_Kremit/Idle/KremitTest.obj", d3dResult, d3dDevice_)) return false;
 	if (!Kremit_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
 
-	if (!KremitWalk.Load("PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_", 8, d3dResult, d3dDevice_)) return false;
+	//if (!KremitWalk.Load("PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_", 8, d3dResult, d3dDevice_)) return false;
 
 	//============ ZOMBIE ============
 	if (!Zombie_M.Init("PlayerModels/Nathan_ExoSuit/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
