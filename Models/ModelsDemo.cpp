@@ -249,8 +249,8 @@ bool ModelsDemo::LoadContent()
 	camera_.snapPosition(&Player1, &Player2);
 
 	//============ WOLF ============
-	if (!Wolf_M.Init("PlayerModels/Antonina_Wolf/Idle/WolfUVd.obj", d3dResult, d3dDevice_)) return false;
-	if (!Wolf_T.Init("PlayerModels/Antonina_Wolf/WolfBrownTextureNew.png", d3dResult, d3dDevice_)) return false;
+	if (!Wolf_M.Init("PlayerModels/Antonina_Wolf/WolfDone_Test.obj", d3dResult, d3dDevice_)) return false;
+	if (!Wolf_T.Init("PlayerModels/Antonina_Wolf/Wolf_Diff_Eye.png", d3dResult, d3dDevice_)) return false;
 
 	if (!WolfAttack.Load("PlayerModels/Antonina_Wolf/Attack/WolfAttack_F", 8, d3dResult, d3dDevice_)) return false;
 
@@ -265,10 +265,11 @@ bool ModelsDemo::LoadContent()
 	if (!KremitWalk.Load("PlayerModels/Matthew_Kremit/Walk/Kremit_Walk_", 8, d3dResult, d3dDevice_)) return false;
 
 	//============ ZOMBIE ============
-	if (!Zombie_M.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
-	if (!Zombie_T.Init("PlayerModels/Nathan_ExoSuit/LabRatUV.png", d3dResult, d3dDevice_)) return false;
+	if (!Zombie_M.Init("PlayerModels/Nathan_ExoSuit/Exo_Suit_Corpse.obj", d3dResult, d3dDevice_)) return false;
+	if (!Zombie_T.Init("PlayerModels/Nathan_ExoSuit/CorpseBodTexture2.png", d3dResult, d3dDevice_)) return false;
 
-	if (!ZombieAttack.Load("PlayerModels/Nathan_ExoSuit/Attack/EXOsuit_Punching_Frame_0", 8, d3dResult, d3dDevice_)) return false;
+	//if (!ZombieAttack.Load("PlayerModels/Nathan_ExoSuit/Attack/EXOsuit_Punching_Frame_0", 8, d3dResult, d3dDevice_)) return false;
+	if (!ZombieIdle.Load("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Idle_0", 8, d3dResult, d3dDevice_)) return false;
 
 	//============ ALIEN ============
 	if (!Alien_M.Init("PlayerModels/Lucy_Alien/Idle/Alien_Walk_1.obj", d3dResult, d3dDevice_)) return false;
@@ -286,8 +287,8 @@ bool ModelsDemo::LoadContent()
 	Player1.setFPS(8 / 2.0f);
 
 	Player2.setIsAnimated(true);
-	Player2.setAnimation("walk");
-	Player2.setFPS(8 / 2.0f);
+	Player2.setAnimation("idle");
+	Player2.setFPS(8 / 1.0f);
 
 
 	// ---------- LOADING OBJECTS ----------
@@ -625,6 +626,9 @@ void ModelsDemo::UnloadContent()
 
 	}
 */
+
+	// Unloading animations
+
 	SkyBoxMesh.Unload();
 	SkyBoxTexture.unloadTexture();
 
@@ -1315,6 +1319,8 @@ void ModelsDemo::Render()
 			DrawString("->ZOMBIE<-", -0.63f, -0.4f);
 			Player1.setMesh(&Zombie_M);
 			Player1.setTexture(&Zombie_T);
+
+			Player1.setIdleMesh(&ZombieIdle);
 		}
 		else
 		{
@@ -1408,6 +1414,8 @@ void ModelsDemo::Render()
 			Player2.SetCharacter(ZOMBIE);
 			Player2.setMesh(&Zombie_M);
 			Player2.setTexture(&Zombie_T);
+
+			Player2.setIdleMesh(&ZombieIdle);
 		}
 		else
 		{
