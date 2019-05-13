@@ -107,6 +107,10 @@ class ModelsDemo : public Dx11DemoBase
 		float m_y1 = 0.0f;
 		float m_z1 = -10.0f;
 
+		// QUAD
+		ID3D11Buffer * vertexBufferQuad_;
+		ID3D11ShaderResourceView* quadColorMap_;
+
 		float Tank3Speed;
 		float wait;
 		float attack_time1;

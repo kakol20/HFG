@@ -11,7 +11,8 @@ By Allen Sherrod and Wendy Jones
 #include<stdio.h>
 #include"objLoader.h"
 
-char* TERRAIN_TEXTURE_NAME = "GameObjects/Dome/DomeTexture.png";
+char* TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/MENU_SCREEN3.jpg";
+char* QUAD_TEXTURE_NAME = "GameObjects/DomeTexture.png";
 struct VertexPos
 {
 	XMFLOAT3 pos;
@@ -326,15 +327,15 @@ bool ModelsDemo::LoadContent()
 		{ XMFLOAT3(-100.0f ,  0.0f, 100.0f), XMFLOAT2(0.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
 		{ XMFLOAT3(100.0f,  0.0f, 100.0f), XMFLOAT2(1.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
 	};*/
-	VertexPos terrainVertices[] =
+	TextVertexPos terrainVertices[] =
 	{
-		{ XMFLOAT3(1.0f, 0.0f , 1.0f),		XMFLOAT2(1.0f, 0.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
-		{ XMFLOAT3(1.0f, 0.0f , -1.0f),		XMFLOAT2(1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
-		{ XMFLOAT3(-1.0f , -0.0f , -1.0f),	XMFLOAT2(0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, 0.5f),	XMFLOAT2(0.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, 0.5f),	XMFLOAT2(1.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f, 0.5f),	XMFLOAT2(0.0f, 1.0f) },
 
-		{ XMFLOAT3(-1.0f , -0.0f , -1.0f),	XMFLOAT2(0.0f, 1.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
-		{ XMFLOAT3(-1.0f ,  0.0f, 1.0f),	XMFLOAT2(0.0f, 0.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
-		{ XMFLOAT3(1.0f,  0.0f, 1.0f),		XMFLOAT2(1.0f, 0.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, 0.5f),	XMFLOAT2(1.0f, 0.0f) },
+		{ XMFLOAT3(1.0f ,-1.0f, 0.5f),	XMFLOAT2(1.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f, 0.5f),	XMFLOAT2(0.0f, 1.0f) },
 	};
 
 	//D3D11_BUFFER_DESC vertexDesc;
@@ -366,6 +367,54 @@ bool ModelsDemo::LoadContent()
 		DXTRACE_MSG("Failed to load the texture image!");
 		return false;
 	}
+
+	//===================== BLOODY QUAD!!! ================
+
+	D3D11_BUFFER_DESC vertexDesc1;
+
+	D3D11_SUBRESOURCE_DATA resourceData1;
+
+	VertexPos quadVertices[] =
+	{
+
+		{ XMFLOAT3(10.0f, 0.0f , 10.0f), XMFLOAT2(1.0f, 0.0f), XMFLOAT3(0.0f, 1.0f , 0.0f) },
+	{ XMFLOAT3(10.0f, 0.0f , -10.0f), XMFLOAT2(1.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+	{ XMFLOAT3(-10.0f,0.0f , -10.0f), XMFLOAT2(0.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+
+	{ XMFLOAT3(-10.0f ,0.0f , -10.0f), XMFLOAT2(0.0f, 1.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+	{ XMFLOAT3(-10.0f , 0.0f, 10.0f), XMFLOAT2(0.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+	{ XMFLOAT3(10.0f,  0.0f, 10.0f), XMFLOAT2(1.0f, 0.0f) , XMFLOAT3(0.0f, 1.0f , 0.0f) },
+	};
+
+	//D3D11_BUFFER_DESC vertexDesc;
+	ZeroMemory(&vertexDesc1, sizeof(vertexDesc1));
+	vertexDesc1.Usage = D3D11_USAGE_DEFAULT;
+	vertexDesc1.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexDesc1.ByteWidth = sizeof(VertexPos) * 6;
+
+	//D3D11_SUBRESOURCE_DATA resourceData;
+	ZeroMemory(&resourceData1, sizeof(resourceData1));
+	resourceData1.pSysMem = quadVertices;
+
+	d3dResult = d3dDevice_->CreateBuffer(&vertexDesc1, &resourceData1, &vertexBufferQuad_);
+
+	if (FAILED(d3dResult))
+	{
+		DXTRACE_MSG("Failed to create vertex buffer!");
+		return false;
+	}
+
+
+	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, QUAD_TEXTURE_NAME, 0, 0, &quadColorMap_, 0);
+
+	if (FAILED(d3dResult))
+	{
+		DXTRACE_MSG("Failed to load the texture image!");
+		return false;
+	}
+
+
+	//=====================================================
 
 	D3D11_SAMPLER_DESC colorMapDesc;
 	ZeroMemory(&colorMapDesc, sizeof(colorMapDesc));
@@ -488,6 +537,9 @@ void ModelsDemo::UnloadContent()
 	if (colorMapSampler_) colorMapSampler_->Release();
 	if (textColorMapSampler_) textColorMapSampler_->Release();
 
+	//QUAD
+	if (quadColorMap_) quadColorMap_->Release();
+
 	if (terrainColorMap_) terrainColorMap_->Release();
 	if (textColorMap_) textColorMap_->Release();
 	if (textureMapVS_) textureMapVS_->Release();
@@ -580,6 +632,9 @@ void ModelsDemo::UnloadContent()
 	textColorMapSampler_ = 0;
 	//colorMap1_ = 0;
 	//colorMap2_ = 0;
+
+	//QUAD
+	quadColorMap_ = 0;
 
 	terrainColorMap_ = 0;
 	textColorMap_ = 0;
@@ -732,7 +787,7 @@ void ModelsDemo::Update(float dt)
 		if ((keystate[DIK_RETURN] & 0x80) && (wait <= 0))
 		{
 			gameState_ = RUN;
-			wait = 0.1;
+			wait = 0.1f;
 		}
 		//=========== Select Player 1 ===================
 		if (
@@ -1159,16 +1214,15 @@ void ModelsDemo::Render()
 		offset = 0;
 
 		d3dContext_->IASetInputLayout(textInputLayout_);
-		d3dContext_->IASetVertexBuffers(0, 1, &textVertexBuffer_, &stride, &offset);
+		d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
 		d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		d3dContext_->VSSetShader(textTextureMapVS_, 0, 0);
 		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
-		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
-		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);
+		d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
+		d3dContext_->PSSetSamplers(0, 1, &colorMapSampler_);
 
-		
-		DrawString("PRESS ENTER to START", -0.4f, 0.0f);
+		d3dContext_->Draw(6, 0);
 		TurnOffAlphaBlending();
 		TurnZBufferOn();
 
@@ -1177,7 +1231,7 @@ void ModelsDemo::Render()
 
 	//============= Character Selection =============
 
-	if (gameState_ == SELECTION) 
+	if (gameState_ == SELECTION)
 	{
 		/*TurnZBufferOff();
 		TurnOnAlphaBlending();
@@ -1261,8 +1315,6 @@ void ModelsDemo::Render()
 			DrawString("->ZOMBIE<-", -0.63f, -0.4f);
 			Player1.setMesh(&Zombie_M);
 			Player1.setTexture(&Zombie_T);
-
-			Player1.setAttackMesh(&ZombieAttack);
 		}
 		else
 		{
@@ -1316,7 +1368,6 @@ void ModelsDemo::Render()
 			Player2.setTexture(&Wolf_T);
 
 			Player2.setAttackMesh(&WolfAttack);
-
 		}
 		else
 		{
@@ -1357,8 +1408,6 @@ void ModelsDemo::Render()
 			Player2.SetCharacter(ZOMBIE);
 			Player2.setMesh(&Zombie_M);
 			Player2.setTexture(&Zombie_T);
-
-			Player2.setAttackMesh(&ZombieAttack);
 		}
 		else
 		{
@@ -1405,8 +1454,9 @@ void ModelsDemo::Render()
 		TurnZBufferOn();*/
 		TurnOffAlphaBlending();
 		TurnZBufferOn();
-		
+
 	}
+
 
 	if ((gameState_ == RUN) || (gameState_ == PAUSED))
 	{
@@ -1420,9 +1470,7 @@ void ModelsDemo::Render()
 
 		d3dContext_->VSSetShader(textureMapVS_, 0, 0);
 		d3dContext_->PSSetShader(textureMapPS_, 0, 0);
-		//d3dContext_->VSSetShader( textTextureMapVS_, 0, 0 );
-		//d3dContext_->PSSetShader( textTextureMapPS_, 0, 0 );
-		//d3dContext_->PSSetShaderResources( 1, 1, &terrainColorMap_);
+
 
 		d3dContext_->PSSetSamplers(0, 1, &colorMapSampler_);
 
@@ -1452,7 +1500,22 @@ void ModelsDemo::Render()
 		XMVECTOR cameraPosition = XMLoadFloat3(&camera_.GetPosition());
 
 		////////////////////terrain////////////////////////////////
-		d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
+		//d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
+		//worldMat = XMMatrixIdentity();
+		//worldMat = XMMatrixTranspose(worldMat);
+		//XMMATRIX scale = XMMatrixIdentity();
+		//scale = XMMatrixScaling(250.0f, 250.0f, 250.0f);
+		//worldMat = scale;
+
+		//d3dContext_->UpdateSubresource(worldCB_, 0, 0, &worldMat, 0, 0);
+		//d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		//d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
+
+		//d3dContext_->Draw(6, 0);
+		//================ QUAD =========================
+
+		d3dContext_->PSSetShaderResources(0, 1, &quadColorMap_);
+		//d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
 		worldMat = XMMatrixIdentity();
 		worldMat = XMMatrixTranspose(worldMat);
 		XMMATRIX scale = XMMatrixIdentity();
@@ -1461,9 +1524,10 @@ void ModelsDemo::Render()
 
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &worldMat, 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-		d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
+		d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferQuad_, &stride, &offset);
 
 		d3dContext_->Draw(6, 0);
+
 
 		// ---------- DRAWING GAME OBJECTS ----------
 
@@ -1473,11 +1537,11 @@ void ModelsDemo::Render()
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
 		d3dContext_->Draw(SkyBox.getMesh()->getTotalVerts(), 0);
 		//health bar
-	
+
 
 		//========================= DOME =====================
 
-	/*	d3dContext_->IASetVertexBuffers(0, 1, DomeObj.getMesh()->getVertexBuffer(), &stride, &offset);
+		/*	d3dContext_->IASetVertexBuffers(0, 1, DomeObj.getMesh()->getVertexBuffer(), &stride, &offset);
 		d3dContext_->PSSetShaderResources(0, 1, DomeObj.getTexture()->getColorMap());
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &DomeObj.getWorldMat(), 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
@@ -1497,6 +1561,7 @@ void ModelsDemo::Render()
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
 		d3dContext_->Draw(Player2.getMesh()->getTotalVerts(), 0);
 	}
+
 
 	if ((gameState_ == RUN) && (displayFPS == true))
 	{
@@ -1617,6 +1682,7 @@ void ModelsDemo::Render()
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
 	}
+
 
 	swapChain_->Present(0, 0);
 }
