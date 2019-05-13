@@ -210,7 +210,7 @@ done:
 				demo.fps_ = fps;
 				demo.frameTime_ = frameTime;
 
-				demo.Update( frameTime );    
+				demo.Update( (float)frameTime );    
 				demo.Render( );
 			}
         }
@@ -347,7 +347,7 @@ double GetFrameTime()
 	frameTimeOld = currentTime.QuadPart;
 
 	if(tickCount < 0.0f)
-		tickCount = 0.0f;
+		tickCount = (long long)0.0f;
 
 	return float(tickCount)/countsPerSecond;
 }
