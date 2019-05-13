@@ -22,7 +22,7 @@ FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f 
 	position_.y = 10.0f;
 
 	// set true to move camera freely
-	m_controllable = true;
+	m_controllable = false;
 
 	// 
 	m_distance = 40.0f;
