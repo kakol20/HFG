@@ -252,7 +252,7 @@ bool ModelsDemo::LoadContent()
 	if (!Wolf_M.Init("PlayerModels/Antonina_Wolf/WolfDone_Test.obj", d3dResult, d3dDevice_)) return false;
 	if (!Wolf_T.Init("PlayerModels/Antonina_Wolf/Wolf_Diff_Eye.png", d3dResult, d3dDevice_)) return false;
 
-	if (!WolfAttack.Load("PlayerModels/Antonina_Wolf/Attack/WolfAttack_F", 8, d3dResult, d3dDevice_)) return false;
+	//if (!WolfAttack.Load("PlayerModels/Antonina_Wolf/Attack/WolfAttack_F", 8, d3dResult, d3dDevice_)) return false;
 	//if (!WolfDeath.Load("PlayerModels/Antonina_Wolf/Dying/Wolf_DyingF", 8, d3dResult, d3dDevice_)) return false;
 	//============ ROBOT ============
 	if (!Robot_M.Init("PlayerModels/Cameron_Robot/Idle/RobotModelV1_V3.obj", d3dResult, d3dDevice_)) return false;
