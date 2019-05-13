@@ -64,7 +64,7 @@
       <Filter>Source Files\Characters</Filter>
     </ClCompile>
     <ClCompile Include="Wolf.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Characters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -108,7 +108,7 @@
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
     <ClInclude Include="Wolf.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Characters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
