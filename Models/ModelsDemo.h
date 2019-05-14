@@ -152,6 +152,10 @@ class ModelsDemo : public Dx11DemoBase
 		Mesh DomeMesh;
 		Texture DomeTexture;
 		GameObject DomeObj;
+
+		Mesh DoorMesh;
+		Texture DoorTexture;
+		GameObject Door;
 		
 		// ---------- Players ----------
 		Player Player1;

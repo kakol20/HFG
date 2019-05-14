@@ -93,6 +93,7 @@ Animation::~Animation()
 	{
 		if ((*it) != nullptr)
 		{
+			(*it)->Unload();
 			delete (*it);
 			(*it) = nullptr;
 		}

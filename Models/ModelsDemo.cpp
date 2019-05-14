@@ -283,14 +283,14 @@ bool ModelsDemo::LoadContent()
 	if (!Alien_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
 
 	//============ SKINNY ============
-	if (!Skinny_M.Init("PlayerModels/Valdas_Skinny/test.obj", d3dResult, d3dDevice_)) return false;
-	if (!Skinny_T.Init("PlayerModels/NoTexture.jpg", d3dResult, d3dDevice_)) return false;
+	if (!Skinny_M.Init("PlayerModels/Valdas_Skinny/export_ctpn.obj", d3dResult, d3dDevice_)) return false;
+	if (!Skinny_T.Init("PlayerModels/Valdas_Skinny/UV17.png", d3dResult, d3dDevice_)) return false;
 	//============ PRAVEZ ============
 
 
 	// SETTING THE ANIMATIONS!!!!
 
-	Player1.setIsAnimated(true);
+	Player1.setIsAnimated(false);
 	Player1.setAnimation("attack");
 	Player1.setFPS(8 / 1.0f); // number of frames / the length of animation in seconds
 
@@ -312,6 +312,12 @@ bool ModelsDemo::LoadContent()
 	DomeObj.setMesh(&DomeMesh);
 	DomeObj.setTexture(&DomeTexture);
 	DomeObj.setPosition({ 0.0f, 0.0f, 0.0f });
+
+	if (!DoorMesh.Init("GameObjects/Door/DoorModel.obj", d3dResult, d3dDevice_)) return false;
+	if (!DoorTexture.Init("GameObjects/Door/DoorUVClean.png", d3dResult, d3dDevice_)) return false;
+	Door.setMesh(&DoorMesh);
+	Door.setTexture(&DoorTexture);
+	Door.setPosition({ 50.0f, 0.0f, 50.0f });
 
 	/*if (enter pressed on bob)
 	{
@@ -599,6 +605,15 @@ void ModelsDemo::UnloadContent()
 
 	Alien_T.unloadTexture();
 	Alien_M.Unload();
+
+	SkyBoxMesh.Unload();
+	SkyBoxTexture.unloadTexture();
+
+	DomeMesh.Unload();
+	DomeTexture.unloadTexture();
+
+	DoorMesh.Unload();
+	DoorTexture.unloadTexture();
 /*
 	for (int i = 0; i < 8; i++)
 	{
@@ -635,10 +650,8 @@ void ModelsDemo::UnloadContent()
 	}
 */
 
-	// Unloading animations
-
-	SkyBoxMesh.Unload();
-	SkyBoxTexture.unloadTexture();
+	/*SkyBoxMesh.Unload();
+	SkyBoxTexture.unloadTexture();*/
 
 	colorMapSampler_ = 0;
 	textColorMapSampler_ = 0;
@@ -1566,15 +1579,22 @@ void ModelsDemo::Render()
 
 		// ---------- DRAWING GAME OBJECTS ----------
 
+		// Skybox
 		d3dContext_->IASetVertexBuffers(0, 1, SkyBox.getMesh()->getVertexBuffer(), &stride, &offset);
 		d3dContext_->PSSetShaderResources(0, 1, SkyBox.getTexture()->getColorMap());
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &SkyBox.getWorldMat(), 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
 		d3dContext_->Draw(SkyBox.getMesh()->getTotalVerts(), 0);
-		//health bar
+		
 
+		// Door
+		d3dContext_->IASetVertexBuffers(0, 1, Door.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->PSSetShaderResources(0, 1, Door.getTexture()->getColorMap());
+		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Door.getWorldMat(), 0, 0);
+		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		d3dContext_->Draw(Door.getMesh()->getTotalVerts(), 0);
 
-		//========================= DOME =====================
+		// Dome
 
 		/*	d3dContext_->IASetVertexBuffers(0, 1, DomeObj.getMesh()->getVertexBuffer(), &stride, &offset);
 		d3dContext_->PSSetShaderResources(0, 1, DomeObj.getTexture()->getColorMap());
