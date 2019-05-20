@@ -59,6 +59,7 @@ public:
 	void ToggleReverse() { m_reverse = !m_reverse; };
 
 	void SetCurrentFrame(int currentFrame) { m_currFrame = currentFrame; };
+	int GetCurremtFrame() { return m_currFrame; };
 
 	bool IsPaused() { return m_isPaused; };
 	bool IsReversed() { return m_reverse; };

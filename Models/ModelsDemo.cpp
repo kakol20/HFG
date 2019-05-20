@@ -317,16 +317,16 @@ bool ModelsDemo::LoadContent()
 	// SETTING THE ANIMATIONS!!!!
 
 	Player1.setIsAnimated(true);
-	Player1.setAnimation("death");
+	Player1.setAnimation("idle");
 	Player1.setFPS(8 / 1.0f); // number of frames / the length of animation in seconds
 
-	if (!Player1.IsReversed())
+	/*if (!Player1.IsReversed())
 	{
 		Player1.ToggleReverse();
-	}
+	}*/
 
 	Player2.setIsAnimated(true);
-	Player2.setAnimation("walk");
+	Player2.setAnimation("idle");
 	Player2.setFPS(8 / 1.0f);
 
 
@@ -987,6 +987,22 @@ void ModelsDemo::Update(float dt)
 				
 			}		  
 		}
+		if ((keystate[DIK_F] & 0x80) && (attack_time1 <= 0))
+		{
+			
+			Player1.setAnimation("attack");
+			Player1.setFPS(8 / 1.0f);
+			Player1.SetCurrentFrame(0);
+
+			
+
+			attack_time1 = 1.0f;
+		}
+		if (Player1.GetCurremtFrame() == 7) 
+		{
+			Player1.setAnimation("idle");
+			Player1.setFPS(8 / 1.0f);
+		}
 		if ((keystate[DIK_F] & 0x80)&& collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) == 1 && (attack_time1 <= 0))
 		{
 			Player2.ApplyDamage(Player1.GetAttack());
@@ -1030,8 +1046,24 @@ void ModelsDemo::Update(float dt)
 				
 			}
 		}
-		
-		if ((keystate[DIK_NUMPAD4] & 0x80)&& collision.colliding(Player2.getPosition(), Player1.getPosition(), dt, dist) == 1 && (attack_time2 <= 0))
+
+		if ((keystate[DIK_NUMPAD4] & 0x80) && (attack_time2 <= 0))
+		{
+
+			Player2.setAnimation("attack");
+			Player2.setFPS(8 / 1.0f);
+			Player2.SetCurrentFrame(0);
+
+
+
+			attack_time2 = 1.0f;
+		}
+		if (Player2.GetCurremtFrame() == 7)
+		{
+			Player2.setAnimation("idle");
+			Player2.setFPS(8 / 1.0f);
+		}
+		if ((keystate[DIK_NUMPAD4] & 0x80)&& collision.colliding(Player2.getPosition(), Player1.getPosition(), dt, dist) == 1 )
 		{
 			Player1.ApplyDamage(Player2.GetAttack());
 			attack_time2 = 0.1f;
