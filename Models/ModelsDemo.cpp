@@ -317,7 +317,7 @@ bool ModelsDemo::LoadContent()
 	// SETTING THE ANIMATIONS!!!!
 
 	Player1.setIsAnimated(true);
-	Player1.setAnimation("death");
+	Player1.setAnimation("walk");
 	Player1.setFPS(8 / 1.0f); // number of frames / the length of animation in seconds
 
 	if (!Player1.IsReversed())
