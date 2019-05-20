@@ -14,6 +14,7 @@
 #include "FirstPersonCamera.h"
 #include<XInput.h>
 #include <string>
+#include <map>
 
 #include "Mesh.h"
 #include "Wolf.h"
@@ -145,17 +146,10 @@ class ModelsDemo : public Dx11DemoBase
 		bool displayFPS;
 
 		// ---------- Game Objects ----------
-		Mesh SkyBoxMesh;
-		Texture SkyBoxTexture;
-		GameObject SkyBox;
 
-		Mesh DomeMesh;
-		Texture DomeTexture;
-		GameObject DomeObj;
-
-		Mesh DoorMesh;
-		Texture DoorTexture;
-		GameObject Door;
+		std::vector<GameObject *> props;
+		std::map<std::string, Mesh*> meshes;
+		std::map<std::string, Texture*> textures;
 		
 		// ---------- Players ----------
 		Player Player1;

@@ -317,7 +317,7 @@ bool ModelsDemo::LoadContent()
 	// SETTING THE ANIMATIONS!!!!
 
 	Player1.setIsAnimated(true);
-	Player1.setAnimation("death");
+	Player1.setAnimation("walk");
 	Player1.setFPS(8 / 1.0f); // number of frames / the length of animation in seconds
 
 	if (!Player1.IsReversed())
@@ -332,23 +332,51 @@ bool ModelsDemo::LoadContent()
 
 	// ---------- LOADING OBJECTS ----------
 
+	/*GameObject* SkyBox;
 	if (!SkyBoxMesh.Init("GameObjects/Skybox1.obj", d3dResult, d3dDevice_)) return false;
 	if (!SkyBoxTexture.Init("GameObjects/SkyBoxTextureSpace.png", d3dResult, d3dDevice_)) return false;
-	SkyBox.setMesh(&SkyBoxMesh);
-	SkyBox.setTexture(&SkyBoxTexture);
-	SkyBox.setPosition({ 0.0f, 0.0f, 0.0f });
+	SkyBox->setMesh(&SkyBoxMesh);
+	SkyBox->setTexture(&SkyBoxTexture);
+	SkyBox->setPosition({ 0.0f, 0.0f, 0.0f });
+	props.push_back(SkyBox);
+	SkyBox = nullptr;
 
+	GameObject * DomeObj;
 	if (!DomeMesh.Init("GameObjects/Dome/Dome.obj", d3dResult, d3dDevice_)) return false;
 	if (!DomeTexture.Init("GameObjects/Dome/DomeTexture.png", d3dResult, d3dDevice_)) return false;
-	DomeObj.setMesh(&DomeMesh);
-	DomeObj.setTexture(&DomeTexture);
-	DomeObj.setPosition({ 0.0f, 0.0f, 0.0f });
+	DomeObj->setMesh(&DomeMesh);
+	DomeObj->setTexture(&DomeTexture);
+	DomeObj->setPosition({ 0.0f, 0.0f, 0.0f });
+	props.push_back(DomeObj);
+	DomeObj = nullptr;
 
+	GameObject * Door;
 	if (!DoorMesh.Init("GameObjects/Door/DoorModel.obj", d3dResult, d3dDevice_)) return false;
 	if (!DoorTexture.Init("GameObjects/Door/DoorUVClean.png", d3dResult, d3dDevice_)) return false;
-	Door.setMesh(&DoorMesh);
-	Door.setTexture(&DoorTexture);
-	Door.setPosition({ 50.0f, 0.0f, 50.0f });
+	Door->setMesh(&DoorMesh);
+	Door->setTexture(&DoorTexture);
+	Door->setPosition({ 50.0f, 0.0f, 50.0f });
+	props.push_back(Door);
+	Door = nullptr;
+
+	GameObject * Cabinet;
+	if (!CabinetMesh.Init("GameObjects/Props/Cabinet01.obj", d3dResult, d3dDevice_)) return false;
+	if (!DoorTexture.Init("GameObjects/Props/Cabinet.png", d3dResult, d3dDevice_)) return false;
+	Cabinet->setMesh(&CabinetMesh);*/
+
+	//GameObject * tempObject = new GameObject;
+	Mesh * tempMesh = new Mesh;
+	Texture * tempTexture = new Texture;
+
+	if (tempMesh->Init("GameObjects/Skybox1.obj", d3dResult, d3dDevice_)) return false;
+	if (tempTexture->Init("GameObjects/SkyBoxTextureSpace.png", d3dResult, d3dDevice_)) return false;
+	meshes["SKYBOX"] = tempMesh;
+	textures["SKYBOX"] = tempTexture;
+	tempMesh = nullptr;
+	tempTexture = nullptr;
+
+	// do for other objects
+
 
 	/*if (enter pressed on bob)
 	{
