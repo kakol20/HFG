@@ -1,6 +1,6 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
-mtllib WolfDyingF8.mtl
+mtllib Wolf_DyingF8.mtl
 g default
 v -1.347322 0.002278 12.176181
 v -1.347726 -0.011758 12.077481

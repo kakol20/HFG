@@ -249,20 +249,25 @@ bool ModelsDemo::LoadContent()
 	camera_.snapPosition(&Player1, &Player2);
 
 	//============ WOLF ============
-	if (!Wolf_M.Init("PlayerModels/Antonina_Wolf/WolfDone_Test.obj", d3dResult, d3dDevice_)) return false;
+	if (!Wolf_M.Init("PlayerModels/Antonina_Wolf/Idle/Wolf_IdleF1.obj", d3dResult, d3dDevice_)) return false;
 	if (!Wolf_T.Init("PlayerModels/Antonina_Wolf/Wolf_Diff_Eye.png", d3dResult, d3dDevice_)) return false;
 
-	//if (!WolfAttack.Load("PlayerModels/Antonina_Wolf/Attack/WolfAttack_F", 8, d3dResult, d3dDevice_)) return false;
-	//if (!WolfDeath.Load("PlayerModels/Antonina_Wolf/Dying/Wolf_DyingF", 8, d3dResult, d3dDevice_)) return false;
+	if (!WolfIdle.Load("PlayerModels/Antonina_Wolf/Idle/Wolf_IdleF", 8, d3dResult, d3dDevice_)) return false; // working
+	if (!WolfWalk.Load("PlayerModels/Antonina_Wolf/Walk/Wolf_WalkF", 8, d3dResult, d3dDevice_)) return false; // working
+	if (!WolfDamaged.Load("PlayerModels/Antonina_Wolf/Damage/Wolf_HitF", 8, d3dResult, d3dDevice_)) return false; // working
+	if (!WolfDeath.Load("PlayerModels/Antonina_Wolf/Death/Wolf_DyingF", 8, d3dResult, d3dDevice_)) return false; // working - fast
+	if (!WolfAttack.Load("PlayerModels/Antonina_Wolf/Attack/Wolf_AttackF", 8, d3dResult, d3dDevice_)) return false; // working - fast
+
+
 	//============ ROBOT ============
 	if (!Robot_M.Init("PlayerModels/Cameron_Robot/Idle/RobotIdle1.obj", d3dResult, d3dDevice_)) return false;
 	if (!Robot_T.Init("PlayerModels/Cameron_Robot/RobotUVforModel.png", d3dResult, d3dDevice_)) return false;
 
-	if (!RobotIdle.Load("PlayerModels/Cameron_Robot/Idle/RobotIdle", 8, d3dResult, d3dDevice_)) return false; // normals not working
 	if (!RobotWalk.Load("PlayerModels/Cameron_Robot/Walk/RobotWalk", 8, d3dResult, d3dDevice_)) return false; // working
 	if (!RobotDeath.Load("PlayerModels/Cameron_Robot/Death/RobotDeath", 8, d3dResult, d3dDevice_)) return false; // working
-	if (!RobotDamaged.Load("PlayerModels/Cameron_Robot/Damage/RobotDamage", 8, d3dResult, d3dDevice_)) return false; // working
 	if (!RobotAttack.Load("PlayerModels/Cameron_Robot/Attack/RobotAttack", 8, d3dResult, d3dDevice_)) return false; // working
+	if (!RobotDamaged.Load("PlayerModels/Cameron_Robot/Damage/RobotDamage", 8, d3dResult, d3dDevice_)) return false; // working
+	if (!RobotIdle.Load("PlayerModels/Cameron_Robot/Idle/RobotIdle", 8, d3dResult, d3dDevice_)) return false; // normals not working
 
 	//============ KREMIT ============
 	if (!Kremit_M.Init("PlayerModels/Matthew_Kremit/Idle/Kremit_idle_1.obj", d3dResult, d3dDevice_)) return false;
@@ -271,8 +276,8 @@ bool ModelsDemo::LoadContent()
 	if (!KremitIdle.Load("PlayerModels/Matthew_Kremit/Idle/Kremit_idle_", 8, d3dResult, d3dDevice_)) return false; // working
 	if (!KremitWalk.Load("PlayerModels/Matthew_Kremit/Walk/Kremit_Walking_", 8, d3dResult, d3dDevice_)) return false; // working
 	if (!KremitDeath.Load("PlayerModels/Matthew_Kremit/Death/Kremit_Death_", 8, d3dResult, d3dDevice_)) return false; // working
-	if (!KremitDamaged.Load("PlayerModels/Matthew_Kremit/Damage/Kremit_Damaged_", 8, d3dResult, d3dDevice_)) return false; // working
 	if (!KremitAttack.Load("PlayerModels/Matthew_Kremit/Attack/Kremit_Attack_", 8, d3dResult, d3dDevice_)) return false; // working
+	if (!KremitDamaged.Load("PlayerModels/Matthew_Kremit/Damage/Kremit_Damaged_", 8, d3dResult, d3dDevice_)) return false; // working
 	
 	//============ ZOMBIE ============
 	if (!Zombie_M.Init("PlayerModels/Nathan_ExoSuit/Idle/Exo_Suit_Idle_01.obj", d3dResult, d3dDevice_)) return false;
@@ -291,8 +296,8 @@ bool ModelsDemo::LoadContent()
 	if (!AlienIdle.Load("PlayerModels/Lucy_Alien/Idle/Alien_Idle_", 8, d3dResult, d3dDevice_)) return false; // working
 	if (!AlienWalk.Load("PlayerModels/Lucy_Alien/Walk/Alien_Walk_", 8, d3dResult, d3dDevice_)) return false; // working
 	if (!AlienDeath.Load("PlayerModels/Lucy_Alien/Death/Alien_Dying_", 8, d3dResult, d3dDevice_)) return false; // working
-	if (!AlienDamaged.Load("PlayerModels/Lucy_Alien/Damage/Alien_GettingHit_", 8, d3dResult, d3dDevice_)) return false; // working
 	if (!AlienAttack.Load("PlayerModels/Lucy_Alien/Attack/Alien_Attack_", 8, d3dResult, d3dDevice_)) return false; // working
+	if (!AlienDamaged.Load("PlayerModels/Lucy_Alien/Damage/Alien_GettingHit_", 8, d3dResult, d3dDevice_)) return false; // working
 
 	//============ SKINNY ============
 	if (!Skinny_M.Init("PlayerModels/Valdas_Skinny/export_ctpn.obj", d3dResult, d3dDevice_)) return false;
@@ -1326,10 +1331,11 @@ void ModelsDemo::Render()
 			Player1.setMesh(&Wolf_M);
 			Player1.setTexture(&Wolf_T);
 
+			Player1.setIdleMesh(&WolfIdle);
+			Player1.setWalkMesh(&WolfWalk);
 			Player1.setDeathMesh(&WolfDeath);
 			Player1.setAttackMesh(&WolfAttack);
-			Player1.setDeathMesh(&WolfDeath);
-			Player1.setIdleMesh(&WolfIdle);
+			Player1.setDamagedMesh(&WolfDamaged);
 		}
 		else
 		{
@@ -1445,10 +1451,11 @@ void ModelsDemo::Render()
 			Player2.setMesh(&Wolf_M);
 			Player2.setTexture(&Wolf_T);
 
-			Player1.setDeathMesh(&WolfDeath);
-			Player2.setAttackMesh(&WolfAttack);
-			Player2.setDeathMesh(&WolfDeath);
 			Player2.setIdleMesh(&WolfIdle);
+			Player2.setWalkMesh(&WolfWalk);
+			Player2.setDeathMesh(&WolfDeath);
+			Player2.setAttackMesh(&WolfAttack);
+			Player2.setDamagedMesh(&WolfDamaged);
 		}
 		else
 		{
