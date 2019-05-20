@@ -28,6 +28,12 @@ Player::Player()
 	m_deathAnim = nullptr;
 	m_attackAnim = nullptr;
 	m_damagedAnim = nullptr;
+
+	m_isPaused = false;
+	m_reverse = false;
+	m_isAnimated = false;
+
+	m_maxFrames = 8;
 }
 
 Player::~Player()
@@ -50,23 +56,23 @@ Mesh * Player::getMesh()
 	{
 		if (m_animation == "walk")
 		{
-			return m_walkAnim->GetMesh();
+			return m_walkAnim->GetMesh(m_currFrame);
 		}
 		else if (m_animation == "attack")
 		{
-			return m_attackAnim->GetMesh();
+			return m_attackAnim->GetMesh(m_currFrame);
 		}
 		else if (m_animation == "death")
 		{
-			return m_deathAnim->GetMesh();
+			return m_deathAnim->GetMesh(m_currFrame);
 		}
 		else if (m_animation == "damaged")
 		{
-			return m_damagedAnim->GetMesh();
+			return m_damagedAnim->GetMesh(m_currFrame);
 		}
 		else
 		{
-			return m_idleAnim->GetMesh();
+			return m_idleAnim->GetMesh(m_currFrame);
 		}
 	}
 	
@@ -180,6 +186,36 @@ void Player::update(float dt, XMFLOAT3 opponentPosition)
 	if (m_attackAnim != nullptr) m_attackAnim->Update(dt);
 	if (m_damagedAnim != nullptr) m_damagedAnim->Update(dt);
 
+	m_dtCumulative += dt;
+	
+	if (m_dtCumulative >= (1 / m_fps))
+	{
+		m_dtCumulative = 0.0f;
+
+		if (!m_isPaused)
+		{
+			if (m_reverse)
+			{
+				m_currFrame--;
+			}
+			else
+			{
+				m_currFrame = m_currFrame + 1;
+			}
+		}
+
+		if (m_currFrame >= m_maxFrames)
+		{
+			m_currFrame = 0;
+		}
+
+		if (m_currFrame < 0)
+		{
+			m_currFrame = m_maxFrames - 1;
+		}
+	}
+	
+
 	//m_direction = XMdVector3ClampLength(m_direction, 0.0f, 1.0f);
 	m_direction = XMVector3Normalize(m_direction);
 
@@ -216,45 +252,6 @@ void Player::SetPlayer(bool player)
 	m_player1 = player;
 }
 
-//void Player::SetCharacter(Characters character)
-//{
-//	/*if (character == WOLF)
-//	{
-//		
-//	
-//	};
-//
-//	else if (character == ROBOT)
-//	{
-//	
-//	};
-//
-//	else if (character == KREMIT)
-//	{
-//
-//	};
-//
-//	else if (character == ZOMBIE)
-//	{
-//
-//	};
-//
-//	else if (character == ALIEN)
-//	{
-//
-//	};
-//
-//	else if (character == SKINNY)
-//	{
-//
-//	};
-//
-//	else if (character == PRAVEZ)
-//	{
-//
-//	};*/
-//}
-
 void Player::setIsAnimated(bool animated)
 {
 	m_isAnimated = animated;
@@ -278,8 +275,8 @@ void Player::setIdleMesh(Animation * animation)
 
 void Player::setWalkMesh(Animation * animation)
 {
-	m_idleAnim = nullptr;
-	m_idleAnim = animation;
+	m_walkAnim = nullptr;
+	m_walkAnim = animation;
 }
 
 void Player::setAttackMesh(Animation * animation)

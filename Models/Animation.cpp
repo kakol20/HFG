@@ -93,6 +93,7 @@ Animation::~Animation()
 	{
 		if ((*it) != nullptr)
 		{
+			(*it)->Unload();
 			delete (*it);
 			(*it) = nullptr;
 		}
@@ -140,7 +141,7 @@ void Animation::Update(float dt)
 	//		}
 	//	}
 
-	m_dtCumulative += dt;
+	/*m_dtCumulative += dt;
 
 	if (m_isAnimated)
 	{
@@ -149,7 +150,7 @@ void Animation::Update(float dt)
 			m_dtCumulative = 0.0f;
 			m_counter++;
 		}
-	}
+	}*/
 }
 
 void Animation::SetFPS(float fps)
@@ -162,9 +163,9 @@ void Animation::SetIsAnimated(bool flag)
 	m_isAnimated = flag;
 }
 
-Mesh * Animation::GetMesh()
+Mesh * Animation::GetMesh(int frame)
 {
-	int frame = m_counter % m_nOfFrames;
+	/*int frame = m_counter % m_nOfFrames;*/
 
 	return m_meshes[frame];
 }
