@@ -22,7 +22,7 @@ FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f 
 	position_.y = 10.0f;
 
 	// set true to move camera freely
-	m_controllable = false;
+	m_controllable = true;
 
 	// 
 	m_distance = 40.0f;
@@ -318,37 +318,6 @@ void FirstPersonCamera::calculateSteps(float dt)
 	// TODO
 	// Try spline interpolation
 	// https://andrewhungblog.wordpress.com/2017/03/03/catmull-rom-splines-in-plain-english/
-/*
-	public static List GenerateSpline(List points, int stepsPerCurve = 3, float tension = 1)
-	{
-		List result = new List();
-
-		for (int i = 0; i < points.Count - 1; i++)
-		{
-			Vector3 prev = i == 0 ? points[i] : points[i - 1];
-			Vector3 currStart = points[i];
-			Vector3 currEnd = points[i + 1];
-			Vector3 next = i == points.Count - 2 ? points[i + 1] : points[i + 2];
-
-			for (int step = 0; step <= stepsPerCurve; step++)
-			{
-				float t = (float)step / stepsPerCurve;
-				float tSquared = t * t;
-				float tCubed = tSquared * t;
-
-				Vector3 interpolatedPoint =
-					(-.5f * tension * tCubed + tension * tSquared - .5f * tension * t) * prev +
-					(1 + .5f * tSquared * (tension - 6) + .5f * tCubed * (4 - tension)) * currStart +
-					(.5f * tCubed * (tension - 4) + .5f * tension * t - (tension - 3) * tSquared) * currEnd +
-					(-.5f * tension * tSquared + .5f * tension * tCubed) * next;
-
-				result.Add(interpolatedPoint);
-			}
-		}
-
-		return result;
-	}
-*/
 
 	for (size_t i = 0; i < m_points.size() - 1; i++)
 	{

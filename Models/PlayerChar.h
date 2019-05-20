@@ -55,6 +55,13 @@ public:
 	float const GetHealth() { return m_health; }
 	void setFPS(float fps);
 
+	void TogglePause() { m_isPaused = !m_isPaused; };
+	void ToggleReverse() { m_reverse = !m_reverse; };
+
+	void SetCurrentFrame(int currentFrame) { m_currFrame = currentFrame; };
+
+	bool IsPaused() { return m_isPaused; };
+	bool IsReversed() { return m_reverse; };
 
 	void SetPlayer(bool player);
 	//void SetCharacter(Characters character);
@@ -81,6 +88,7 @@ protected:
 	std::string m_animation;
 	float m_dtCumulative;
 	float m_fps;
+	int m_maxFrames;
 
 	XMMATRIX m_worldMat;
 	XMMATRIX m_translation;
@@ -104,6 +112,10 @@ protected:
 	bool m_Alive = true;
 
 	float m_angle;
+
+	bool m_isPaused;
+
+	bool m_reverse;
 };
 
 #endif // !PLAYERCHAR_H

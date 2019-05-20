@@ -29,7 +29,9 @@ public:
 	void SetFPS(float fps);
 	void SetIsAnimated(bool flag);
 
-	Mesh * GetMesh();
+	Mesh * GetMesh(int frame);
+
+	int GetMaxFrames() const { return m_nOfFrames; };
 
 private:
 
