@@ -13,7 +13,9 @@
 class ObjModel
 {
    public:
-      ObjModel( );      
+      ObjModel( );
+	  ObjModel(const ObjModel & copyModel);
+	  ObjModel& operator=(const ObjModel & copyModel);
       ~ObjModel( );
 
       void Release( );

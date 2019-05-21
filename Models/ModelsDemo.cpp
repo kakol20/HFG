@@ -302,6 +302,8 @@ bool ModelsDemo::LoadContent()
 	//============ SKINNY ============
 	if (!Skinny_M.Init("PlayerModels/Valdas_Skinny/export_ctpn.obj", d3dResult, d3dDevice_)) return false;
 	if (!Skinny_T.Init("PlayerModels/Valdas_Skinny/UV17.png", d3dResult, d3dDevice_)) return false;
+	
+	
 	//============ PRAVEZ ============
 
 
@@ -332,59 +334,83 @@ bool ModelsDemo::LoadContent()
 
 	// ---------- LOADING OBJECTS ----------
 
-	/*GameObject* SkyBox;
-	if (!SkyBoxMesh.Init("GameObjects/Skybox1.obj", d3dResult, d3dDevice_)) return false;
-	if (!SkyBoxTexture.Init("GameObjects/SkyBoxTextureSpace.png", d3dResult, d3dDevice_)) return false;
-	SkyBox->setMesh(&SkyBoxMesh);
-	SkyBox->setTexture(&SkyBoxTexture);
-	SkyBox->setPosition({ 0.0f, 0.0f, 0.0f });
-	props.push_back(SkyBox);
-	SkyBox = nullptr;
+	// Loading meshes and textures
 
-	GameObject * DomeObj;
-	if (!DomeMesh.Init("GameObjects/Dome/Dome.obj", d3dResult, d3dDevice_)) return false;
-	if (!DomeTexture.Init("GameObjects/Dome/DomeTexture.png", d3dResult, d3dDevice_)) return false;
-	DomeObj->setMesh(&DomeMesh);
-	DomeObj->setTexture(&DomeTexture);
-	DomeObj->setPosition({ 0.0f, 0.0f, 0.0f });
-	props.push_back(DomeObj);
-	DomeObj = nullptr;
+	if (!meshes["SKYBOX"].Init("GameObjects/SkyBox/Skybox1.obj", d3dResult, d3dDevice_)) return false;
+	if (!textures["SKYBOX"].Init("GameObjects/SkyBox/SkyboxTextureSpace.png", d3dResult, d3dDevice_)) return false;
 
-	GameObject * Door;
-	if (!DoorMesh.Init("GameObjects/Door/DoorModel.obj", d3dResult, d3dDevice_)) return false;
-	if (!DoorTexture.Init("GameObjects/Door/DoorUVClean.png", d3dResult, d3dDevice_)) return false;
-	Door->setMesh(&DoorMesh);
-	Door->setTexture(&DoorTexture);
-	Door->setPosition({ 50.0f, 0.0f, 50.0f });
-	props.push_back(Door);
-	Door = nullptr;
+	if (!meshes["DOME"].Init("GameObjects/Dome/Dome.obj", d3dResult, d3dDevice_)) return false;
+	if (!textures["DOME"].Init("GameObjects/Dome/DomeTexture.png", d3dResult, d3dDevice_)) return false;
 
-	GameObject * Cabinet;
-	if (!CabinetMesh.Init("GameObjects/Props/Cabinet01.obj", d3dResult, d3dDevice_)) return false;
-	if (!DoorTexture.Init("GameObjects/Props/Cabinet.png", d3dResult, d3dDevice_)) return false;
-	Cabinet->setMesh(&CabinetMesh);*/
+	if (!meshes["DOOR"].Init("GameObjects/Door/DoorModel.obj", d3dResult, d3dDevice_)) return false;
+	if (!textures["DOOR"].Init("GameObjects/Door/DoorUVClean.png", d3dResult, d3dDevice_)) return false;
 
-	//GameObject * tempObject = new GameObject;
-	Mesh * tempMesh = new Mesh;
-	Texture * tempTexture = new Texture;
+	if (!meshes["CABINET"].Init("GameObjects/Props/Cabinet01.obj", d3dResult, d3dDevice_)) return false;
+	if (!textures["CABINET"].Init("GameObjects/Props/Cabinet.png", d3dResult, d3dDevice_)) return false;
 
-	if (tempMesh->Init("GameObjects/Skybox1.obj", d3dResult, d3dDevice_)) return false;
-	if (tempTexture->Init("GameObjects/SkyBoxTextureSpace.png", d3dResult, d3dDevice_)) return false;
-	meshes["SKYBOX"] = tempMesh;
-	textures["SKYBOX"] = tempTexture;
-	tempMesh = nullptr;
-	tempTexture = nullptr;
-
-	// do for other objects
+	if (!meshes["CONTAINER"].Init("GameObjects/Props/Container.obj", d3dResult, d3dDevice_)) return false;
+	if (!textures["CONTAINER"].Init("GameObjects/Props/ContainerUVColour.png", d3dResult, d3dDevice_)) return false;
 
 
-	/*if (enter pressed on bob)
-	{
-		Player1.setMesh(& Player1Mesh)
-			set texture
-			set animations*/
-	//Player1.SetCharacter(WOLF);
-	/*}*/
+	// LOADING MODELS
+	/*GameObject * tempObject = new GameObject;
+	tempObject->setMesh(&meshes["SKYBOX"]);
+	tempObject->setTexture(&textures["SKYBOX"]);
+	tempObject->setPosition({ 0.0f, 0.0f, 0.0f });
+	tempObject->SetID("SKYBOX");
+	props.push_back(tempObject);
+	tempObject = nullptr;
+
+	tempObject = new GameObject;
+	tempObject->setMesh(&meshes["DOME"]);
+	tempObject->setTexture(&textures["DOME"]);
+	tempObject->setPosition({ 0.0f, 0.0f, 0.0f });
+	tempObject->SetID("DOME");
+	props.push_back(tempObject);
+	tempObject = nullptr;
+
+	tempObject = new GameObject;
+	tempObject->setMesh(&meshes["DOOR"]);
+	tempObject->setTexture(&textures["DOOR"]);
+	tempObject->setPosition({ 100.0f, 0.0f, 100.0f });
+	tempObject->SetID("DOOR");
+	props.push_back(tempObject);
+	tempObject = nullptr;
+
+	tempObject = new GameObject;
+	tempObject->setMesh(&meshes["CABINET"]);
+	tempObject->setTexture(&textures["CABINET"]);
+	tempObject->setPosition({ 100.0f, 0.0f, 50.0f });
+	tempObject->SetID("CABINET");
+	props.push_back(tempObject);
+	tempObject = nullptr;
+
+	tempObject = new GameObject;
+	tempObject->setMesh(&meshes["CONTAINER"]);
+	tempObject->setTexture(&textures["CONTAINER"]);
+	tempObject->setPosition({ 100.0f, 0.0f, 25.0f });
+	tempObject->SetID("CONTAINER");
+	props.push_back(tempObject);
+	tempObject = nullptr;*/
+
+	props.push_back(new GameObject);
+	props[0]->setMesh(&meshes["SKYBOX"]);
+	props[0]->setTexture(&textures["SKYBOX"]);
+	props[0]->setPosition({ 0.0f, 0.0f, 0.0f });
+	props[0]->SetID("SKYBOX");
+
+	props.push_back(new GameObject);
+	props[1]->setMesh(&meshes["DOME"]);
+	props[1]->setTexture(&textures["DOME"]);
+	props[1]->setPosition({ 0.0f, 0.0f, 0.0f });
+	props[1]->SetID("DOME");
+
+	props.push_back(new GameObject);
+	props[2]->setMesh(&meshes["DOOR"]);
+	props[2]->setTexture(&textures["DOOR"]);
+	props[2]->setPosition({ 100.0f, 0.0f, 100.0f });
+	props[2]->SetID("DOOR");
+
 	// ------------------------------ END ------------------------------
 
 	D3D11_BUFFER_DESC vertexDesc;
@@ -665,14 +691,31 @@ void ModelsDemo::UnloadContent()
 	Alien_T.unloadTexture();
 	Alien_M.Unload();
 
-	SkyBoxMesh.Unload();
+	/*SkyBoxMesh.Unload();
 	SkyBoxTexture.unloadTexture();
 
 	DomeMesh.Unload();
 	DomeTexture.unloadTexture();
 
 	DoorMesh.Unload();
-	DoorTexture.unloadTexture();
+	DoorTexture.unloadTexture();*/
+
+	for (auto it = meshes.begin(); it != meshes.end(); it++)
+	{
+		(*it).second.Unload();
+
+	}
+
+	for (auto it = textures.begin(); it != textures.end(); it++)
+	{
+		(*it).second.unloadTexture();
+	}
+
+	for (auto it = props.begin(); it != props.end(); it++)
+	{
+		delete (*it);
+		(*it) = nullptr;
+	}
 /*
 	for (int i = 0; i < 8; i++)
 	{
@@ -1670,19 +1713,30 @@ void ModelsDemo::Render()
 		// ---------- DRAWING GAME OBJECTS ----------
 
 		// Skybox
-		d3dContext_->IASetVertexBuffers(0, 1, SkyBox.getMesh()->getVertexBuffer(), &stride, &offset);
-		d3dContext_->PSSetShaderResources(0, 1, SkyBox.getTexture()->getColorMap());
-		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &SkyBox.getWorldMat(), 0, 0);
-		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-		d3dContext_->Draw(SkyBox.getMesh()->getTotalVerts(), 0);
-		
 
-		// Door
-		d3dContext_->IASetVertexBuffers(0, 1, Door.getMesh()->getVertexBuffer(), &stride, &offset);
-		d3dContext_->PSSetShaderResources(0, 1, Door.getTexture()->getColorMap());
-		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Door.getWorldMat(), 0, 0);
-		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-		d3dContext_->Draw(Door.getMesh()->getTotalVerts(), 0);
+
+		//d3dContext_->IASetVertexBuffers(0, 1, SkyBox.getMesh()->getVertexBuffer(), &stride, &offset);
+		//d3dContext_->PSSetShaderResources(0, 1, SkyBox.getTexture()->getColorMap());
+		//d3dContext_->UpdateSubresource(worldCB_, 0, 0, &SkyBox.getWorldMat(), 0, 0);
+		//d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		//d3dContext_->Draw(SkyBox.getMesh()->getTotalVerts(), 0);
+		//
+
+		//// Door
+		//d3dContext_->IASetVertexBuffers(0, 1, Door.getMesh()->getVertexBuffer(), &stride, &offset);
+		//d3dContext_->PSSetShaderResources(0, 1, Door.getTexture()->getColorMap());
+		//d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Door.getWorldMat(), 0, 0);
+		//d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		//d3dContext_->Draw(Door.getMesh()->getTotalVerts(), 0);
+
+		for (auto it = props.begin(); it != props.end(); it++)
+		{
+			d3dContext_->IASetVertexBuffers(0, 1, (*it)->getMesh()->getVertexBuffer(), &stride, &offset);
+			d3dContext_->PSSetShaderResources(0, 1, (*it)->getTexture()->getColorMap());
+			d3dContext_->UpdateSubresource(worldCB_, 0, 0, &(*it)->getWorldMat(), 0, 0);
+			d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+			d3dContext_->Draw((*it)->getMesh()->getTotalVerts(), 0);
+		}
 
 		// Dome
 
