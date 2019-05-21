@@ -21,37 +21,6 @@ ObjModel::ObjModel( )
     totalVerts_ = 0;
 }
 
-	ObjModel::ObjModel(const ObjModel & copyModel)
-	{
-		vertices_ = new float;
-		normals_ = new float;
-		texCoords_ = new float;
-
-		*vertices_ = *copyModel.vertices_;
-		*normals_ = *copyModel.normals_;
-		*texCoords_ = *copyModel.texCoords_;
-
-		totalVerts_ = copyModel.totalVerts_;
-	}
-
-	ObjModel & ObjModel::operator=(const ObjModel & copyModel)
-	{
-		// TODO: insert return statement here
-		if (this == &copyModel) return *this;
-
-		vertices_ = new float;
-		normals_ = new float;
-		texCoords_ = new float;
-
-		*vertices_ = *copyModel.vertices_;
-		*normals_ = *copyModel.normals_;
-		*texCoords_ = *copyModel.texCoords_;
-
-		totalVerts_ = copyModel.totalVerts_;
-
-		return *this;
-	}
-
       
 ObjModel::~ObjModel( )
 {

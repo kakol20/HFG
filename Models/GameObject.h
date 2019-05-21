@@ -6,13 +6,10 @@
 #include "Texture.h"
 
 #include <math.h>
-#include <string>
 
 class GameObject {
 public:
 	GameObject();
-	GameObject(const GameObject &copyObject);
-	GameObject& operator=(const GameObject &copyObject);
 	~GameObject();
 
 	void setMesh(Mesh* mesh);
@@ -34,9 +31,6 @@ public:
 
 	void updateWorldMat();
 
-	std::string GetID() { return m_id; };
-	void SetID(const std::string & id) { m_id = id; };
-
 	//void draw(ID3D11DeviceContext* d3dContext, HRESULT &d3dResult, ID3D11Device *d3dDevice, const UINT *pStrides, const UINT *pOffset);
 
 private:
@@ -54,7 +48,5 @@ private:
 	XMVECTOR m_defaultUp;
 
 	XMVECTOR m_direction;
-
-	std::string m_id;
 };
 #endif // !GAMEOBJECT_H

@@ -5,7 +5,6 @@
 //#include "Texture.h"
 #include "objLoader.h"
 #include<xnamath.h>
-#include <vector>
 
 
 class Mesh {
