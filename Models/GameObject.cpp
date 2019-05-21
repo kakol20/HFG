@@ -13,6 +13,73 @@ GameObject::GameObject()
 	m_scale = XMMatrixScaling(1.0f, 1.0f, 1.0f);
 }
 
+GameObject::GameObject(const GameObject & copyObject)
+{
+	/*Mesh* m_mesh;
+	Texture* m_texture;
+	XMFLOAT3 m_position;
+
+	XMMATRIX m_worldMat;
+	XMMATRIX m_translation;
+	XMMATRIX m_rotation;
+	XMMATRIX m_scale;
+
+	XMVECTOR m_defaultForward;
+	XMVECTOR m_defaultRight;
+	XMVECTOR m_defaultUp;
+
+	XMVECTOR m_direction;
+
+	std::string m_id;*/
+
+	//m_mesh = new Mesh;
+	//m_texture = new Texture;
+	*m_mesh = *copyObject.m_mesh;
+	*m_texture = *copyObject.m_texture;
+
+	m_position = copyObject.m_position;
+
+	m_worldMat = copyObject.m_worldMat;
+	m_translation = copyObject.m_translation;
+	m_rotation = copyObject.m_rotation;
+	m_scale = copyObject.m_rotation;
+
+	m_defaultForward = copyObject.m_defaultForward;
+	m_defaultRight = copyObject.m_defaultRight;
+	m_defaultUp = copyObject.m_defaultUp;
+	
+	m_direction = copyObject.m_direction;
+
+	m_id = copyObject.m_id;
+}
+
+GameObject & GameObject::operator=(const GameObject & copyObject)
+{
+	if (this == &copyObject) return *this;
+
+	m_mesh = new Mesh;
+	m_texture = new Texture;
+	*m_mesh = *copyObject.m_mesh;
+	*m_texture = *copyObject.m_texture;
+
+	m_position = copyObject.m_position;
+
+	m_worldMat = copyObject.m_worldMat;
+	m_translation = copyObject.m_translation;
+	m_rotation = copyObject.m_rotation;
+	m_scale = copyObject.m_rotation;
+
+	m_defaultForward = copyObject.m_defaultForward;
+	m_defaultRight = copyObject.m_defaultRight;
+	m_defaultUp = copyObject.m_defaultUp;
+
+	m_direction = copyObject.m_direction;
+
+	m_id = copyObject.m_id;
+
+	return *this;
+}
+
 GameObject::~GameObject()
 {
 }
@@ -109,7 +176,18 @@ void GameObject::updateWorldMat()
 
 	//m_worldMat =  m_translation;
 
-	m_worldMat = XMMatrixTranspose(m_worldMat);
+	try
+	{
+		m_worldMat = XMMatrixTranspose(m_worldMat);
 
+	}
+	catch (int e)
+	{
+			
+	}
 	//d3dContext->UpdateSubresource
 }\
+
+
+//Unhandled exception thrown : read access violation.
+//**this** was 0xFFFFFFCF. occurred

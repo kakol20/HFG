@@ -32,7 +32,6 @@ Mesh & Mesh::operator=(const Mesh & copyMesh)
 	m_vertexBuffer = 0;
 	m_vertexBuffer = copyMesh.m_vertexBuffer;
 
-	// TODO: insert return statement here
 	return *this;
 }
 
@@ -66,6 +65,7 @@ bool Mesh::Init(const char * name, HRESULT& d3dResult, ID3D11Device* d3dDevice)
 		vertices[i].norm = XMFLOAT3(*(normalPtr + 0), *(normalPtr + 1), *(normalPtr + 2));
 		normalPtr += 3;
 	}
+
 
 	D3D11_BUFFER_DESC vertexDesc;
 
