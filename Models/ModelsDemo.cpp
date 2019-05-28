@@ -944,44 +944,36 @@ void ModelsDemo::Update(float dt)
 
 	if (gameState_ == RUN)
 	{
-
-		//movement = false;
 		//// =========== MODEL MOVEMENTS 1 =================
 
 		if ((keystate[DIK_W] & 0x80))
 		{
 			AnimatioState = 1;
-			float tempx = m_x1;
-			tempx -= moveSpeed2 * dt;
+			Player1.SetReverse(false);
+
 			bool right = false;
 			Player1.moveRight(dt, right);
 		}
 		else if ((keystate[DIK_S] & 0x80))
 		{
 			AnimatioState = 1;
-			float tempx = m_x1;
-			tempx += moveSpeed2 * dt;
-			//m_x1 += moveSpeed2 * dt;
+			Player1.SetReverse(true);
+
 			bool right = true;
 			Player1.moveRight(dt, right);
 		}
 		else if ((keystate[DIK_A] & 0x80))
 		{
 			AnimatioState = 1;
-			if (!Player1.IsReversed())
-			{
-				Player1.ToggleReverse();
-			}
-			float tempx = m_z1;
-			tempx -= moveSpeed2 * dt;
+			Player1.SetReverse(true);
 			Player1.moveForward(dt, true);
 				
 		}
 		else if ((keystate[DIK_D] & 0x80))
 		{
 			AnimatioState = 1;
-			float tempx = m_z1 * (float)200.0f;
-			tempx += moveSpeed2 * dt;
+			Player1.SetReverse(true);
+
 			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) != 1)
 			{
 				//m_z1 += moveSpeed2 * dt;
@@ -990,51 +982,29 @@ void ModelsDemo::Update(float dt)
 					
 			}
 		}
-		else 
+		else if ((keystate[DIK_F] & 0x80) && (attack_time1 <= 0))
 		{
-			AnimatioState = 0;
-		}
-		if ((keystate[DIK_F] & 0x80) && (attack_time1 <= 0))
-		{
-			attack = true;
+			Player1.SetReverse(false);
 			AnimatioState = 2;
+			
+			attack_time1 = 1.0f;
 
 		}
-
-		//
-		//if ((keystate[DIK_F] & 0x80) && (attack_time1 <= 0))
-		//{
-		//	attack = true;
-		//	Player1.setAnimation("attack");
-		//	Player1.setFPS(8 / 1.0f);
-		//	Player1.SetCurrentFrame(0);
-
-		//	attack_time1 = 1.0f;
-		//}
-		//if (attack == true) 
-		//{
-
-		//	if (Player1.GetCurremtFrame() == 7) 
-		//	{
-		//		attack == false;
-	
-		//	}
-		//}
-		//else if (attack == false) 
-		//{
-		//	Player1.setAnimation("idle");
-		//	Player1.setFPS(8 / 1.0f);
-		//}
-		/*if ((keystate[DIK_F] & 0x80)&& collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) == 1 && (attack_time1 <= 0))
+		else if ((collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) == 1) && (Player1.GetCurremtFrame() == 7) && AnimatioState == 2)
 		{
 			Player2.ApplyDamage(Player1.GetAttack());
-			if (!Player1.GetAlive()) 
+		}
+		else
+		{
+			//preventing to stop the attack animation,
+			//but stopping the move animation once the button is not pressed anymore
+			if (AnimatioState != 2)
 			{
-				gameState_ = START_MENU;
+				AnimatioState = 0;
 			}
-
-			attack_time1 = 0.1f;
-		}*/
+			
+		}
+		
 		switch (AnimatioState) 
 		{
 		case 0:
@@ -1044,6 +1014,7 @@ void ModelsDemo::Update(float dt)
 			{
 				Player1.SetCurrentFrame(0);
 			}
+			
 			break;
 		case 1:
 			Player1.setAnimation("walk");
@@ -1052,6 +1023,7 @@ void ModelsDemo::Update(float dt)
 			{
 				Player1.SetCurrentFrame(0);
 			}
+			
 			break;
 		case 2:
 			Player1.setAnimation("attack");
@@ -1060,73 +1032,114 @@ void ModelsDemo::Update(float dt)
 			{
 				Player1.SetCurrentFrame(0);
 			}
+			//here we are actually stopping the attack animation ONCE IS OVER!!!
+
+			if (Player1.GetCurremtFrame() == 7)
+			{
+				AnimatioState = 0;
+			}
 
 			break;
-		//default:
-		//	Player1.setAnimation("idle");
-		//	Player1.setFPS(8 / 1.0f);
-		//	if (PrevAnimState != 0)
-		//	{
-		//		Player1.SetCurrentFrame(0);
-		//	}
-
 		}
 		PrevAnimState = AnimatioState;
 		// =========== MODEL MOVEMENTS 2 =================
 		if ((keystate[DIK_DOWN] & 0x80))
 		{
-			float tempx = m_x2;
-			tempx -= moveSpeed2 * dt;
+			AnimatioState2 = 1;
+			Player2.SetReverse(false);
+
 			bool right = false;
 			Player2.moveRight(dt, right);
 		}
-		if ((keystate[DIK_UP] & 0x80))
+		else if ((keystate[DIK_UP] & 0x80))
 		{
-			float tempx = m_x2;
-			tempx += moveSpeed2 * dt;
+			AnimatioState2 = 1;
+			Player2.SetReverse(true);
+
 			bool right = true;
 			Player2.moveRight(dt, right);
 		}
 
-		if ((keystate[DIK_RIGHT] & 0x80))
+		else if ((keystate[DIK_RIGHT] & 0x80))
 		{
-			float tempx = m_z2;
-			tempx -= moveSpeed2 * dt;
-			Player2.moveForward(dt, true);	  
+			AnimatioState2 = 1;
+			Player2.SetReverse(true);
+
+			Player2.moveForward(dt, true);
 		}
-		if ((keystate[DIK_LEFT] & 0x80))
+		else if ((keystate[DIK_LEFT] & 0x80))
 		{
-			float tempx = m_z2;
-			tempx += moveSpeed2 * dt;
+			AnimatioState2 = 1;
+			Player2.SetReverse(true);
+
 			if (collision.colliding(Player2.getPosition(), Player1.getPosition(), dt, dist) != 1)
 			{
 				bool forward = false;
 				Player2.moveForward(dt, forward);
-				
+
 			}
 		}
 
-		if ((keystate[DIK_NUMPAD4] & 0x80) && (attack_time2 <= 0))
+		else if ((keystate[DIK_NUMPAD4] & 0x80) && (attack_time2 <= 0))
 		{
 
-			Player2.setAnimation("attack");
-			Player2.setFPS(8 / 1.0f);
-			Player2.SetCurrentFrame(0);
-
-
-
+			Player2.SetReverse(false);
+			AnimatioState2 = 2;
 			attack_time2 = 1.0f;
+
 		}
-		if (Player2.GetCurremtFrame() == 7)
-		{
-			Player2.setAnimation("idle");
-			Player2.setFPS(8 / 1.0f);
-		}
-		if ((keystate[DIK_NUMPAD4] & 0x80)&& collision.colliding(Player2.getPosition(), Player1.getPosition(), dt, dist) == 1 )
+
+		else if ((collision.colliding(Player2.getPosition(), Player1.getPosition(), dt, dist) == 1) && (Player2.GetCurremtFrame() == 7) && AnimatioState2 == 2)
 		{
 			Player1.ApplyDamage(Player2.GetAttack());
-			attack_time2 = 0.1f;
 		}
+		else
+		{
+			//preventing to stop the attack animation,
+			//but stopping the move animation once the button is not pressed anymore
+			if (AnimatioState2 != 2)
+			{
+				AnimatioState2 = 0;
+			}
+
+		}
+		switch (AnimatioState2)
+		{
+		case 0:
+			Player2.setAnimation("idle");
+			Player2.setFPS(8 / 1.0f);
+			if (PrevAnimState2 != 0)
+			{
+				Player2.SetCurrentFrame(0);
+			}
+
+			break;
+		case 1:
+			Player2.setAnimation("walk");
+			Player2.setFPS(8 / 1.0f);
+			if (PrevAnimState2 != 1)
+			{
+				Player2.SetCurrentFrame(0);
+			}
+
+			break;
+		case 2:
+			Player2.setAnimation("attack");
+			Player2.setFPS(8 / 1.0f);
+			if (PrevAnimState2 != 2)
+			{
+				Player2.SetCurrentFrame(0);
+			}
+			//here we are actually stopping the attack animation ONCE IS OVER!!!
+
+			if (Player2.GetCurremtFrame() == 7)
+			{
+				AnimatioState2 = 0;
+			}
+
+			break;
+		}
+		PrevAnimState2 = AnimatioState2;
 //=================== AM I STILL ALIVE??? ==================
 		if (!Player1.GetAlive())
 		{

@@ -117,9 +117,14 @@ class ModelsDemo : public Dx11DemoBase
 		float attack_time2;
 		bool attack = false;
 		bool movement = false;
+		bool Imputs = false;
 
+		// Player 1 animations switch
 		int AnimatioState = 0;
 		int PrevAnimState = 0;
+		// Player 2 animations switch
+		int AnimatioState2 = 0;
+		int PrevAnimState2 = 0;
 
         ID3D11ShaderResourceView* colorMap1_;
 		ID3D11ShaderResourceView* colorMap2_;

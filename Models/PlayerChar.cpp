@@ -161,8 +161,7 @@ void Player::moveRight(float dt, bool reverse)
 void Player::update(float dt, XMFLOAT3 opponentPosition)
 {
 	XMVECTOR Opponent = XMLoadFloat3(&XMFLOAT3(opponentPosition.x, opponentPosition.y, opponentPosition.z));
-	XMVECTOR Self = XMLoadFloat3(&XMFLOAT3(m_position.x, m_position.y, m_position.z));
-	
+	XMVECTOR Self = XMLoadFloat3(&XMFLOAT3(m_position.x, m_position.y, m_position.z));	
 	m_direction = XMVectorSet(XMVectorGetX(Opponent) - XMVectorGetX(Self)
 		, 0.0f,
 		XMVectorGetZ(Opponent) - XMVectorGetZ(Self),
