@@ -24,7 +24,7 @@
 #include "PlayerChar.h"
 
 enum GameStates {PLAY_INTRO, START_MENU, RUN, PAUSED, INTRO_MOVIE_REPLAY,SELECTION};
-
+//enum Animations { IDLE, WALK, ATTACK, DEATH, DAMAGED };
 enum PauseMenuSelection {RETURN, FPS, PLAY_MOVIE, QUIT, CHA_SELEC};
 //this Enum has been declared in PlayerChar.h
 
@@ -115,6 +115,11 @@ class ModelsDemo : public Dx11DemoBase
 		float wait;
 		float attack_time1;
 		float attack_time2;
+		bool attack = false;
+		bool movement = false;
+
+		int AnimatioState = 0;
+		int PrevAnimState = 0;
 
         ID3D11ShaderResourceView* colorMap1_;
 		ID3D11ShaderResourceView* colorMap2_;
@@ -192,22 +197,10 @@ class ModelsDemo : public Dx11DemoBase
 		Animation ZombieAttack;
 		Animation ZombieDamaged;
 
-/*
-		Mesh ZombieWalk[8];
-		Mesh ZombieIdle[8];
-		Mesh ZombieDeath[8];
-		Mesh ZombieAttack[8];
-		Mesh ZombieDamaged[8];
-*/
+
 		Mesh Alien_M;
 		Texture Alien_T;
-/*
-		Mesh AlienWalk[8];
-		Mesh AlienIdle[8];
-		Mesh AlienDeath[8];
-		Mesh AlienAttack[8];
-		Mesh AlienDamaged[8];
-*/
+
 		Animation AlienWalk;
 		Animation AlienIdle;
 		Animation AlienDeath;
@@ -216,7 +209,12 @@ class ModelsDemo : public Dx11DemoBase
 
 		Mesh Skinny_M;
 		Texture Skinny_T;
-		// ???
+
+		Animation SkinnyWalk;
+		Animation SkinnyIdle;
+		Animation SkinnyDeath;
+		Animation SkinnyAttack;
+		Animation SkinnyDamaged;
 
 		Mesh Pravez_M;
 		Texture Pravez_T;
@@ -224,13 +222,7 @@ class ModelsDemo : public Dx11DemoBase
 
 		Mesh Kremit_M;
 		Texture Kremit_T;
-/*
-		Mesh KremitWalk[8];
-		Mesh KremitIdle[8];
-		Mesh KremitDeath[8];
-		Mesh KremitAttack[8];
-		Mesh KremitDamaged[8];
-*/
+
 		Animation KremitWalk;
 		Animation KremitIdle;
 		Animation KremitDeath;
@@ -239,13 +231,7 @@ class ModelsDemo : public Dx11DemoBase
 
 		Mesh Wolf_M;
 		Texture Wolf_T;
-/*
-		Mesh WolfWalk[8];
-		Mesh WolfIdle[8];
-		Mesh WolfDeath[8];
-		Mesh WolfAttack[8];
-		Mesh WolfDamaged[8];
-*/
+
 		Animation WolfWalk;
 		Animation WolfIdle;
 		Animation WolfDeath;
@@ -254,18 +240,14 @@ class ModelsDemo : public Dx11DemoBase
 
 		Mesh Robot_M;
 		Texture Robot_T;
-/*
-		Mesh RobotWalk[8];
-		Mesh RobotIdle[8];
-		Mesh RobotDeath[8];
-		Mesh RobotAttack[8];
-		Mesh RobotDamaged[8];
-*/
+
 		Animation RobotWalk;
 		Animation RobotIdle;
 		Animation RobotDeath;
 		Animation RobotAttack;
 		Animation RobotDamaged;
+
+
 
 		//////////////time globals///////////////////
 public:

@@ -171,8 +171,8 @@ bool ObjModel::LoadOBJ( const char * fileName )
     {
         texCoords_ = new float[totalVerts_ * 2];
     }
-
-    for( int f = 0; f < ( int )faces.size( ) - 1; f+=3 )
+	// faces.size( )-1 the "-1" is an  "extra"
+    for( int f = 0; f < ( int )faces.size( )-1; f+=3 )
     {
         vertices_[vIndex + 0] = verts[( faces[f + 0] - 1 ) * 3 + 0];
         vertices_[vIndex + 1] = verts[( faces[f + 0] - 1 ) * 3 + 1];
