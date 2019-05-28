@@ -300,10 +300,14 @@ bool ModelsDemo::LoadContent()
 	if (!AlienDamaged.Load("PlayerModels/Lucy_Alien/Damage/Alien_GettingHit_", 8, d3dResult, d3dDevice_)) return false; // working
 
 	//============ SKINNY ============
-	if (!Skinny_M.Init("PlayerModels/Valdas_Skinny/export_ctpn.obj", d3dResult, d3dDevice_)) return false;
+	if (!Skinny_M.Init("PlayerModels/Valdas_Skinny/Skinny_Idle_1.obj", d3dResult, d3dDevice_)) return false;
 	if (!Skinny_T.Init("PlayerModels/Valdas_Skinny/UV17.png", d3dResult, d3dDevice_)) return false;
-	//============ PRAVEZ ============
 
+	if (!SkinnyIdle.Load("PlayerModels/Valdas_Skinny/Idle/Skinny_Idle_", 8, d3dResult, d3dDevice_)) return false; // working
+	if (!SkinnyWalk.Load("PlayerModels/Valdas_Skinny/Walk/Skinny_Walking_", 8, d3dResult, d3dDevice_)) return false; // working
+	if (!SkinnyDeath.Load("PlayerModels/Valdas_Skinny/Death/Skinny_Death_", 8, d3dResult, d3dDevice_)) return false; // working
+	if (!SkinnyAttack.Load("PlayerModels/Valdas_Skinny/Attack/Skinny_Punch_", 8, d3dResult, d3dDevice_)) return false; // working
+	if (!SkinnyDamaged.Load("PlayerModels/Valdas_Skinny/Damage/Skinny_Gethit_", 8, d3dResult, d3dDevice_)) return false; // working
 
 	if (Player1.IsPaused())
 	{
@@ -645,44 +649,7 @@ void ModelsDemo::UnloadContent()
 
 	DoorMesh.Unload();
 	DoorTexture.unloadTexture();
-/*
-	for (int i = 0; i < 8; i++)
-	{
-		 UNLOADING FRAMES
 
-		 ZOMBIE
-		UnloadMeshPointer(&ZombieWalk[i]);
-		UnloadMeshPointer(&ZombieIdle[i]);
-		UnloadMeshPointer(&ZombieDeath[i]);
-		UnloadMeshPointer(&ZombieAttack[i]);
-		UnloadMeshPointer(&ZombieDamaged[i]);
-						  
-		 ALIEN		  &
-		UnloadMeshPointer(&AlienWalk[i]);
-		UnloadMeshPointer(&AlienIdle[i]);
-		UnloadMeshPointer(&AlienDeath[i]);
-		UnloadMeshPointer(&AlienAttack[i]);
-		UnloadMeshPointer(&AlienDamaged[i]);
-						  
-		 WOLF			  &
-		UnloadMeshPointer(&WolfWalk[i]);
-		UnloadMeshPointer(&WolfIdle[i]);
-		UnloadMeshPointer(&WolfDeath[i]);
-		UnloadMeshPointer(&WolfAttack[i]);
-		UnloadMeshPointer(&WolfDamaged[i]);
-						  
-		 ROBOT		  &
-		UnloadMeshPointer(&RobotWalk[i]);
-		UnloadMeshPointer(&RobotIdle[i]);
-		UnloadMeshPointer(&RobotDeath[i]);
-		UnloadMeshPointer(&RobotAttack[i]);
-		UnloadMeshPointer(&RobotDamaged[i]);
-
-	}
-*/
-
-	/*SkyBoxMesh.Unload();
-	SkyBoxTexture.unloadTexture();*/
 
 	colorMapSampler_ = 0;
 	textColorMapSampler_ = 0;
@@ -797,32 +764,6 @@ void ModelsDemo::Update(float dt)
 	wait -= dt;
 	attack_time1 -= dt;
 	attack_time2 -= dt;
-	/*if(keystate[DIK_LEFT] & 0x80)
-	{
-	yRotation += moveSpeed;
-	}
-	if(keystate[DIK_RIGHT] & 0x80)
-	{
-	yRotation -= moveSpeed;
-	}
-
-	if(keystate[DIK_DOWN] & 0x80)
-	{
-	xRotation += moveSpeed;
-	}
-	if(keystate[DIK_UP] & 0x80)
-	{
-	xRotation -= moveSpeed;
-	}
-	if(keystate[DIK_SUBTRACT] & 0x80)
-	{
-	zoom += moveSpeed*2;
-	}
-	if(keystate[DIK_ADD] & 0x80)
-	{
-	zoom -= moveSpeed*2;
-	}*/
-
 	
 	//============================= STATES CONTROLS !!! ==================
 	
@@ -942,68 +883,91 @@ void ModelsDemo::Update(float dt)
 	float dist = Player1.getRadius() + Player2.getRadius() ;
 	Player2.SetPlayer(false);
 
+
 	if (gameState_ == RUN)
 	{
-		// =========== MODEL MOVEMENTS 1 =================
+
+		//movement = false;
+		//// =========== MODEL MOVEMENTS 1 =================
+
 		if ((keystate[DIK_W] & 0x80))
 		{
+			AnimatioState = 1;
 			float tempx = m_x1;
 			tempx -= moveSpeed2 * dt;
-			
-				//m_x1 -= moveSpeed2 * dt;
-				bool right = false;
-				Player1.moveRight(dt, right);
-			
+			bool right = false;
+			Player1.moveRight(dt, right);
 		}
-		if ((keystate[DIK_S] & 0x80))
+		else if ((keystate[DIK_S] & 0x80))
 		{
+			AnimatioState = 1;
 			float tempx = m_x1;
 			tempx += moveSpeed2 * dt;
-			
-				//m_x1 += moveSpeed2 * dt;
-				bool right = true;
-				Player1.moveRight(dt, right);
-				  
+			//m_x1 += moveSpeed2 * dt;
+			bool right = true;
+			Player1.moveRight(dt, right);
 		}
-
-		if ((keystate[DIK_A] & 0x80))
+		else if ((keystate[DIK_A] & 0x80))
 		{
+			AnimatioState = 1;
+			if (!Player1.IsReversed())
+			{
+				Player1.ToggleReverse();
+			}
 			float tempx = m_z1;
 			tempx -= moveSpeed2 * dt;
-			
-				//m_z1 -= moveSpeed2 * dt;
-				Player1.moveForward(dt, true);
-			
+			Player1.moveForward(dt, true);
+				
 		}
-		if ((keystate[DIK_D] & 0x80))
+		else if ((keystate[DIK_D] & 0x80))
 		{
-			float tempx = m_z1;
+			AnimatioState = 1;
+			float tempx = m_z1 * (float)200.0f;
 			tempx += moveSpeed2 * dt;
 			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) != 1)
 			{
 				//m_z1 += moveSpeed2 * dt;
 				bool forward = false;
 				Player1.moveForward(dt, forward);
-				
-			}		  
+					
+			}
+		}
+		else 
+		{
+			AnimatioState = 0;
 		}
 		if ((keystate[DIK_F] & 0x80) && (attack_time1 <= 0))
 		{
-			
-			Player1.setAnimation("attack");
-			Player1.setFPS(8 / 1.0f);
-			Player1.SetCurrentFrame(0);
+			attack = true;
+			AnimatioState = 2;
 
-			
+		}
 
-			attack_time1 = 1.0f;
-		}
-		if (Player1.GetCurremtFrame() == 7) 
-		{
-			Player1.setAnimation("idle");
-			Player1.setFPS(8 / 1.0f);
-		}
-		if ((keystate[DIK_F] & 0x80)&& collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) == 1 && (attack_time1 <= 0))
+		//
+		//if ((keystate[DIK_F] & 0x80) && (attack_time1 <= 0))
+		//{
+		//	attack = true;
+		//	Player1.setAnimation("attack");
+		//	Player1.setFPS(8 / 1.0f);
+		//	Player1.SetCurrentFrame(0);
+
+		//	attack_time1 = 1.0f;
+		//}
+		//if (attack == true) 
+		//{
+
+		//	if (Player1.GetCurremtFrame() == 7) 
+		//	{
+		//		attack == false;
+	
+		//	}
+		//}
+		//else if (attack == false) 
+		//{
+		//	Player1.setAnimation("idle");
+		//	Player1.setFPS(8 / 1.0f);
+		//}
+		/*if ((keystate[DIK_F] & 0x80)&& collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) == 1 && (attack_time1 <= 0))
 		{
 			Player2.ApplyDamage(Player1.GetAttack());
 			if (!Player1.GetAlive()) 
@@ -1012,7 +976,44 @@ void ModelsDemo::Update(float dt)
 			}
 
 			attack_time1 = 0.1f;
+		}*/
+		switch (AnimatioState) 
+		{
+		case 0:
+			Player1.setAnimation("idle");
+			Player1.setFPS(8 / 1.0f);
+			if (PrevAnimState != 0) 
+			{
+				Player1.SetCurrentFrame(0);
+			}
+			break;
+		case 1:
+			Player1.setAnimation("walk");
+			Player1.setFPS(8 / 1.0f);
+			if (PrevAnimState != 1)
+			{
+				Player1.SetCurrentFrame(0);
+			}
+			break;
+		case 2:
+			Player1.setAnimation("attack");
+			Player1.setFPS(8 / 1.0f);
+			if (PrevAnimState != 2)
+			{
+				Player1.SetCurrentFrame(0);
+			}
+
+			break;
+		//default:
+		//	Player1.setAnimation("idle");
+		//	Player1.setFPS(8 / 1.0f);
+		//	if (PrevAnimState != 0)
+		//	{
+		//		Player1.SetCurrentFrame(0);
+		//	}
+
 		}
+		PrevAnimState = AnimatioState;
 		// =========== MODEL MOVEMENTS 2 =================
 		if ((keystate[DIK_DOWN] & 0x80))
 		{
@@ -1454,6 +1455,13 @@ void ModelsDemo::Render()
 			Player1.SetCharacter(SKINNY);
 			Player1.setMesh(&Skinny_M);
 			Player1.setTexture(&Skinny_T);
+
+			Player1.setIdleMesh(&SkinnyIdle);
+			Player1.setWalkMesh(&SkinnyWalk);
+			Player1.setDeathMesh(&SkinnyDeath);
+			Player1.setAttackMesh(&SkinnyAttack);
+			Player1.setDamagedMesh(&SkinnyDamaged);
+			
 		}
 		else
 		{
@@ -1574,6 +1582,12 @@ void ModelsDemo::Render()
 			Player2.SetCharacter(SKINNY);
 			Player2.setMesh(&Skinny_M);
 			Player2.setTexture(&Skinny_T);
+
+			Player2.setIdleMesh(&SkinnyIdle);
+			Player2.setWalkMesh(&SkinnyWalk);
+			Player2.setDeathMesh(&SkinnyDeath);
+			Player2.setAttackMesh(&SkinnyAttack);
+			Player2.setDamagedMesh(&SkinnyDamaged);
 		}
 		else
 		{

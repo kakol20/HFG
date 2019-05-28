@@ -112,4 +112,4 @@ void GameObject::updateWorldMat()
 	m_worldMat = XMMatrixTranspose(m_worldMat);
 
 	//d3dContext->UpdateSubresource
-}\
+}
