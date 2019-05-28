@@ -156,6 +156,22 @@ class ModelsDemo : public Dx11DemoBase
 		Mesh DoorMesh;
 		Texture DoorTexture;
 		GameObject Door;
+
+		Mesh CabinetMesh;
+		Texture CabinetTexture;
+		GameObject Cabinet;
+
+		Mesh ContainerMesh;
+		Texture ContainerTexture;
+		GameObject Container;
+
+		Mesh CanisterMesh;
+		Texture CanisterTexture;
+		GameObject Canister;
+
+		Mesh HangarMesh;
+		Texture HangarTexture;
+		GameObject Hangar;
 		
 		// ---------- Players ----------
 		Player Player1;
