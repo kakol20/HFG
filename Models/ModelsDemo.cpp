@@ -329,7 +329,7 @@ bool ModelsDemo::LoadContent()
 	Player2.setAnimation("walk");
 	Player2.setFPS(8 / 1.0f);
 
-
+	float mult = 140.0f;
 	// ---------- LOADING OBJECTS ----------
 
 	if (!SkyBoxMesh.Init("GameObjects/Skybox1.obj", d3dResult, d3dDevice_)) return false;
@@ -342,13 +342,60 @@ bool ModelsDemo::LoadContent()
 	if (!DomeTexture.Init("GameObjects/Dome/DomeTexture.png", d3dResult, d3dDevice_)) return false;
 	DomeObj.setMesh(&DomeMesh);
 	DomeObj.setTexture(&DomeTexture);
-	DomeObj.setPosition({ 0.0f, 0.0f, 0.0f });
+	DomeObj.setPosition({ 0.0f, 0.1f, 0.0f });
 
 	if (!DoorMesh.Init("GameObjects/Door/DoorModel.obj", d3dResult, d3dDevice_)) return false;
 	if (!DoorTexture.Init("GameObjects/Door/DoorUVClean.png", d3dResult, d3dDevice_)) return false;
 	Door.setMesh(&DoorMesh);
 	Door.setTexture(&DoorTexture);
-	Door.setPosition({ 50.0f, 0.0f, 50.0f });
+
+	XMVECTOR temp = XMVectorSet(100.0f, 0.0f, 100.0f, 0.0f);
+	temp = XMVector3Normalize(temp) * 160.0f;
+	Door.setPosition({ XMVectorGetX(temp),  XMVectorGetY(temp), XMVectorGetZ(temp) });
+	Door.setDirection(temp * -1.0f);
+
+	if (!CabinetMesh.Init("GameObjects/Props/Cabinet01.obj", d3dResult, d3dDevice_)) return false;
+	if (!CabinetTexture.Init("GameObjects/Props/Cabinet.png", d3dResult, d3dDevice_)) return false;
+	Cabinet.setMesh(&CabinetMesh);
+	Cabinet.setTexture(&CabinetTexture);
+
+	temp = XMVectorSet(70.0f, 0.0f, 100.0f, 0.0f);
+	temp = XMVector3Normalize(temp) * mult;
+	Cabinet.setPosition({ XMVectorGetX(temp),  XMVectorGetY(temp), XMVectorGetZ(temp) });
+	Cabinet.setDirection(temp * -1.0f);
+
+	if (!ContainerMesh.Init("GameObjects/Props/Container.obj", d3dResult, d3dDevice_)) return false;
+	if (!ContainerTexture.Init("GameObjects/Props/ContainerUVColour.png", d3dResult, d3dDevice_)) return false;
+	Container.setMesh(&ContainerMesh);
+	Container.setTexture(&ContainerTexture);
+
+	temp = XMVectorSet(80.0f, 0.0f, 100.0f, 0.0f);
+	temp = XMVector3Normalize(temp) * mult;
+
+	Container.setPosition({ XMVectorGetX(temp),  XMVectorGetY(temp), XMVectorGetZ(temp) });
+	Container.setDirection(temp * -1.0f);
+
+	if (!CanisterMesh.Init("GameObjects/Props/Canister_Props.obj", d3dResult, d3dDevice_)) return false;
+	if (!CanisterTexture.Init("GameObjects/Props/Canisters_UV.png", d3dResult, d3dDevice_)) return false;
+	Canister.setMesh(&CanisterMesh);
+	Canister.setTexture(&CanisterTexture);
+
+	temp = XMVectorSet(130.0f, 0.0f, 100.0f, 0.0f);
+	temp = XMVector3Normalize(temp) * mult;
+
+	Canister.setPosition({ XMVectorGetX(temp),  XMVectorGetY(temp), XMVectorGetZ(temp) });
+	Canister.setDirection(temp * -1.0f);
+
+	if (!HangarMesh.Init("GameObjects/Props/Exo_Hanger_Prop.obj", d3dResult, d3dDevice_)) return false;
+	if (!HangarTexture.Init("GameObjects/Props/Hanger_Colours_Flipped.png", d3dResult, d3dDevice_)) return false;
+	Hangar.setMesh(&HangarMesh);
+	Hangar.setTexture(&HangarTexture);
+
+	temp = XMVectorSet(150.0f, 0.0f, 100.0f, 0.0f);
+	temp = XMVector3Normalize(temp) * mult;
+
+	Hangar.setPosition({ XMVectorGetX(temp),  XMVectorGetY(temp), XMVectorGetZ(temp) });
+	Hangar.setDirection(temp * -1.0f);
 
 	/*if (enter pressed on bob)
 	{
@@ -645,44 +692,18 @@ void ModelsDemo::UnloadContent()
 
 	DoorMesh.Unload();
 	DoorTexture.unloadTexture();
-/*
-	for (int i = 0; i < 8; i++)
-	{
-		 UNLOADING FRAMES
 
-		 ZOMBIE
-		UnloadMeshPointer(&ZombieWalk[i]);
-		UnloadMeshPointer(&ZombieIdle[i]);
-		UnloadMeshPointer(&ZombieDeath[i]);
-		UnloadMeshPointer(&ZombieAttack[i]);
-		UnloadMeshPointer(&ZombieDamaged[i]);
-						  
-		 ALIEN		  &
-		UnloadMeshPointer(&AlienWalk[i]);
-		UnloadMeshPointer(&AlienIdle[i]);
-		UnloadMeshPointer(&AlienDeath[i]);
-		UnloadMeshPointer(&AlienAttack[i]);
-		UnloadMeshPointer(&AlienDamaged[i]);
-						  
-		 WOLF			  &
-		UnloadMeshPointer(&WolfWalk[i]);
-		UnloadMeshPointer(&WolfIdle[i]);
-		UnloadMeshPointer(&WolfDeath[i]);
-		UnloadMeshPointer(&WolfAttack[i]);
-		UnloadMeshPointer(&WolfDamaged[i]);
-						  
-		 ROBOT		  &
-		UnloadMeshPointer(&RobotWalk[i]);
-		UnloadMeshPointer(&RobotIdle[i]);
-		UnloadMeshPointer(&RobotDeath[i]);
-		UnloadMeshPointer(&RobotAttack[i]);
-		UnloadMeshPointer(&RobotDamaged[i]);
+	CabinetMesh.Unload();
+	CabinetTexture.unloadTexture();
 
-	}
-*/
+	ContainerMesh.Unload();
+	ContainerTexture.unloadTexture();
 
-	/*SkyBoxMesh.Unload();
-	SkyBoxTexture.unloadTexture();*/
+	CanisterMesh.Unload();
+	CanisterTexture.unloadTexture();
+
+	HangarMesh.Unload();
+	HangarTexture.unloadTexture();
 
 	colorMapSampler_ = 0;
 	textColorMapSampler_ = 0;
@@ -1655,15 +1676,42 @@ void ModelsDemo::Render()
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Door.getWorldMat(), 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
 		d3dContext_->Draw(Door.getMesh()->getTotalVerts(), 0);
+#
+		// Cabinet
+		d3dContext_->IASetVertexBuffers(0, 1, Cabinet.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->PSSetShaderResources(0, 1, Cabinet.getTexture()->getColorMap());
+		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Cabinet.getWorldMat(), 0, 0);
+		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		d3dContext_->Draw(Cabinet.getMesh()->getTotalVerts(), 0);
+
+		//Container
+		d3dContext_->IASetVertexBuffers(0, 1, Container.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->PSSetShaderResources(0, 1, Container.getTexture()->getColorMap());
+		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Container.getWorldMat(), 0, 0);
+		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		d3dContext_->Draw(Container.getMesh()->getTotalVerts(), 0);
+
+		// Canister
+		d3dContext_->IASetVertexBuffers(0, 1, Canister.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->PSSetShaderResources(0, 1, Canister.getTexture()->getColorMap());
+		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Canister.getWorldMat(), 0, 0);
+		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		d3dContext_->Draw(Canister.getMesh()->getTotalVerts(), 0);
 
 		// Dome
 
-		/*	d3dContext_->IASetVertexBuffers(0, 1, DomeObj.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->IASetVertexBuffers(0, 1, DomeObj.getMesh()->getVertexBuffer(), &stride, &offset);
 		d3dContext_->PSSetShaderResources(0, 1, DomeObj.getTexture()->getColorMap());
 		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &DomeObj.getWorldMat(), 0, 0);
 		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-		d3dContext_->Draw(DomeObj.getMesh()->getTotalVerts(), 0);*/
+		d3dContext_->Draw(DomeObj.getMesh()->getTotalVerts(), 0);
 
+		// Hangar
+		d3dContext_->IASetVertexBuffers(0, 1, Hangar.getMesh()->getVertexBuffer(), &stride, &offset);
+		d3dContext_->PSSetShaderResources(0, 1, Hangar.getTexture()->getColorMap());
+		d3dContext_->UpdateSubresource(worldCB_, 0, 0, &Hangar.getWorldMat(), 0, 0);
+		d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
+		d3dContext_->Draw(Hangar.getMesh()->getTotalVerts(), 0);
 
 		// ---------- DRAWING PLAYERS ----------
 		d3dContext_->IASetVertexBuffers(0, 1, Player1.getMesh()->getVertexBuffer(), &stride, &offset);
