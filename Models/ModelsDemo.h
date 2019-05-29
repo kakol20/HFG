@@ -28,10 +28,12 @@ enum GameStates {PLAY_INTRO, START_MENU, RUN, PAUSED, INTRO_MOVIE_REPLAY,SELECTI
 enum PauseMenuSelection {RETURN, FPS, PLAY_MOVIE, QUIT, CHA_SELEC};
 //this Enum has been declared in PlayerChar.h
 
+enum MainMenu { PLAY, OPTIONS, EXIT};
+
 
 
 #define PAUSE_MENU_ITEMS 4
-
+#define MAIN_MENU_ITEMS 3
 
 inline PauseMenuSelection operator++(PauseMenuSelection &eDOW, int)
 {
@@ -54,13 +56,28 @@ inline PauseMenuSelection operator--(PauseMenuSelection &eDOW, int)
    }
    return ePrev;
 }
-//=========== PROPOSAL ==========
-
-
-
-
-
-
+//=========== MAIN MENU ==========
+inline MainMenu operator++(MainMenu &eDOW, int)
+{
+	const MainMenu ePrev = eDOW;
+	const int i = static_cast<int>(eDOW);
+	eDOW = static_cast<MainMenu>((i + 1) % MAIN_MENU_ITEMS);
+	return ePrev;
+}
+inline MainMenu operator--(MainMenu &eDOW, int)
+{
+	const MainMenu ePrev = eDOW;
+	const int i = static_cast<int>(eDOW);
+	if (i > 0)
+	{
+		eDOW = static_cast<MainMenu>(i - 1);
+	}
+	else
+	{
+		eDOW = static_cast<MainMenu>(MAIN_MENU_ITEMS - 1);
+	}
+	return ePrev;
+}
 
 class ModelsDemo : public Dx11DemoBase
 {
@@ -117,9 +134,14 @@ class ModelsDemo : public Dx11DemoBase
 		float attack_time2;
 		bool attack = false;
 		bool movement = false;
+		bool Imputs = false;
 
+		// Player 1 animations switch
 		int AnimatioState = 0;
 		int PrevAnimState = 0;
+		// Player 2 animations switch
+		int AnimatioState2 = 0;
+		int PrevAnimState2 = 0;
 
         ID3D11ShaderResourceView* colorMap1_;
 		ID3D11ShaderResourceView* colorMap2_;
@@ -147,6 +169,7 @@ class ModelsDemo : public Dx11DemoBase
 		PauseMenuSelection pauseMenuSelection;
 		Characters P1charSelection;
 		Characters P2charSelection;
+		MainMenu MMSelection;
 		bool displayFPS;
 
 		// ---------- Game Objects ----------

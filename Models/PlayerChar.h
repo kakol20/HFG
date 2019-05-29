@@ -55,8 +55,10 @@ public:
 	float const GetHealth() { return m_health; }
 	void setFPS(float fps);
 
+	// TOGLLES!!!!
 	void TogglePause() { m_isPaused = !m_isPaused; };
 	void ToggleReverse() { m_reverse = !m_reverse; };
+	void SetReverse(bool reversed) { m_reverse = reversed; };
 
 	void SetCurrentFrame(int currentFrame) { m_currFrame = currentFrame; };
 	int GetCurremtFrame() { return m_currFrame; };
@@ -69,8 +71,8 @@ public:
 	XMFLOAT3 getPosition();
 	XMVECTOR getDirection();
 	
-	void setRadius( float radius2);
-	float getRadius();
+	void setRadius(float radius2) { m_radius = radius2; };
+	float getRadius() { return m_radius ; };
 
 protected:
 	Mesh * m_mesh;
