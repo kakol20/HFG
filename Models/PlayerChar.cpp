@@ -111,7 +111,17 @@ void Player::SetCharacter(Characters character)
 {
 	switch (character)
 	{
-	case WOLF: { m_health = 30 ; }
+	case WOLF: { m_health = 25.0f; m_attack = 4.0f; m_radius = 4.0f; }
+			   break;
+	case ROBOT: { m_health = 35.0f; m_attack = 3.0f; m_radius = 2.5f; }
+			   break;
+	case KREMIT: { m_health = 20.0f; m_attack = 5.0f; m_radius = 3.0f; }
+			   break;
+	case ZOMBIE: { m_health = 25.0f; m_attack = 3.0f; m_radius = 3.0f; }
+			   break;
+	case ALIEN: { m_health = 30.0f; m_attack = 3.0f; m_radius = 3.0f; }
+				 break;
+	case SKINNY: { m_health = 30.0f; m_attack = 3.0f; m_radius = 3.0f; }
 			   break;
 	default: {m_health = 20; }
 
@@ -344,14 +354,4 @@ XMFLOAT3 Player::getPosition()
 XMVECTOR Player::getDirection()
 {
 	return m_direction;
-}
-
-void Player::setRadius(float radius2)
-{
-	m_radius = radius2;
-}
-
-float Player::getRadius()
-{
-	return m_radius;
 }

@@ -844,7 +844,8 @@ void ModelsDemo::Update(float dt)
 
 	if (gameState_ == SELECTION)
 	{
-
+		Player1.setPosition({ -10.0f, 0.0f, 0.0f });
+		Player2.setPosition({ 10.0f, 0.0f, 0.0f });
 		if ((keystate[DIK_RETURN] & 0x80) && (wait <= 0))
 		{
 			gameState_ = RUN;
@@ -853,12 +854,12 @@ void ModelsDemo::Update(float dt)
 		//=========== Select Player 1 ===================
 		if ((!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80)))
 		{
-			P1charSelection--;
+			P1charSelection++;
 		}
 		if ((!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80)))
 
 		{
-			P1charSelection++;
+			P1charSelection--;
 		}
 		//=========== Select Player 2 ================
 		if ((!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80)))
@@ -921,11 +922,7 @@ void ModelsDemo::Update(float dt)
 	float moveBackForward = 0.0;
 	float moveUpDown = 0.0;
 
-	float radius1 = 2.0f;
-	Player1.setRadius(radius1);
 
-	float radius2 = 2.0f;
-	Player2.setRadius(radius2);
 
 	
 	float dist = Player1.getRadius() + Player2.getRadius() ;
@@ -962,7 +959,7 @@ void ModelsDemo::Update(float dt)
 		else if ((keystate[DIK_D] & 0x80))
 		{
 			AnimatioState = 1;
-			Player1.SetReverse(true);
+			Player1.SetReverse(false);
 
 			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) != 1)
 			{
@@ -983,12 +980,21 @@ void ModelsDemo::Update(float dt)
 		else if ((collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) == 1) && (Player1.GetCurremtFrame() == 7) && AnimatioState == 2)
 		{
 			Player2.ApplyDamage(Player1.GetAttack());
+			if (Player2.GetAlive())
+			{
+				AnimatioState2 = 3;
+			}
+			else 
+			{
+				AnimatioState2 = 4;
+			}
+
 		}
 		else
 		{
 			//preventing to stop the attack animation,
 			//but stopping the move animation once the button is not pressed anymore
-			if (AnimatioState != 2)
+			if (AnimatioState != 2 && AnimatioState != 3 && AnimatioState != 4)
 			{
 				AnimatioState = 0;
 			}
@@ -1030,13 +1036,40 @@ void ModelsDemo::Update(float dt)
 			}
 
 			break;
+		case 3:
+			Player1.setAnimation("damaged");
+			Player1.setFPS(8 / 1.0f);
+			if (PrevAnimState != 3)
+			{
+				Player1.SetCurrentFrame(0);
+			}
+			if (Player1.GetCurremtFrame() == 7)
+			{
+				AnimatioState = 0;
+			}
+
+			break;
+		case 4:
+			Player1.setAnimation("death");
+			Player1.setFPS(8 / 1.0f);
+			if (PrevAnimState != 4)
+			{
+				Player1.SetCurrentFrame(0);
+			}
+			if (Player1.GetCurremtFrame() == 7)
+			{
+				AnimatioState = 0;
+				gameState_ = START_MENU;
+			}
+
+			break;
 		}
 		PrevAnimState = AnimatioState;
 		// =========== MODEL MOVEMENTS 2 =================
 		if ((keystate[DIK_DOWN] & 0x80))
 		{
 			AnimatioState2 = 1;
-			Player2.SetReverse(false);
+			Player2.SetReverse(true);
 
 			bool right = false;
 			Player2.moveRight(dt, right);
@@ -1044,7 +1077,7 @@ void ModelsDemo::Update(float dt)
 		else if ((keystate[DIK_UP] & 0x80))
 		{
 			AnimatioState2 = 1;
-			Player2.SetReverse(true);
+			Player2.SetReverse(false);
 
 			bool right = true;
 			Player2.moveRight(dt, right);
@@ -1060,7 +1093,7 @@ void ModelsDemo::Update(float dt)
 		else if ((keystate[DIK_LEFT] & 0x80))
 		{
 			AnimatioState2 = 1;
-			Player2.SetReverse(true);
+			Player2.SetReverse(false);
 
 			if (collision.colliding(Player2.getPosition(), Player1.getPosition(), dt, dist) != 1)
 			{
@@ -1082,15 +1115,24 @@ void ModelsDemo::Update(float dt)
 		else if ((collision.colliding(Player2.getPosition(), Player1.getPosition(), dt, dist) == 1) && (Player2.GetCurremtFrame() == 7) && AnimatioState2 == 2)
 		{
 			Player1.ApplyDamage(Player2.GetAttack());
+			if (Player1.GetAlive())
+			{
+				AnimatioState = 3;
+			}
+			else
+			{
+				AnimatioState = 4;
+			}
 		}
 		else
 		{
 			//preventing to stop the attack animation,
 			//but stopping the move animation once the button is not pressed anymore
-			if (AnimatioState2 != 2)
+			if (AnimatioState2 != 2 && AnimatioState2 != 3 && AnimatioState2 != 4)
 			{
 				AnimatioState2 = 0;
 			}
+
 
 		}
 		switch (AnimatioState2)
@@ -1121,25 +1163,45 @@ void ModelsDemo::Update(float dt)
 				Player2.SetCurrentFrame(0);
 			}
 			//here we are actually stopping the attack animation ONCE IS OVER!!!
-
 			if (Player2.GetCurremtFrame() == 7)
 			{
 				AnimatioState2 = 0;
 			}
 
 			break;
+		case 3:
+			Player2.setAnimation("damaged");
+			Player2.setFPS(8 / 1.0f);
+			if (PrevAnimState2 != 3)
+			{
+				Player2.SetCurrentFrame(0);
+			}
+			//here we are actually stopping the attack animation ONCE IS OVER!!!
+			if (Player2.GetCurremtFrame() == 7)
+			{
+				AnimatioState2 = 0;
+			}
+
+			break;
+		case 4:
+			Player2.setAnimation("death");
+			Player2.setFPS(8 / 1.0f);
+			if (PrevAnimState2 != 4)
+			{
+				Player2.SetCurrentFrame(0);
+			}
+			//here we are actually stopping the attack animation ONCE IS OVER!!!
+			if (Player2.GetCurremtFrame() == 7)
+			{
+				AnimatioState2 = 0;
+				gameState_ = START_MENU;
+			}
+
+			break;
 		}
 		PrevAnimState2 = AnimatioState2;
 //=================== AM I STILL ALIVE??? ==================
-		if (!Player1.GetAlive())
-		{
-			gameState_ = START_MENU;
-		}
 
-		else if (!Player2.GetAlive())
-		{
-			gameState_ = START_MENU;
-		}
 		//============================== CAMERA  =====================================
 
 		if (camera_.getControllable())
@@ -1335,17 +1397,6 @@ void ModelsDemo::Render()
 	if (d3dContext_ == 0)
 		return;
 
-	/////////////////////debug frames per second//////////////////
-	/*int a=12348,b=409786;
-	int x =0;
-	while(x<10000000)
-	{
-	a=a/b;
-	x++;
-	}*/
-	/////////////////////////////////////////////////
-
-	//float clearColor[4] = { 0.0f, 0.0f, 0.25f, 1.0f };
 	float clearColor[4] = { 0.7f, 0.8f, 1.0f, 1.0f };
 	d3dContext_->ClearRenderTargetView(backBufferTarget_, clearColor);
 	d3dContext_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH, 1.0f, 0);
