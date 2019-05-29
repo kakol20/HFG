@@ -11,7 +11,7 @@ By Allen Sherrod and Wendy Jones
 #include<stdio.h>
 #include"objLoader.h"
 
-char* TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/MENU_SCREEN3.jpg";
+char* TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Play.jpg";
 char* QUAD_TEXTURE_NAME = "GameObjects/DomeTexture.png";
 struct VertexPos
 {
@@ -426,12 +426,12 @@ bool ModelsDemo::LoadContent()
 	};*/
 	TextVertexPos terrainVertices[] =
 	{
-		{ XMFLOAT3(-1.0f, 1.0f, 0.5f),	XMFLOAT2(0.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, 0.5f),	XMFLOAT2(1.0f, 0.0f) },
+		{  XMFLOAT3(-1.0f, 1.0f, 0.5f),	XMFLOAT2(0.0f, 0.0f) },
+		{  XMFLOAT3 (1.0f, 1.0f, 0.5f),	XMFLOAT2(1.0f, 0.0f) },
 		{ XMFLOAT3(-1.0f, -1.0f, 0.5f),	XMFLOAT2(0.0f, 1.0f) },
 
-		{ XMFLOAT3(1.0f, 1.0f, 0.5f),	XMFLOAT2(1.0f, 0.0f) },
-		{ XMFLOAT3(1.0f ,-1.0f, 0.5f),	XMFLOAT2(1.0f, 1.0f) },
+		{   XMFLOAT3(1.0f, 1.0f, 0.5f),	XMFLOAT2(1.0f, 0.0f) },
+		{  XMFLOAT3(1.0f ,-1.0f, 0.5f),	XMFLOAT2(1.0f, 1.0f) },
 		{ XMFLOAT3(-1.0f, -1.0f, 0.5f),	XMFLOAT2(0.0f, 1.0f) },
 	};
 
@@ -454,10 +454,7 @@ bool ModelsDemo::LoadContent()
 	}
 
 
-	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_,
-		//"decal.dds", 0, 0, &colorMap_, 0 );
-		//"41.jpg", 0, 0, &colorMap_, 0 );
-		TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_,TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
 
 	if (FAILED(d3dResult))
 	{
@@ -834,6 +831,15 @@ void ModelsDemo::Update(float dt)
 			gameState_ = SELECTION;
 			wait = 1.0;
 		}
+		if ((!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80)))
+		{
+			MMSelection++;
+		}
+		if ((!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80)))
+
+		{
+			MMSelection --;
+		}
 	}
 
 	if (gameState_ == SELECTION)
@@ -845,29 +851,21 @@ void ModelsDemo::Update(float dt)
 			wait = 0.1f;
 		}
 		//=========== Select Player 1 ===================
-		if (
-			(!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80))
-			)
-		{
-			P1charSelection++;
-		}
-		if (
-			(!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80))
-			)
-
+		if ((!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80)))
 		{
 			P1charSelection--;
 		}
+		if ((!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80)))
+
+		{
+			P1charSelection++;
+		}
 		//=========== Select Player 2 ================
-		if (
-			(!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80))
-			)
+		if ((!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80)))
 		{
 			P2charSelection ++;
 		}
-		if (
-			(!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80))
-			)
+		if ((!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80)))
 
 		{
 			P2charSelection --;
@@ -905,19 +903,11 @@ void ModelsDemo::Update(float dt)
 			displayFPS = !displayFPS;
 		}
 
-		if (
-			(!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80))
-			||
-			(!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80))
-			)
+		if ((!(keystate[DIK_DOWN] & 0x80) && (keyPrevState[DIK_DOWN] & 0x80)) || (!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80)))
 		{
 			pauseMenuSelection++;
 		}
-		if (
-			(!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80))
-			||
-			(!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80))
-			)
+		if ((!(keystate[DIK_UP] & 0x80) && (keyPrevState[DIK_UP] & 0x80)) || (!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80)))
 
 		{
 			pauseMenuSelection--;
@@ -1387,26 +1377,27 @@ void ModelsDemo::Render()
 		TurnZBufferOn();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
+		if (MMSelection == PLAY) 
+		{
+			TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Play.jpg";
+			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+		}
+		if (MMSelection == OPTIONS)
+		{
+			TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Options.jpg";
+			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+		}
+		if (MMSelection == EXIT)
+		{
+			TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Quit.jpg";
+			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+		}
 	}
 
 	//============= Character Selection =============
 
 	if (gameState_ == SELECTION)
 	{
-		/*TurnZBufferOff();
-		TurnOnAlphaBlending();
-
-		stride = sizeof(TextVertexPos);
-		offset = 0;
-
-		d3dContext_->IASetInputLayout(textInputLayout_);
-		d3dContext_->IASetVertexBuffers(0, 1, &textVertexBuffer_, &stride, &offset);
-		d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		d3dContext_->VSSetShader(textTextureMapVS_, 0, 0);
-		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
-		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
-		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);*/
 		TurnZBufferOff();
 		TurnOnAlphaBlending();
 
@@ -1421,6 +1412,7 @@ void ModelsDemo::Render()
 		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
 		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
 		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);
+
 
 		Player1.SetAlive(true);
 		Player2.SetAlive(true);
@@ -1727,22 +1719,10 @@ void ModelsDemo::Render()
 		XMVECTOR cameraPosition = XMLoadFloat3(&camera_.GetPosition());
 
 		////////////////////terrain////////////////////////////////
-		//d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
-		//worldMat = XMMatrixIdentity();
-		//worldMat = XMMatrixTranspose(worldMat);
-		//XMMATRIX scale = XMMatrixIdentity();
-		//scale = XMMatrixScaling(250.0f, 250.0f, 250.0f);
-		//worldMat = scale;
 
-		//d3dContext_->UpdateSubresource(worldCB_, 0, 0, &worldMat, 0, 0);
-		//d3dContext_->VSSetConstantBuffers(0, 1, &worldCB_);
-		//d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
-
-		//d3dContext_->Draw(6, 0);
 		//================ QUAD =========================
 
 		d3dContext_->PSSetShaderResources(0, 1, &quadColorMap_);
-		//d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
 		worldMat = XMMatrixIdentity();
 		worldMat = XMMatrixTranspose(worldMat);
 		XMMATRIX scale = XMMatrixIdentity();
@@ -1844,13 +1824,13 @@ void ModelsDemo::Render()
 		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);
 
 		char output[64];
-		sprintf_s(output, "FPS:%d", fps_);
+		//sprintf_s(output, "FPS:%d", fps_);
 
-		DrawString(output, -0.9f, 0.83f);
+		//DrawString(output, -0.9f, 0.83f);
 
-		sprintf_s(output, "Frame Time:%.6f", frameTime_);
+		//sprintf_s(output, "Frame Time:%.6f", frameTime_);
 
-		DrawString(output, -0.9f, 0.6f);
+		//DrawString(output, -0.9f, 0.6f);
 
 		sprintf_s(output, "Player1 HP:%.1f", Player1.GetHealth());
 
