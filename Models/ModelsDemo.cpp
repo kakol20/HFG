@@ -831,11 +831,11 @@ void ModelsDemo::Update(float dt)
 			gameState_ = SELECTION;
 			wait = 1.0;
 		}
-		if ((!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80)))
+		else if ((!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80)))
 		{
 			MMSelection++;
 		}
-		if ((!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80)))
+		else if ((!(keystate[DIK_W] & 0x80) && (keyPrevState[DIK_W] & 0x80)))
 
 		{
 			MMSelection --;
@@ -1452,6 +1452,27 @@ void ModelsDemo::Render()
 		TurnZBufferOff();
 		TurnOnAlphaBlending();
 
+	// Sending THE FONT to the SHADER
+
+		stride = sizeof(TextVertexPos);
+		offset = 0;
+
+		d3dContext_->IASetInputLayout(textInputLayout_);
+		d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
+		d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		d3dContext_->VSSetShader(textTextureMapVS_, 0, 0);
+		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
+		d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
+		d3dContext_->PSSetSamplers(0, 1, &colorMapSampler_);
+
+		d3dContext_->Draw(6, 0);
+	
+		// Sending THE TEXTURE to the SHADER
+		TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Selection.jpg";
+		HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+
+
 		stride = sizeof(TextVertexPos);
 		offset = 0;
 
@@ -1463,7 +1484,6 @@ void ModelsDemo::Render()
 		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
 		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
 		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);
-
 
 		Player1.SetAlive(true);
 		Player2.SetAlive(true);
@@ -1582,18 +1602,7 @@ void ModelsDemo::Render()
 			DrawString("SKINNY", -0.55f, -0.6f);
 
 		}
-		if (P1charSelection == PRAVEZ)
-		{
-			DrawString("->PRAVEZ<-", -0.63f, -0.7f);
 
-			Player1.SetCharacter(PRAVEZ);
-			Player1.setMesh(&Player1Mesh);
-			Player1.setTexture(&Player1Texture);
-		}
-		else
-		{
-			DrawString("PRAVEZ", -0.55f, -0.7f);
-		}
 
 		//=============== Player 2 ==============
 
@@ -1706,18 +1715,6 @@ void ModelsDemo::Render()
 		else
 		{
 			DrawString("SKINNY", 0.41f, -0.6f);
-		}
-		if (P2charSelection == PRAVEZ)
-		{
-			DrawString("->PRAVEZ<-", 0.33f, -0.7f);
-
-			Player2.SetCharacter(PRAVEZ);
-			Player2.setMesh(&Player2Mesh);
-			Player2.setTexture(&Player2Texture);
-		}
-		else
-		{
-			DrawString("PRAVEZ", 0.41f, -0.7f);
 		}
 
 		/*TurnOffAlphaBlending();
