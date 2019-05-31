@@ -11,8 +11,9 @@ By Allen Sherrod and Wendy Jones
 #include<stdio.h>
 #include"objLoader.h"
 
-char* TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Play.jpg";
-char* QUAD_TEXTURE_NAME = "GameObjects/DomeTexture.png";
+//char* TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Play.jpg";
+char* MENU_TEXTURE_NAME = "GameObjects/Menu_Stuff/Play.jpg";
+char* SOIL_TEXTURE_NAME = "GameObjects/DomeTexture.png";
 struct VertexPos
 {
 	XMFLOAT3 pos;
@@ -454,7 +455,7 @@ bool ModelsDemo::LoadContent()
 	}
 
 
-	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_,TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, MENU_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
 
 	if (FAILED(d3dResult))
 	{
@@ -499,7 +500,7 @@ bool ModelsDemo::LoadContent()
 	}
 
 
-	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, QUAD_TEXTURE_NAME, 0, 0, &quadColorMap_, 0);
+	d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, SOIL_TEXTURE_NAME, 0, 0, &soilColorMap_, 0);
 
 	if (FAILED(d3dResult))
 	{
@@ -632,7 +633,7 @@ void ModelsDemo::UnloadContent()
 	if (textColorMapSampler_) textColorMapSampler_->Release();
 
 	//QUAD
-	if (quadColorMap_) quadColorMap_->Release();
+	if (soilColorMap_) soilColorMap_->Release();
 
 	if (terrainColorMap_) terrainColorMap_->Release();
 	if (textColorMap_) textColorMap_->Release();
@@ -711,8 +712,8 @@ void ModelsDemo::UnloadContent()
 	//colorMap1_ = 0;
 	//colorMap2_ = 0;
 
-	//QUAD
-	quadColorMap_ = 0;
+	//SOIL
+	soilColorMap_ = 0;
 
 	terrainColorMap_ = 0;
 	textColorMap_ = 0;
@@ -723,8 +724,6 @@ void ModelsDemo::UnloadContent()
 	inputLayout_ = 0;
 	textInputLayout_ = 0;
 
-	//vertexBuffer1_ = 0;
-	//vertexBuffer2_ = 0;
 
 	textVertexBuffer_ = 0;
 	viewCB_ = 0;
@@ -825,13 +824,7 @@ void ModelsDemo::Update(float dt)
 
 	if (gameState_ == START_MENU )
 	{
-
-		/*if (!(keystate[DIK_RETURN] & 0x80) && ((keyPrevState[DIK_RETURN] & 0x80)) && (wait <= 0))
-		{
-			gameState_ = SELECTION;
-			wait = 1.0;
-		}*/
-	/*	else*/ if ((!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80)))
+		if ((!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80)))
 		{
 			MMSelection++;
 		}
@@ -964,7 +957,7 @@ void ModelsDemo::Update(float dt)
 
 		if ((keystate[DIK_W] & 0x80))
 		{
-			AnimatioState = 1;
+			AnimatioState = WALK;
 			Player1.SetReverse(false);
 
 			bool right = false;
@@ -972,7 +965,7 @@ void ModelsDemo::Update(float dt)
 		}
 		else if ((keystate[DIK_S] & 0x80))
 		{
-			AnimatioState = 1;
+			AnimatioState = WALK;
 			Player1.SetReverse(true);
 
 			bool right = true;
@@ -980,14 +973,14 @@ void ModelsDemo::Update(float dt)
 		}
 		else if ((keystate[DIK_A] & 0x80))
 		{
-			AnimatioState = 1;
+			AnimatioState = WALK;
 			Player1.SetReverse(true);
 			Player1.moveForward(dt, true);
 				
 		}
 		else if ((keystate[DIK_D] & 0x80))
 		{
-			AnimatioState = 1;
+			AnimatioState = WALK;
 			Player1.SetReverse(false);
 
 			if (collision.colliding(Player1.getPosition(), Player2.getPosition(), dt, dist) != 1)
@@ -1001,7 +994,7 @@ void ModelsDemo::Update(float dt)
 		else if ((keystate[DIK_F] & 0x80) && (attack_time1 <= 0))
 		{
 			Player1.SetReverse(false);
-			AnimatioState = 2;
+			AnimatioState = ATTACK;
 			
 			attack_time1 = 1.0f;
 
@@ -1011,11 +1004,11 @@ void ModelsDemo::Update(float dt)
 			Player2.ApplyDamage(Player1.GetAttack());
 			if (Player2.GetAlive())
 			{
-				AnimatioState2 = 3;
+				AnimatioState2 = HITTED;
 			}
 			else 
 			{
-				AnimatioState2 = 4;
+				AnimatioState2 = DIE;
 			}
 
 		}
@@ -1023,37 +1016,37 @@ void ModelsDemo::Update(float dt)
 		{
 			//preventing to stop the attack animation,
 			//but stopping the move animation once the button is not pressed anymore
-			if (AnimatioState != 2 && AnimatioState != 3 && AnimatioState != 4)
+			if (AnimatioState != ATTACK && AnimatioState != HITTED && AnimatioState != DIE)
 			{
-				AnimatioState = 0;
+				AnimatioState = IDLE;
 			}
 			
 		}
 		
 		switch (AnimatioState) 
 		{
-		case 0:
+		case IDLE:
 			Player1.setAnimation("idle");
 			Player1.setFPS(8 / 1.0f);
-			if (PrevAnimState != 0) 
+			if (PrevAnimState != IDLE)
 			{
 				Player1.SetCurrentFrame(0);
 			}
 			
 			break;
-		case 1:
+		case WALK:
 			Player1.setAnimation("walk");
 			Player1.setFPS(8 / 1.0f);
-			if (PrevAnimState != 1)
+			if (PrevAnimState != WALK)
 			{
 				Player1.SetCurrentFrame(0);
 			}
 			
 			break;
-		case 2:
+		case ATTACK:
 			Player1.setAnimation("attack");
 			Player1.setFPS(8 / 1.0f);
-			if (PrevAnimState != 2)
+			if (PrevAnimState != ATTACK)
 			{
 				Player1.SetCurrentFrame(0);
 			}
@@ -1061,27 +1054,27 @@ void ModelsDemo::Update(float dt)
 
 			if (Player1.GetCurremtFrame() == 7)
 			{
-				AnimatioState = 0;
+				AnimatioState = IDLE;
 			}
 
 			break;
-		case 3:
+		case HITTED:
 			Player1.setAnimation("damaged");
 			Player1.setFPS(8 / 1.0f);
-			if (PrevAnimState != 3)
+			if (PrevAnimState != HITTED)
 			{
 				Player1.SetCurrentFrame(0);
 			}
 			if (Player1.GetCurremtFrame() == 7)
 			{
-				AnimatioState = 0;
+				AnimatioState = IDLE;
 			}
 
 			break;
-		case 4:
+		case DIE:
 			Player1.setAnimation("death");
 			Player1.setFPS(8 / 1.0f);
-			if (PrevAnimState != 4)
+			if (PrevAnimState != DIE)
 			{
 				Player1.SetCurrentFrame(0);
 			}
@@ -1097,7 +1090,7 @@ void ModelsDemo::Update(float dt)
 		// =========== MODEL MOVEMENTS 2 =================
 		if ((keystate[DIK_DOWN] & 0x80))
 		{
-			AnimatioState2 = 1;
+			AnimatioState2 = WALK;
 			Player2.SetReverse(true);
 
 			bool right = false;
@@ -1105,7 +1098,7 @@ void ModelsDemo::Update(float dt)
 		}
 		else if ((keystate[DIK_UP] & 0x80))
 		{
-			AnimatioState2 = 1;
+			AnimatioState2 = WALK;
 			Player2.SetReverse(false);
 
 			bool right = true;
@@ -1114,14 +1107,14 @@ void ModelsDemo::Update(float dt)
 
 		else if ((keystate[DIK_RIGHT] & 0x80))
 		{
-			AnimatioState2 = 1;
+			AnimatioState2 = WALK;
 			Player2.SetReverse(true);
 
 			Player2.moveForward(dt, true);
 		}
 		else if ((keystate[DIK_LEFT] & 0x80))
 		{
-			AnimatioState2 = 1;
+			AnimatioState2 = WALK;
 			Player2.SetReverse(false);
 
 			if (collision.colliding(Player2.getPosition(), Player1.getPosition(), dt, dist) != 1)
@@ -1136,7 +1129,7 @@ void ModelsDemo::Update(float dt)
 		{
 
 			Player2.SetReverse(false);
-			AnimatioState2 = 2;
+			AnimatioState2 = ATTACK;
 			attack_time2 = 1.0f;
 
 		}
@@ -1146,83 +1139,83 @@ void ModelsDemo::Update(float dt)
 			Player1.ApplyDamage(Player2.GetAttack());
 			if (Player1.GetAlive())
 			{
-				AnimatioState = 3;
+				AnimatioState = HITTED;
 			}
 			else
 			{
-				AnimatioState = 4;
+				AnimatioState = DIE;
 			}
 		}
 		else
 		{
 			//preventing to stop the attack animation,
 			//but stopping the move animation once the button is not pressed anymore
-			if (AnimatioState2 != 2 && AnimatioState2 != 3 && AnimatioState2 != 4)
+			if (AnimatioState2 != ATTACK && AnimatioState2 != HITTED && AnimatioState2 != DIE)
 			{
-				AnimatioState2 = 0;
+				AnimatioState2 = IDLE;
 			}
 
 
 		}
 		switch (AnimatioState2)
 		{
-		case 0:
+		case IDLE:
 			Player2.setAnimation("idle");
 			Player2.setFPS(8 / 1.0f);
-			if (PrevAnimState2 != 0)
+			if (PrevAnimState2 != IDLE)
 			{
 				Player2.SetCurrentFrame(0);
 			}
 
 			break;
-		case 1:
+		case WALK:
 			Player2.setAnimation("walk");
 			Player2.setFPS(8 / 1.0f);
-			if (PrevAnimState2 != 1)
+			if (PrevAnimState2 != WALK)
 			{
 				Player2.SetCurrentFrame(0);
 			}
 
 			break;
-		case 2:
+		case ATTACK:
 			Player2.setAnimation("attack");
 			Player2.setFPS(8 / 1.0f);
-			if (PrevAnimState2 != 2)
+			if (PrevAnimState2 != ATTACK)
 			{
 				Player2.SetCurrentFrame(0);
 			}
 			//here we are actually stopping the attack animation ONCE IS OVER!!!
 			if (Player2.GetCurremtFrame() == 7)
 			{
-				AnimatioState2 = 0;
+				AnimatioState2 = IDLE;
 			}
 
 			break;
-		case 3:
+		case HITTED:
 			Player2.setAnimation("damaged");
 			Player2.setFPS(8 / 1.0f);
-			if (PrevAnimState2 != 3)
+			if (PrevAnimState2 != HITTED)
 			{
 				Player2.SetCurrentFrame(0);
 			}
 			//here we are actually stopping the attack animation ONCE IS OVER!!!
 			if (Player2.GetCurremtFrame() == 7)
 			{
-				AnimatioState2 = 0;
+				AnimatioState2 = IDLE;
 			}
 
 			break;
-		case 4:
+		case DIE:
 			Player2.setAnimation("death");
 			Player2.setFPS(8 / 1.0f);
-			if (PrevAnimState2 != 4)
+			if (PrevAnimState2 != DIE)
 			{
 				Player2.SetCurrentFrame(0);
 			}
 			//here we are actually stopping the attack animation ONCE IS OVER!!!
 			if (Player2.GetCurremtFrame() == 7)
 			{
-				AnimatioState2 = 0;
+				AnimatioState2 = IDLE;
 				gameState_ = POST_MATCH;
 			}
 
@@ -1459,23 +1452,23 @@ void ModelsDemo::Render()
 		////////////////////////////////////////////////////////////////////////////////////////////////
 		if (MMSelection == PLAY) 
 		{
-			TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Play.jpg";
-			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+			MENU_TEXTURE_NAME = "GameObjects/Menu_Stuff/Play.jpg";
+			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, MENU_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
 		}
 		if (MMSelection == OPTIONS)
 		{
-			TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Options.jpg";
-			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+			MENU_TEXTURE_NAME = "GameObjects/Menu_Stuff/Options.jpg";
+			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, MENU_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
 		}
 		if (MMSelection == CREDITS)
 		{
-			TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Credits.jpg";
-			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+			MENU_TEXTURE_NAME = "GameObjects/Menu_Stuff/Credits.jpg";
+			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, MENU_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
 		}
 		if (MMSelection == EXIT)
 		{
-			TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Quit.jpg";
-			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+			MENU_TEXTURE_NAME = "GameObjects/Menu_Stuff/Quit.jpg";
+			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, MENU_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
 		}
 	}
 
@@ -1503,8 +1496,8 @@ void ModelsDemo::Render()
 		d3dContext_->Draw(6, 0);
 	
 		// Sending THE TEXTURE to the SHADER
-		TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Selection.jpg";
-		HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+		MENU_TEXTURE_NAME = "GameObjects/Menu_Stuff/Selection.jpg";
+		HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, MENU_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
 
 
 		stride = sizeof(TextVertexPos);
@@ -1801,9 +1794,9 @@ void ModelsDemo::Render()
 
 		////////////////////terrain////////////////////////////////
 
-		//================ QUAD =========================
+		//================ SOIL =========================
 
-		d3dContext_->PSSetShaderResources(0, 1, &quadColorMap_);
+		d3dContext_->PSSetShaderResources(0, 1, &soilColorMap_);
 		worldMat = XMMatrixIdentity();
 		worldMat = XMMatrixTranspose(worldMat);
 		XMMATRIX scale = XMMatrixIdentity();
@@ -2060,8 +2053,8 @@ void ModelsDemo::Render()
 		d3dContext_->Draw(6, 0);
 
 		// Sending THE TEXTURE to the SHADER
-		TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Selection.jpg";
-		HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+		MENU_TEXTURE_NAME = "GameObjects/Menu_Stuff/Selection.jpg";
+		HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, MENU_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
 
 
 		stride = sizeof(TextVertexPos);

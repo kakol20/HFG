@@ -14,6 +14,5 @@ private:
 	XMFLOAT3 m_nextP;
 	XMVECTOR m_direction;
 	float m_speed;
-	float moveSpeed2 = 5.0f;
 };
 

@@ -4,7 +4,6 @@
 
 Collision::Collision()
 {
-	float moveSpeed2 = 5.0f;
 }
 
 

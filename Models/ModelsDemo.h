@@ -29,6 +29,7 @@ enum PauseMenuSelection {RETURN, FPS, PLAY_MOVIE, QUIT, CHA_SELEC};
 //this Enum has been declared in PlayerChar.h
 
 enum MainMenu { PLAY, OPTIONS, CREDITS, EXIT};
+enum Animations { IDLE, WALK, ATTACK, HITTED,DIE };
 
 
 
@@ -126,7 +127,8 @@ class ModelsDemo : public Dx11DemoBase
 
 		// QUAD
 		ID3D11Buffer * vertexBufferQuad_;
-		ID3D11ShaderResourceView* quadColorMap_;
+		//ID3D11ShaderResourceView* quadColorMap_;
+		ID3D11ShaderResourceView* soilColorMap_;
 
 		float Tank3Speed;
 		float wait;
