@@ -268,7 +268,7 @@ bool ModelsDemo::LoadContent()
 	if (!RobotDeath.Load("PlayerModels/Cameron_Robot/Death/RobotDeath", 8, d3dResult, d3dDevice_)) return false; // working
 	if (!RobotAttack.Load("PlayerModels/Cameron_Robot/Attack/RobotAttack", 8, d3dResult, d3dDevice_)) return false; // working
 	if (!RobotDamaged.Load("PlayerModels/Cameron_Robot/Damage/RobotDamage", 8, d3dResult, d3dDevice_)) return false; // working
-	if (!RobotIdle.Load("PlayerModels/Cameron_Robot/Idle/RobotIdle", 8, d3dResult, d3dDevice_)) return false; // normals not working
+	if (!RobotIdle.Load("PlayerModels/Cameron_Robot/Idle/RobotIdle", 8, d3dResult, d3dDevice_)) return false; // working
 
 	//============ KREMIT ============
 	if (!Kremit_M.Init("PlayerModels/Matthew_Kremit/Idle/Kremit_idle_1.obj", d3dResult, d3dDevice_)) return false;
