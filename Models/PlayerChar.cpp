@@ -175,7 +175,7 @@ void Player::update(float dt, XMFLOAT3 opponentPosition)
 	m_direction = XMVectorSet(XMVectorGetX(Opponent) - XMVectorGetX(Self)
 		, 0.0f,
 		XMVectorGetZ(Opponent) - XMVectorGetZ(Self),
-		0.0f);
+		0.0f); // 
 
 	if (m_walkAnim != nullptr) m_walkAnim->SetIsAnimated(m_isAnimated);
 	if (m_idleAnim != nullptr) m_idleAnim->SetIsAnimated(m_isAnimated);
@@ -197,6 +197,7 @@ void Player::update(float dt, XMFLOAT3 opponentPosition)
 
 	m_dtCumulative += dt;
 	
+	// add to frame number based on fps
 	if (m_dtCumulative >= (1 / m_fps))
 	{
 		m_dtCumulative = 0.0f;
@@ -228,6 +229,7 @@ void Player::update(float dt, XMFLOAT3 opponentPosition)
 	//m_direction = XMdVector3ClampLength(m_direction, 0.0f, 1.0f);
 	m_direction = XMVector3Normalize(m_direction);
 
+	// angle for looking at player
 	m_angle = atan2(XMVectorGetX(m_direction), XMVectorGetZ(m_direction));
 
 	updateWorldMat();

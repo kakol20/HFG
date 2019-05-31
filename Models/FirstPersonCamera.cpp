@@ -27,7 +27,7 @@ FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f 
 	// 
 	m_distance = 40.0f;
 	m_minDistance = 25.0f;
-	m_maxSpeed = 40.0f;
+	m_maxSpeed = 30.0f;
 	m_speedAc = 1.0f;
 	//m_speedAc = m_maxSpeed;
 	m_curSpeed = 0.0f;
@@ -35,13 +35,10 @@ FirstPersonCamera::FirstPersonCamera(void): target_( XMFLOAT3( 0.0f, 0.0f, 0.0f 
 	m_lookAtY = 10.0f;
 	m_lookAngle = 10.0f;
 
-	m_maxSteps = 5;
+	/*m_maxSteps = 5;
 	m_maxPoints = 5;
-	m_tension = 1;
+	m_tension = 1;*/
 	m_isMoving = false;
-
-	m_points.reserve(m_maxPoints);
-	m_points.reserve((m_maxSteps + 1) * m_maxPoints);
 }
 
 
@@ -212,8 +209,10 @@ void FirstPersonCamera::m_moveCameraSameHeight(float dt, Player * Player1, Playe
 
 void FirstPersonCamera::m_moveCameraTilted(float dt, Player * Player1, Player * Player2, bool tween)
 {
+	// get the average position of both players
 	XMFLOAT3 mid = { (Player1->getPosition().x + Player2->getPosition().x) / 2.0f, m_lookAtY, (Player1->getPosition().z + Player2->getPosition().z) / 2.0f }; //  find the midpoint of the two players
 
+	// get direction vector between both players
 	float tempX = Player1->getPosition().x - Player2->getPosition().x;
 	float tempZ = Player1->getPosition().z - Player2->getPosition().z;
 
@@ -226,6 +225,7 @@ void FirstPersonCamera::m_moveCameraTilted(float dt, Player * Player1, Player * 
 
 	m_distance = sqrt(tempX * tempX + tempZ * tempZ) + 10.0f;
 
+	// to prevent camera from being too close
 	if (m_distance < m_minDistance) // minimum distance
 	{
 		m_distance = m_minDistance;
@@ -242,7 +242,7 @@ void FirstPersonCamera::m_moveCameraTilted(float dt, Player * Player1, Player * 
 
 	if (tween && !isStill)
 	{
-		//old movement
+		
 		m_smoothMove(mid, targetPosition, dt);
 	}
 	else
@@ -279,6 +279,7 @@ void FirstPersonCamera::m_smoothMove(XMFLOAT3 & mid, XMFLOAT3 & targetPos, float
 			m_speedAc = 1.0f;
 		}
 
+		// camera gets faster the further away it is to the target
 		if (m_curSpeed < m_maxSpeed)
 		{
 			m_curSpeed += m_speedAc * dt;
