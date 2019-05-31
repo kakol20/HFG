@@ -23,17 +23,17 @@
 #include "GameObject.h"
 #include "PlayerChar.h"
 
-enum GameStates {PLAY_INTRO, START_MENU, RUN, PAUSED, INTRO_MOVIE_REPLAY,SELECTION};
+enum GameStates {PLAY_INTRO, START_MENU, RUN, PAUSED, INTRO_MOVIE_REPLAY,SELECTION,POST_MATCH,THANKS};
 //enum Animations { IDLE, WALK, ATTACK, DEATH, DAMAGED };
 enum PauseMenuSelection {RETURN, FPS, PLAY_MOVIE, QUIT, CHA_SELEC};
 //this Enum has been declared in PlayerChar.h
 
-enum MainMenu { PLAY, OPTIONS, EXIT};
+enum MainMenu { PLAY, OPTIONS, CREDITS, EXIT};
 
 
 
 #define PAUSE_MENU_ITEMS 4
-#define MAIN_MENU_ITEMS 3
+#define MAIN_MENU_ITEMS 4
 
 inline PauseMenuSelection operator++(PauseMenuSelection &eDOW, int)
 {
