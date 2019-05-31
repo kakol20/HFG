@@ -826,12 +826,12 @@ void ModelsDemo::Update(float dt)
 	if (gameState_ == START_MENU )
 	{
 
-		if (!(keystate[DIK_RETURN] & 0x80) && ((keyPrevState[DIK_RETURN] & 0x80)) && (wait <= 0))
+		/*if (!(keystate[DIK_RETURN] & 0x80) && ((keyPrevState[DIK_RETURN] & 0x80)) && (wait <= 0))
 		{
 			gameState_ = SELECTION;
 			wait = 1.0;
-		}
-		else if ((!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80)))
+		}*/
+	/*	else*/ if ((!(keystate[DIK_S] & 0x80) && (keyPrevState[DIK_S] & 0x80)))
 		{
 			MMSelection++;
 		}
@@ -839,6 +839,21 @@ void ModelsDemo::Update(float dt)
 
 		{
 			MMSelection --;
+		}
+		if ((keystate[DIK_RETURN] & 0x80) && (MMSelection == EXIT) && (wait <= 0))
+		{
+			gameState_ = START_MENU;
+			wait = 0.1;
+		}
+		if ((keystate[DIK_RETURN] & 0x80) && (MMSelection == CREDITS) && (wait <= 0))
+		{
+			gameState_ = THANKS;
+			wait = 0.1;
+		}
+		if ((keystate[DIK_RETURN] & 0x80) && (MMSelection == PLAY) && (wait <= 0))
+		{
+			gameState_ = SELECTION;
+			wait = 0.1;
 		}
 	}
 
@@ -914,6 +929,20 @@ void ModelsDemo::Update(float dt)
 			pauseMenuSelection--;
 		}
 
+	}
+	if (gameState_ == POST_MATCH) 
+	{
+		if ((!(keystate[DIK_RETURN] & 0x80) && (keyPrevState[DIK_RETURN] & 0x80) && (wait <= 0)))
+		{
+			gameState_ = START_MENU;
+		}
+	}
+	if (gameState_ == THANKS)
+	{
+		if ((!(keystate[DIK_RETURN] & 0x80) && (keyPrevState[DIK_RETURN] & 0x80) && (wait <= 0)))
+		{
+			gameState_ = START_MENU;
+		}
 	}
 
 	//========================== GETTING THE INPUTS / COLLISIONS  ==============================
@@ -1059,7 +1088,7 @@ void ModelsDemo::Update(float dt)
 			if (Player1.GetCurremtFrame() == 7)
 			{
 				AnimatioState = 0;
-				gameState_ = START_MENU;
+				gameState_ = POST_MATCH;
 			}
 
 			break;
@@ -1194,7 +1223,7 @@ void ModelsDemo::Update(float dt)
 			if (Player2.GetCurremtFrame() == 7)
 			{
 				AnimatioState2 = 0;
-				gameState_ = START_MENU;
+				gameState_ = POST_MATCH;
 			}
 
 			break;
@@ -1438,6 +1467,11 @@ void ModelsDemo::Render()
 			TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Options.jpg";
 			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
 		}
+		if (MMSelection == CREDITS)
+		{
+			TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Credits.jpg";
+			HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+		}
 		if (MMSelection == EXIT)
 		{
 			TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Quit.jpg";
@@ -1488,7 +1522,8 @@ void ModelsDemo::Render()
 		Player1.SetAlive(true);
 		Player2.SetAlive(true);
 
-		DrawString("PRESS ENTER to SELECT CHARACTER", -0.4f, 0.0f);
+		DrawString("PRESS ENTER TO SELECT", -0.4f, 0.0f);
+		DrawString("CHARACTER", -0.2f, -0.1f);
 
 		//=============== Player 1 ==============
 		if (P1charSelection == WOLF)
@@ -1717,15 +1752,13 @@ void ModelsDemo::Render()
 			DrawString("SKINNY", 0.41f, -0.6f);
 		}
 
-		/*TurnOffAlphaBlending();
-		TurnZBufferOn();*/
 		TurnOffAlphaBlending();
 		TurnZBufferOn();
 
 	}
 
 
-	if ((gameState_ == RUN) || (gameState_ == PAUSED))
+	if ((gameState_ == RUN) || (gameState_ == PAUSED) || (gameState_ == POST_MATCH))
 	{
 
 		/////////////////////////////////////////geometry settings//////////////////////////////
@@ -1970,6 +2003,96 @@ void ModelsDemo::Render()
 		TurnZBufferOn();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////
+	}
+	if (gameState_ == POST_MATCH) 
+	{
+		TurnZBufferOff();
+		TurnOnAlphaBlending();
+
+		stride = sizeof(TextVertexPos);
+		offset = 0;
+
+		d3dContext_->IASetInputLayout(textInputLayout_);
+		d3dContext_->IASetVertexBuffers(0, 1, &textVertexBuffer_, &stride, &offset);
+		d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		d3dContext_->VSSetShader(textTextureMapVS_, 0, 0);
+		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
+		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
+		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);
+
+		DrawString("PRESS ENTER TO GET TO ", -0.5f, 0.8f);
+		DrawString("THE MAIN MENU ", -0.3f, 0.7f);
+		
+		if (Player1.GetAlive()) 
+		{
+			DrawString("CONGRATULATIONS PLAYER 1 ", -0.5f, 0.1f);
+			DrawString("YOU WON THE MATCH!!!", -0.4f, 0.0f);
+		}
+		else if (Player2.GetAlive())
+		{
+			DrawString("CONGRATULATIONS PLAYER 2 YOU WON THE MATCH!!!", -0.5f, 0.1f);
+			DrawString("YOU WON THE MATCH!!!", -0.4f, 0);
+		}
+		TurnOffAlphaBlending();
+		TurnZBufferOn();
+		
+	}
+	if (gameState_ == THANKS)
+	{
+		TurnZBufferOff();
+		TurnOnAlphaBlending();
+
+		// Sending THE FONT to the SHADER
+
+		stride = sizeof(TextVertexPos);
+		offset = 0;
+
+		d3dContext_->IASetInputLayout(textInputLayout_);
+		d3dContext_->IASetVertexBuffers(0, 1, &vertexBufferTerrain_, &stride, &offset);
+		d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		d3dContext_->VSSetShader(textTextureMapVS_, 0, 0);
+		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
+		d3dContext_->PSSetShaderResources(0, 1, &terrainColorMap_);
+		d3dContext_->PSSetSamplers(0, 1, &colorMapSampler_);
+
+		d3dContext_->Draw(6, 0);
+
+		// Sending THE TEXTURE to the SHADER
+		TERRAIN_TEXTURE_NAME = "GameObjects/Menu_Stuff/Selection.jpg";
+		HRESULT d3dResult = D3DX11CreateShaderResourceViewFromFile(d3dDevice_, TERRAIN_TEXTURE_NAME, 0, 0, &terrainColorMap_, 0);
+
+
+		stride = sizeof(TextVertexPos);
+		offset = 0;
+
+		d3dContext_->IASetInputLayout(textInputLayout_);
+		d3dContext_->IASetVertexBuffers(0, 1, &textVertexBuffer_, &stride, &offset);
+		d3dContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		d3dContext_->VSSetShader(textTextureMapVS_, 0, 0);
+		d3dContext_->PSSetShader(textTextureMapPS_, 0, 0);
+		d3dContext_->PSSetShaderResources(0, 1, &textColorMap_);
+		d3dContext_->PSSetSamplers(0, 1, &textColorMapSampler_);
+
+		DrawString("PRESS ENTER TO GET TO ", -0.5f, 0.4f);
+		DrawString("THE MAIN MENU ", -0.3f, 0.3f);
+
+		DrawString("PROGRAMMERS: ", -0.3f, 0.1f);
+		DrawString("Adrian Lee Aquino-Neary,", -0.5f, 0.0f);
+		DrawString("Alessandro Cinque.", -0.4f, -0.1f);
+
+		DrawString("ARTISTS: ", -0.2f, -0.3f);
+		DrawString("Charles Flint,", -0.35f, -0.4f);
+		DrawString("Valdas Biveinis,", -0.35f, -0.5f);
+		DrawString("Matthew Williams,", -0.4f, -0.6f);
+		DrawString("Antonina Robevska,", -0.4f, -0.7f);
+		DrawString("Cameron Savvidou-Jones,", -0.5f, -0.8f);
+		DrawString("Andreea Luciana Smedoiu.", -0.5f, -0.9f);
+
+		TurnOffAlphaBlending();
+		TurnZBufferOn();
 	}
 
 
